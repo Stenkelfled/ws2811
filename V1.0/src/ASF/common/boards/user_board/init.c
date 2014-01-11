@@ -16,8 +16,8 @@ void board_init(void)
 	 * specific board configuration, found in conf_board.h.
 	 */
 	ioport_init();
-	ioport_set_pin_level(LED_GN,false);
-	ioport_set_pin_level(LED_RD,false);
+	LED_GN_OFF
+	LED_RD_OFF
 	ioport_set_pin_dir(LED_GN,IOPORT_DIR_OUTPUT);
 	ioport_set_pin_dir(LED_RD,IOPORT_DIR_OUTPUT);
 	
