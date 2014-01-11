@@ -26,7 +26,7 @@ void board_init(void)
 	
 	ioport_set_pin_dir(VBUS,IOPORT_DIR_INPUT);
 	
-	ioport_set_pin_level(RGBLED_ENABLE,false);
-	ioport_set_pin_dir(RGBLED_ENABLE,IOPORT_DIR_OUTPUT);
+	RGBLED_DISABLE_TX
+	ioport_set_pin_dir(RGBLED_ENABLE_PIN,IOPORT_DIR_OUTPUT);
 	ioport_set_pin_dir(RGBLED_DATA_PIN,IOPORT_DIR_OUTPUT);
 }
