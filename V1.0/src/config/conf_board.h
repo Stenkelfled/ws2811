@@ -1,0 +1,22 @@
+/**
+ * \file
+ *
+ * \brief User board configuration template
+ *
+ */
+
+#ifndef CONF_BOARD_H
+#define CONF_BOARD_H
+
+#define LED_GN			IOPORT_CREATE_PIN(PORTD,1)
+#define LED_RD			IOPORT_CREATE_PIN(PORTB,0)
+
+#define TASTER1			IOPORT_CREATE_PIN(PORTE,1)
+#define TASTER2			IOPORT_CREATE_PIN(PORTE,2)
+
+#define VBUS			IOPORT_CREATE_PIN(PORTD,5)
+
+#define RGBLED_ENABLE	IOPORT_CREATE_PIN(PORTC,4)
+#define RGBLED_DATA_PIN	IOPORT_CREATE_PIN(PORTC,7)
+
+#endif // CONF_BOARD_H
