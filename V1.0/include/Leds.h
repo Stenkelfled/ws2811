@@ -14,15 +14,15 @@
 #define BYTES_PER_LED			(BYTES_PER_COLOR*3)
 #define LED_COUNT				(1)
 
-#define LED_CODE_1				(1111100000) //11100
-#define LED_CODE_0				(1100000000) //10000
+#define LED_CODE_1				(0b0011) //lsb is transmitted first
+#define LED_CODE_0				(0b0001) //lsb is transmitted first
 
 //#define LED_GN_ON			()
 
 typedef struct{
-	unsigned char red[BYTES_PER_COLOR];
-	unsigned char green[BYTES_PER_COLOR];
-	unsigned char blue[BYTES_PER_COLOR];
+	uint8_t red[BYTES_PER_COLOR];
+	uint8_t green[BYTES_PER_COLOR];
+	uint8_t blue[BYTES_PER_COLOR];
 }led_data_t;
 
 

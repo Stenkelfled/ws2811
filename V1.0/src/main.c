@@ -45,6 +45,19 @@ void dma_init(){
 	DMA.CH0.REPCNT = 1;
 }
 
+void fill_buffer(uint8_t src, uint8_t* dest){
+    for (uint8_t i=0;i<8;i++){
+        /*if(!(i%2)){
+            dest[i/2] = 0;
+        }*/
+        if(src&(1<<i)){
+            dest[i/2] |= LED_CODE_1<<(4*(i%2));
+        } else {
+            dest[i/2] |= LED_CODE_0<<(4*(i%2));
+        }
+    }
+}
+
 int main (void)
 {
 	sysclk_init();
@@ -52,12 +65,15 @@ int main (void)
 	
 	usart_init();
 	dma_init();
-	
-	led_data_t led_data = {
-		.red = 123,
-		.green = 212,
-		.blue = 050
-	};
+
+    uint8_t red = 0xFF;
+    uint8_t green = 0xF2;
+    uint8_t blue = 0x0F;
+    led_data_t led_data = {0,0,0};
+
+    fill_buffer(red,led_data.red);
+    fill_buffer(green,led_data.green);
+    fill_buffer(blue,led_data.blue);
 
 	DMA.CH0.SRCADDR0 = (((uint16_t)&led_data) >> 0 )&0xFF;
 	DMA.CH0.SRCADDR1 = (((uint16_t)&led_data) >> 8 )&0xFF;
