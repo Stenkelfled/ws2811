@@ -63,6 +63,8 @@ int main (void)
 	sysclk_init();
 	board_init();
 	
+    //!!CAUTION: Check, whether the registers of USART and DMA are really set - in the simulation they weren't.
+
 	usart_init();
 	dma_init();
 
