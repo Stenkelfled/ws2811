@@ -26,4 +26,7 @@ typedef struct{
 }led_data_t;
 
 
+void usart_init(void);
+void dma_init(void);
+
 #endif /* LEDS_H_ */
