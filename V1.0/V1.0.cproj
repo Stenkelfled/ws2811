@@ -85,26 +85,25 @@
     <OverrideVtorValue>exception_table</OverrideVtorValue>
     <BootSegment>2</BootSegment>
     <eraseonlaunchrule>0</eraseonlaunchrule>
-    <avrtool>com.atmel.avrdbg.tool.jtagice3plus</avrtool>
+    <avrtool>com.atmel.avrdbg.tool.simulator</avrtool>
     <com_atmel_avrdbg_tool_simulator>
-      <ToolOptions xmlns="">
+      <ToolOptions>
         <InterfaceProperties>
           <JtagEnableExtResetOnStartSession>false</JtagEnableExtResetOnStartSession>
         </InterfaceProperties>
-        <InterfaceName>
-        </InterfaceName>
+        <InterfaceName>JTAG</InterfaceName>
       </ToolOptions>
-      <ToolType xmlns="">com.atmel.avrdbg.tool.simulator</ToolType>
-      <ToolNumber xmlns="">
+      <ToolType>com.atmel.avrdbg.tool.simulator</ToolType>
+      <ToolNumber>
       </ToolNumber>
-      <ToolName xmlns="">Simulator</ToolName>
+      <ToolName>Simulator</ToolName>
     </com_atmel_avrdbg_tool_simulator>
     <preserveEEPROM>True</preserveEEPROM>
     <com_atmel_avrdbg_tool_jtagice3plus>
       <ToolOptions>
         <InterfaceProperties>
           <JtagEnableExtResetOnStartSession>false</JtagEnableExtResetOnStartSession>
-          <JtagDbgClock>4510000</JtagDbgClock>
+          <JtagDbgClock>0</JtagDbgClock>
         </InterfaceProperties>
         <InterfaceName>JTAG</InterfaceName>
       </ToolOptions>
@@ -256,7 +255,10 @@
     <None Include="src\ASF\common\services\clock\sysclk.h">
       <SubType>compile</SubType>
     </None>
-    <Compile Include="include\Leds.h">
+    <Compile Include="include\ledbuffer.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\leds.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\ASF\common\services\clock\xmega\sysclk.c">
@@ -292,6 +294,9 @@
     <None Include="src\config\conf_clock.h">
       <SubType>compile</SubType>
     </None>
+    <Compile Include="src\ledbuffer.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\leds.c">
       <SubType>compile</SubType>
     </Compile>

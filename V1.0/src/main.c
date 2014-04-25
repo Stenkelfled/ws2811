@@ -25,8 +25,10 @@
  * Atmel Software Framework (ASF).
  */
 #include <asf.h>
-#include <Leds.h>
 #include <util/delay.h>
+
+#include <leds.h>
+#include <ledbuffer.h>
 
 void clock_init(void);
 
@@ -67,14 +69,14 @@ int main (void)
 	usart_init();
 	dma_init();
 	
-	while(1){
+	/*while(1){
 		_delay_ms(500);
 		LED_RD_ON
 		_delay_ms(500);
 		LED_RD_OFF
-	}
+	}*/
 
-/*    define_group(0,0,2,1);
+    define_group(0,0,2,1);
     define_group(1,3,7,2);
     append_to_group(0,4);
 
@@ -85,8 +87,10 @@ int main (void)
 
     fill_buffer();
 
-    while(1){}
+    while(1){
+		asm volatile("nop");
+	}
 
-*/
+
 	// Insert application code here, after the board has been initialized.
 }
