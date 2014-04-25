@@ -4,7 +4,8 @@
  * Created: 25.04.2014 12:28:50
  *  Author: stenkelfled
  */ 
-
+#include <avr/io.h>
+#include <Leds.h>
 
 void usart_init(void){
 	USARTC1.BAUDCTRLA = 2; //BSEL = 2 --> 3,333 MHz @f_per = 10MHz; this are 0.3us/spi-bit and 1.2us per data bit

@@ -64,6 +64,8 @@ int main (void)
 {
     clock_init();
 	board_init();
+	usart_init();
+	dma_init();
 	
 	while(1){
 		_delay_ms(500);
