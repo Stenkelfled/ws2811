@@ -13,6 +13,10 @@ led_group_t groups[GROUP_COUNT];
 
 uint8_t led_data[LED_COUNT*BYTES_PER_LED];
 
+uint8_t* ledbuffer_get_data_pointer(void){
+	return led_data;
+}
+
 void color2data(uint8_t* *data, uint8_t color){
     uint8_t raw_data;
 

@@ -67,7 +67,7 @@ int main (void)
     clock_init();
 	board_init();
 	usart_init();
-	dma_init();
+	dma_init(ledbuffer_get_data_pointer());
 	
 	/*while(1){
 		_delay_ms(500);
@@ -86,6 +86,8 @@ int main (void)
     color_group(1,clr);
 
     fill_buffer();
+	
+	reset_leds();
 
     while(1){
 		asm volatile("nop");
