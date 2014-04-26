@@ -5,7 +5,6 @@
  *  Author: stenkelfled
  */ 
 
-
 #ifndef LEDS_H_
 #define LEDS_H_
 
@@ -15,8 +14,8 @@
 #define LED_COUNT				(100)
 #define GROUP_COUNT				(8)
 
-#define LED_CODE_1				(0b0011) //lsb is transmitted first
-#define LED_CODE_0				(0b0001) //lsb is transmitted first
+#define LED_CODE_1				(0b1100) //msb is transmitted first
+#define LED_CODE_0				(0b1000) //msb is transmitted first
 
 //#define LED_GN_ON			()
 
