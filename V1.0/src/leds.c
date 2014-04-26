@@ -23,3 +23,13 @@ void dma_init(void){
 	DMA.CH0.TRIGSRC = DMA_CH_TRIGSRC_USARTC1_DRE_gc;
 	DMA.CH0.TRFCNT = LED_COUNT*BYTES_PER_LED;
 }
+
+void refresh_leds(uint8_t* ledbuffer){
+	DMA.CH0.SRCADDR0 = (((uint16_t)&ledbuffer) >> 0 )&0xFF;
+	DMA.CH0.SRCADDR1 = (((uint16_t)&ledbuffer) >> 8 )&0xFF;
+	DMA.CH0.SRCADDR2 = 0;
+
+	DMA.CH0.DESTADDR0 = (((uint16_t)&USARTC1.DATA) >> 0 )&0xFF;
+	DMA.CH0.DESTADDR1 = (((uint16_t)&USARTC1.DATA) >> 8 )&0xFF;
+	DMA.CH0.DESTADDR2 = 0;
+}
