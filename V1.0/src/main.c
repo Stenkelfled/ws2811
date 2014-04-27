@@ -76,18 +76,21 @@ int main (void)
 		LED_RD_OFF
 	}*/
 
-    define_group(0,0,2,1);
+    /*define_group(0,0,2,1);
     define_group(1,3,7,2);
     append_to_group(0,4);
 
     rgbcolor_t clr={0x11,0x11,0x88};
     color_group(0,clr);
     clr.red=0xFF;clr.green=0x0F;clr.blue=0x00;
-    color_group(1,clr);
+    color_group(1,clr);*/
+	
+	rgbcolor_t clr={0xFF,0xFF,0xFF};
+	color_led(0,clr);
 
     fill_buffer();
 	
-	reset_leds();
+	refresh_leds();
 
     while(1){
 		asm volatile("nop");

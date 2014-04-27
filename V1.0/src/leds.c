@@ -9,7 +9,8 @@
 #include <leds.h>
 
 void usart_init(void){
-	USARTC1.BAUDCTRLA = 2; //BSEL = 2 --> 3,333 MHz @f_per = 10MHz; this are 0.3us/spi-bit and 1.2us per data bit
+	USARTC1.BAUDCTRLA = 2; //BSEL = 2 --> 3,333 MHz @f_per = 20MHz; this are 0.3us/spi-bit and 1.2us per data bit
+	//other idea, BSEL=3 --> 2,5MHz and only 3spi-bits per data-bit
 	USARTC1.CTRLA = USART_DREINTLVL_LO_gc;
 	USARTC1.CTRLB = USART_TXEN_bm;
 	USARTC1.CTRLC = USART_CMODE_MSPI_gc;

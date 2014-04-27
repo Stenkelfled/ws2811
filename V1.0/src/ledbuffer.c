@@ -51,6 +51,13 @@ void define_group(uint8_t group_id, uint8_t start_led,uint8_t end_led, uint8_t s
     uint8_t next_led = -1;
     groups[group_id].start_led = &leds[start_led];
 
+	if(end_led >= LED_COUNT){
+		while(1){asm volatile ("nop");}
+	}
+	if(group_id >= GROUP_COUNT){
+		while(1){asm volatile ("nop");}
+	}
+
     while(current_led != end_led){
         next_led = current_led + step;
         if(next_led > end_led) next_led = end_led;
@@ -61,6 +68,13 @@ void define_group(uint8_t group_id, uint8_t start_led,uint8_t end_led, uint8_t s
 }
 
 void append_to_group(uint8_t group_id, uint8_t led_id){
+	if(led_id >= LED_COUNT){
+		while(1){asm volatile ("nop");}
+	}
+	if(group_id >= GROUP_COUNT){
+		while(1){asm volatile ("nop");}
+	}
+	
     led_color_t* ledptr = groups[group_id].start_led;
     while(ledptr->next_led != NULL){
         ledptr = ledptr->next_led;
@@ -69,7 +83,11 @@ void append_to_group(uint8_t group_id, uint8_t led_id){
 }
 
 void color_group(uint8_t group_id, rgbcolor_t color){
-    led_color_t* ledptr = groups[group_id].start_led;
+    if(group_id >= GROUP_COUNT){
+	    while(1){asm volatile ("nop");}
+    }
+	
+	led_color_t* ledptr = groups[group_id].start_led;
     while(ledptr != NULL){
         ledptr->color = color;
         ledptr = ledptr->next_led;
