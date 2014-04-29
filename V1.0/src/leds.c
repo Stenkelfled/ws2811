@@ -29,8 +29,8 @@ void dma_init(uint8_t* ledbuffer){
 	DMA.CH0.TRIGSRC = DMA_CH_TRIGSRC_USARTC1_DRE_gc;
 	DMA.CH0.TRFCNT = LED_COUNT*BYTES_PER_LED;
 	
-	DMA.CH0.SRCADDR0 = (((uint16_t)&ledbuffer) >> 0 )&0xFF;
-	DMA.CH0.SRCADDR1 = (((uint16_t)&ledbuffer) >> 8 )&0xFF;
+	DMA.CH0.SRCADDR0 = (((uint16_t)ledbuffer) >> 0 )&0xFF;
+	DMA.CH0.SRCADDR1 = (((uint16_t)ledbuffer) >> 8 )&0xFF;
 	DMA.CH0.SRCADDR2 = 0;
 
 	DMA.CH0.DESTADDR0 = (((uint16_t)&USARTC1.DATA) >> 0 )&0xFF;
@@ -41,21 +41,21 @@ void dma_init(uint8_t* ledbuffer){
 
 void reset_leds(void){
 	USARTC1.CTRLB &= ~USART_TXEN_bm; //disable USART transmitter
+	ioport_set_pin_dir(RGBLED_DATA_PIN,IOPORT_DIR_OUTPUT);
 	ioport_set_pin_level(RGBLED_DATA_PIN,false);
-	_delay_us(40);
-	asm volatile ("nop");
+	_delay_us(60);
 	USARTC1.CTRLB |= USART_TXEN_bm;	
 }
 
 void refresh_leds(void){
 	
 	LED_GN_ON
-	reset_leds();
 	DMA.CH0.CTRLA |= DMA_CH_ENABLE_bm;
 	
-	while(DMA.CH0.CTRLB & DMA_CH_CHBUSY_bm){
+	_delay_ms(500);
+	/*while(DMA.CH0.CTRLB & DMA_CH_CHBUSY_bm){
 		asm volatile("nop");
-	}
+	}*/
 	reset_leds();
 	LED_GN_OFF
 }
