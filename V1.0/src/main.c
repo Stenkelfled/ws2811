@@ -64,10 +64,11 @@ void clock_init(void){
 
 int main (void)
 {
-    clock_init();
+	clock_init();
 	board_init();
 	usart_init();
 	dma_init(ledbuffer_get_data_pointer());
+	LED_RD_ON
 	
 	/*while(1){
 		_delay_ms(500);
@@ -85,7 +86,7 @@ int main (void)
     clr.red=0xFF;clr.green=0x0F;clr.blue=0x00;
     color_group(1,clr);*/
 	
-	rgbcolor_t clr={0xFF,0xFF,0xFF};
+	rgbcolor_t clr={0x00,0x00,0xFF};
 	color_led(0,clr);
 
     fill_buffer();

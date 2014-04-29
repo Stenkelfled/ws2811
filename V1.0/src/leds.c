@@ -49,12 +49,13 @@ void reset_leds(void){
 
 void refresh_leds(void){
 	
-	//reset_leds();
-
+	LED_GN_ON
+	reset_leds();
 	DMA.CH0.CTRLA |= DMA_CH_ENABLE_bm;
 	
 	while(DMA.CH0.CTRLB & DMA_CH_CHBUSY_bm){
 		asm volatile("nop");
 	}
 	reset_leds();
+	LED_GN_OFF
 }
