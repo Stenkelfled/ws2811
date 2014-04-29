@@ -16,7 +16,7 @@
 #define LED_RD_OFF			ioport_set_pin_level(LED_RD,false);
 
 #define TASTER1				IOPORT_CREATE_PIN(PORTE,1)
-#define TASTER2					IOPORT_CREATE_PIN(PORTE,2)
+#define TASTER2				IOPORT_CREATE_PIN(PORTE,2)
 
 #define VBUS				IOPORT_CREATE_PIN(PORTD,5)
 

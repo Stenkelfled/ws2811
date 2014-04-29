@@ -79,7 +79,7 @@ int main (void)
     clr.red=0xFF;clr.green=0x0F;clr.blue=0x00;
     color_group(1,clr);*/
 	
-	rgbcolor_t clr={0xFF,0x00,0x00};
+	rgbcolor_t clr={0x00,0x00,0xff};
 	color_led(0,clr);
 
     fill_buffer();

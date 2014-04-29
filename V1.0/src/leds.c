@@ -51,11 +51,9 @@ void refresh_leds(void){
 	
 	LED_GN_ON
 	DMA.CH0.CTRLA |= DMA_CH_ENABLE_bm;
-	
-	_delay_ms(500);
-	/*while(DMA.CH0.CTRLB & DMA_CH_CHBUSY_bm){
+	while(!(USARTC1.STATUS & USART_TXCIF_bm)){
 		asm volatile("nop");
-	}*/
+	}
 	reset_leds();
 	LED_GN_OFF
 }
