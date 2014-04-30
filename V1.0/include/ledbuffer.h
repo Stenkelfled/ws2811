@@ -12,8 +12,8 @@
 #include <compiler.h>
 
 typedef struct{
-    uint8_t red;
     uint8_t green;
+	uint8_t red;
     uint8_t blue;
 }__attribute__((packed)) rgbcolor_t;
 

@@ -12,7 +12,7 @@ void usart_init(void){
 	USARTC1.BAUDCTRLA = 2; //BSEL = 2 --> 3,333 MHz @f_per = 20MHz; this are 0.3us/spi-bit and 1.2us per data bit
 	//other idea, BSEL=3 --> 2,5MHz and only 3spi-bits per data-bit
 	USARTC1.CTRLA = USART_DREINTLVL_LO_gc;
-	USARTC1.CTRLB = USART_TXEN_bm;
+	//USARTC1.CTRLB = USART_TXEN_bm;
 	USARTC1.CTRLC = USART_CMODE_MSPI_gc;
 	USARTC1.CTRLA = USART_DREINTLVL_MED_gc;
 	
@@ -51,9 +51,17 @@ void refresh_leds(void){
 	
 	LED_GN_ON
 	DMA.CH0.CTRLA |= DMA_CH_ENABLE_bm;
+	USARTC1.CTRLB = USART_TXEN_bm;
 	while(!(USARTC1.STATUS & USART_TXCIF_bm)){
 		asm volatile("nop");
 	}
-	reset_leds();
+	//reset_leds();
 	LED_GN_OFF
+	USARTC1.CTRLB &= ~USART_TXEN_bm; //disable USART transmitter
+	ioport_set_pin_dir(RGBLED_DATA_PIN,IOPORT_DIR_OUTPUT);
+	ioport_set_pin_level(RGBLED_DATA_PIN,false);
+	
+	USARTC1.STATUS |= USART_TXCIF_bm; //clear TXCIF flag
+	
+	_delay_us(60);
 }

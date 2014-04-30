@@ -80,6 +80,23 @@ int main (void)
     color_group(1,clr);*/
 	
 	rgbcolor_t clr={0x00,0x00,0xff};
+	
+	while(1){
+		clr.green = 0xff;
+		clr.blue = 0;
+		color_led(0,clr);	
+		fill_buffer();
+		refresh_leds();
+		_delay_ms(500);
+		
+		clr.green = 0x00;
+		clr.blue = 0xff;
+		color_led(0,clr);
+		fill_buffer();
+		refresh_leds();
+		_delay_ms(500);
+	}
+	
 	color_led(0,clr);
 
     fill_buffer();

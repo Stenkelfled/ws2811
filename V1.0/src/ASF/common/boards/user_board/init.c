@@ -28,6 +28,6 @@ void board_init(void)
 	
 	RGBLED_DISABLE_TX
 	ioport_set_pin_dir(RGBLED_ENABLE_PIN,IOPORT_DIR_OUTPUT);
-	ioport_set_pin_level(RGBLED_DATA_PIN,true);
+	ioport_set_pin_level(RGBLED_DATA_PIN,false);
 	ioport_set_pin_dir(RGBLED_DATA_PIN,IOPORT_DIR_OUTPUT);
 }
