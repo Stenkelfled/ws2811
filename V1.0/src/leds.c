@@ -62,21 +62,15 @@ void start_leds(void){
 void refresh_leds(void){
 	
 	LED_GN_ON
+
 	DMA.CH0.CTRLA |= DMA_CH_ENABLE_bm;
-	/*asm volatile ("nop");
-	asm volatile ("nop");
-	USARTC1.CTRLB = USART_TXEN_bm;*/
-	//while(!(USARTC1.STATUS & USART_TXCIF_bm)){
-	while( (DMA.CH0.CTRLB&DMA_CH_CHBUSY_bm) ){
+	DMA.CH1.CTRLA &= ~DMA_CH_ENABLE_bm;
+	while( !(DMA.CH0.CTRLB&DMA_CH_TRNIF_bm) ){
 		//asm volatile("nop");
 	}
-	//USARTC1.CTRLB &= ~USART_TXEN_bm; //disable USART transmitter
-	//reset_leds();
-	LED_GN_OFF
-	/*ioport_set_pin_dir(RGBLED_DATA_PIN,IOPORT_DIR_OUTPUT);
-	ioport_set_pin_level(RGBLED_DATA_PIN,false);*/
-	
+	DMA.CH1.CTRLA |= DMA_CH_ENABLE_bm;
+
 	USARTC1.STATUS |= USART_TXCIF_bm; //clear TXCIF flag
-	
+	LED_GN_OFF	
 	_delay_us(60);
 }

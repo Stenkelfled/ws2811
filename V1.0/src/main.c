@@ -29,6 +29,7 @@
 
 #include <leds.h>
 #include <ledbuffer.h>
+#include <rgbhsv.h>
 
 void clock_init(void);
 
@@ -83,20 +84,27 @@ int main (void)
 	rgbcolor_t clr={0x00,0x00,0x00};
 	
 	/*while(1){
-		clr.green = 0xff;
-		clr.blue = 0;
-		color_led(0,clr);	
-		fill_buffer();
-		refresh_leds();
-		_delay_ms(500);
-		
-		clr.green = 0x00;
-		clr.blue = 0xff;
-		color_led(0,clr);
-		fill_buffer();
-		refresh_leds();
-		_delay_ms(500);
+		for(uint8_t i=0;i<=0xFF;i+=10){
+			clr.red = i;
+			color_led(0,clr);
+			fill_buffer();
+			refresh_leds();
+			_delay_ms(50);
+		}
 	}*/
+	hsvcolor_t hsvcol;
+	hsvcol.sat = 255;
+	hsvcol.val = 255;
+	while(1){
+		for(uint16_t hue=0;hue<360;hue+=1){
+			hsvcol.hue = hue;
+			clr = hsv2rgb(hsvcol);
+			color_led(0,clr);
+			fill_buffer();
+			refresh_leds();
+			_delay_ms(20);
+		}
+	}
 	
 	color_led(0,clr);
 

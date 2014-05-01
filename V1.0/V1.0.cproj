@@ -243,6 +243,12 @@
     <GenerateEepFile>True</GenerateEepFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="include\rgbhsv.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\rgbhsv.c">
+      <SubType>compile</SubType>
+    </Compile>
     <None Include="src\ASF\common\services\ioport\xmega\ioport.h">
       <SubType>compile</SubType>
     </None>
