@@ -29,7 +29,7 @@ typedef struct{
 void usart_init(void);
 void dma_init(uint8_t* ledbuffer);
 
-void reset_leds(void);
+void start_leds(void);
 void refresh_leds(void);
 
 #endif /* LEDS_H_ */

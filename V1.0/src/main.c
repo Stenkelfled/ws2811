@@ -68,6 +68,7 @@ int main (void)
 	board_init();
 	usart_init();
 	dma_init(ledbuffer_get_data_pointer());
+	start_leds();
 	LED_RD_ON
 
     /*define_group(0,0,2,1);
@@ -79,9 +80,9 @@ int main (void)
     clr.red=0xFF;clr.green=0x0F;clr.blue=0x00;
     color_group(1,clr);*/
 	
-	rgbcolor_t clr={0x00,0x00,0xff};
+	rgbcolor_t clr={0x00,0x00,0x00};
 	
-	while(1){
+	/*while(1){
 		clr.green = 0xff;
 		clr.blue = 0;
 		color_led(0,clr);	
@@ -95,7 +96,7 @@ int main (void)
 		fill_buffer();
 		refresh_leds();
 		_delay_ms(500);
-	}
+	}*/
 	
 	color_led(0,clr);
 
