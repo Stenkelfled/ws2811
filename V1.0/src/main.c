@@ -83,22 +83,17 @@ int main (void)
 	
 	rgbcolor_t clr={0x00,0x00,0x00};
 	
-	/*while(1){
-		for(uint8_t i=0;i<=0xFF;i+=10){
-			clr.red = i;
-			color_led(0,clr);
-			fill_buffer();
-			refresh_leds();
-			_delay_ms(50);
-		}
-	}*/
 	hsvcolor_t hsvcol;
 	hsvcol.sat = 255;
 	hsvcol.val = 255;
+	hsvcol.hue = 255;
+
 	while(1){
 		for(uint16_t hue=0;hue<360;hue+=1){
 			hsvcol.hue = hue;
 			clr = hsv2rgb(hsvcol);
+		//for(uint8_t green=0;green<128;green+=1){
+			//clr.green = green;
 			color_led(0,clr);
 			fill_buffer();
 			refresh_leds();

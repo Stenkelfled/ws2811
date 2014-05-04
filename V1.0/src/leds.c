@@ -63,14 +63,13 @@ void refresh_leds(void){
 	
 	LED_GN_ON
 
-	DMA.CH0.CTRLA |= DMA_CH_ENABLE_bm;
 	DMA.CH1.CTRLA &= ~DMA_CH_ENABLE_bm;
-	while( !(DMA.CH0.CTRLB&DMA_CH_TRNIF_bm) ){
+	DMA.CH0.CTRLA |= DMA_CH_ENABLE_bm;
+	while( (DMA.CH0.CTRLB&DMA_CH_CHBUSY_bm) ){
 		//asm volatile("nop");
 	}
 	DMA.CH1.CTRLA |= DMA_CH_ENABLE_bm;
 
-	USARTC1.STATUS |= USART_TXCIF_bm; //clear TXCIF flag
 	LED_GN_OFF	
 	_delay_us(60);
 }
