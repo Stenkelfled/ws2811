@@ -27,49 +27,23 @@
 #include <asf.h>
 #include <util/delay.h>
 
+#include <config.h>
 #include <leds.h>
 #include <ledbuffer.h>
 #include <rgbhsv.h>
 
-void clock_init(void);
-
-void clock_init(void){
-    //Setup: calibrate 32MHz osc as 48MHz for USB
-    //use 2MHz osc with PLL(mul = 10) as 20MHz CPU and peripheral clock
-    //use for USART in SPI mode: BSEL=2 -> Baudrate=3.333333MHz ->1Bit = 300ns -> 4Bit per Color-bit
-
-    OSC.CTRL |= OSC_RC32MEN_bm; //enable 32MHz oscillator
-    while(!(OSC.STATUS&OSC_RC32MRDY_bm)){} //wait for 32MHz oscillator to be ready
-    
-    //set up the DFLL for 32MHz calibration
-    uint16_t osc_rc32m_comp = 0xB71B;
-    DFLLRC32M.COMP1 = (osc_rc32m_comp >> 0)&0xFF;
-    DFLLRC32M.COMP2 = (osc_rc32m_comp >> 8)&0xFF;
-    OSC.DFLLCTRL = OSC_RC32MCREF_RC32K_gc;
-    OSC.CTRL |= OSC_RC32KEN_bm; //enable 32kHz oscillator as reference oscillator
-    while(!(OSC.STATUS&OSC_RC32KRDY_bm)){} // wait for 32kHz oscillator to be ready
-    DFLLRC32M.CTRL |= DFLL_ENABLE_bm; // enable DFLL
-
-    CLK.USBCTRL = CLK_USBPSDIV_1_gc | CLK_USBSRC_RC32M_gc; //select 32MHz (48Mhz) oscillator as USB clock source
-
-    //configure PLL: 
-        //Input = 2MHz osc
-        //Multiplier = 10 -> 20MHz
-    OSC.PLLCTRL = OSC_PLLSRC_RC2M_gc | (10)<<OSC_PLLFAC_gp;
-    OSC.CTRL |= OSC_PLLEN_bm; //enable PLL
-    while(!(OSC.STATUS&OSC_PLLRDY_bm)){} // wait for PLL to be ready
-
-    ccp_write_io((void*)&CLK.PSCTRL,CLK_PSADIV_1_gc | CLK_PSBCDIV_1_1_gc); //Prescalers: No division for peripherals
-    ccp_write_io((void*)&CLK.CTRL,CLK_SCLKSEL_PLL_gc); //Select PLL output as System Clock source (should be 20MHz)
-}
+uint8_t mode = 0;
 
 int main (void)
 {
-	clock_init();
+	init_interrupts();
+	init_clock();
 	board_init();
-	usart_init();
-	dma_init(ledbuffer_get_data_pointer());
+	init_ports();
+	init_usart();
+	init_dma(ledbuffer_get_data_pointer());
 	start_leds();
+	sei();
 	LED_RD_ON
 
     /*define_group(0,0,2,1);
@@ -82,23 +56,35 @@ int main (void)
     color_group(1,clr);*/
 	
 	rgbcolor_t clr={0x00,0x00,0x00};
-	
+
 	hsvcolor_t hsvcol;
 	hsvcol.sat = 255;
 	hsvcol.val = 255;
-	hsvcol.hue = 255;
+	hsvcol.hue = 0;
 
 	while(1){
-		for(uint16_t hue=0;hue<360;hue+=1){
-			hsvcol.hue = hue;
-			clr = hsv2rgb(hsvcol);
-		//for(uint8_t green=0;green<128;green+=1){
-			//clr.green = green;
-			color_led(0,clr);
-			fill_buffer();
-			refresh_leds();
-			_delay_ms(20);
+		cli();
+		switch(mode){
+			case 0:	
+				hsvcol.hue +=1;
+				if(hsvcol.hue == 360) hsvcol.hue = 0;
+				clr = hsv2rgb(hsvcol);
+				break;
+			case 1:
+				set_predefined_color(&clr,CLR_RED);
+				break;
+			case 2:
+				set_predefined_color(&clr,CLR_GREEN);
+				break;
+			case 3:
+				set_predefined_color(&clr,CLR_BLUE);
+				break;
 		}
+		sei();
+		color_led(0,clr);
+		fill_buffer();
+		refresh_leds();
+		_delay_ms(20);
 	}
 	
 	color_led(0,clr);
@@ -113,4 +99,16 @@ int main (void)
 
 
 	// Insert application code here, after the board has been initialized.
+}
+
+ISR(PORTE_INT0_vect){ //Button 1 pressed
+	if(++mode > 3){
+		mode = 0;
+	}
+}
+
+ISR(PORTE_INT1_vect){ //Button 2 pressed
+	if(mode-- == 0){
+		mode = 3;
+	}
 }

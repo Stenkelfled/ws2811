@@ -9,6 +9,12 @@
 
 #include <asf.h>
 
+void set_predefined_color(rgbcolor_t* clr, uint8_t red, uint8_t green, uint8_t blue){
+	clr->red = red;
+	clr->green = green;
+	clr->blue = blue;
+}
+
 rgbcolor_t hsv2rgb(hsvcolor_t hsv){
 	rgbcolor_t rgb;
 	uint8_t hi, p, t;

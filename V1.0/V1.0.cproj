@@ -108,7 +108,7 @@
         <InterfaceName>JTAG</InterfaceName>
       </ToolOptions>
       <ToolType>com.atmel.avrdbg.tool.jtagice3plus</ToolType>
-      <ToolNumber>J30200004502</ToolNumber>
+      <ToolNumber>J30200030648</ToolNumber>
       <ToolName>JTAGICE3</ToolName>
     </com_atmel_avrdbg_tool_jtagice3plus>
     <avrtoolinterface>JTAG</avrtoolinterface>
@@ -243,7 +243,13 @@
     <GenerateEepFile>True</GenerateEepFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="include\config.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="include\rgbhsv.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\config.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\rgbhsv.c">

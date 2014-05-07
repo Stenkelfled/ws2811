@@ -26,8 +26,8 @@ typedef struct{
 }led_data_t;
 
 
-void usart_init(void);
-void dma_init(uint8_t* ledbuffer);
+void init_usart(void);
+void init_dma(uint8_t* ledbuffer);
 
 void start_leds(void);
 void refresh_leds(void);

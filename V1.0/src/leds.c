@@ -10,16 +10,14 @@
 
 uint8_t zero = 0;
 
-void usart_init(void){
+void init_usart(void){
 	USARTC1.BAUDCTRLA = 2; //BSEL = 2 --> 3,333 MHz @f_per = 20MHz; this are 0.3us/spi-bit and 1.2us per data bit
 	//other idea, BSEL=3 --> 2,5MHz and only 3spi-bits per data-bit
-	USARTC1.CTRLA = USART_DREINTLVL_LO_gc;
-	//USARTC1.CTRLB = USART_TXEN_bm;
+	//USARTC1.CTRLA = USART_DREINTLVL_LO_gc;
 	USARTC1.CTRLC = USART_CMODE_MSPI_gc;
-	USARTC1.CTRLA = USART_DREINTLVL_MED_gc;
 }
 
-void dma_init(uint8_t* ledbuffer){
+void init_dma(uint8_t* ledbuffer){
 	DMA.CTRL = DMA_ENABLE_bm;
 	DMA.CTRL |= DMA_DBUFMODE_DISABLED_gc | DMA_PRIMODE_CH0123_gc;
 	DMA.CH0.CTRLA = DMA_CH_SINGLE_bm | DMA_CH_BURSTLEN_1BYTE_gc;

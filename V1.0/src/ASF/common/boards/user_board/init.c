@@ -21,8 +21,8 @@ void board_init(void)
 	ioport_set_pin_dir(LED_GN,IOPORT_DIR_OUTPUT);
 	ioport_set_pin_dir(LED_RD,IOPORT_DIR_OUTPUT);
 	
-	ioport_set_pin_dir(TASTER1,IOPORT_DIR_INPUT);
-	ioport_set_pin_dir(TASTER2,IOPORT_DIR_INPUT);
+	/*ioport_set_pin_dir(TASTER1,IOPORT_DIR_INPUT);
+	ioport_set_pin_dir(TASTER2,IOPORT_DIR_INPUT);*/
 	
 	ioport_set_pin_dir(VBUS,IOPORT_DIR_INPUT);
 	
