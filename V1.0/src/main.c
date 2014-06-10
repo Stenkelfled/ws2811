@@ -28,6 +28,7 @@
 #include <util/delay.h>
 
 #include <config.h>
+#include <eeprom.h>
 #include <leds.h>
 #include <ledbuffer.h>
 #include <rgbhsv.h>
@@ -38,13 +39,20 @@ int main (void)
 {
 	init_interrupts();
 	init_clock();
-	board_init();
+	init_board();
 	init_ports();
 	init_usart();
 	init_dma(ledbuffer_get_data_pointer());
+	init_eeprom();
 	start_leds();
 	sei();
-	LED_RD_ON
+	//LED_RD_ON
+	
+	eeprom_write_page("abcdef", 6, 2);
+	
+	while(1){
+		asm volatile ("nop");
+	}
 
     /*define_group(0,0,2,1);
     define_group(1,3,7,2);

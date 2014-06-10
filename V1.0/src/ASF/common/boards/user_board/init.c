@@ -9,7 +9,7 @@
 #include <board.h>
 #include <conf_board.h>
 
-void board_init(void)
+void init_board(void)
 {
 	/* This function is meant to contain board-specific initialization code
 	 * for, e.g., the I/O pins. The initialization can rely on application-
