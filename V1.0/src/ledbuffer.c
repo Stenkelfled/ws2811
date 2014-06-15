@@ -5,6 +5,8 @@
  *  Author: stenkelfled
  */ 
 
+#include <asf.h>
+
 #include <ledbuffer.h>
 #include <leds.h>
 
@@ -52,9 +54,11 @@ void define_group(uint8_t group_id, uint8_t start_led,uint8_t end_led, uint8_t s
     groups[group_id].start_led = &leds[start_led];
 
 	if(end_led >= LED_COUNT){
+		LED_RD_ON
 		while(1){asm volatile ("nop");}
 	}
 	if(group_id >= GROUP_COUNT){
+		LED_RD_ON
 		while(1){asm volatile ("nop");}
 	}
 

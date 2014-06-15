@@ -11,7 +11,7 @@
 #define SEND_BITS_PER_DATA_BIT	(4)
 #define BYTES_PER_COLOR			(SEND_BITS_PER_DATA_BIT)//*8/8) //*8Bits/Color-Byte, /8send-Bits/data-Byte
 #define BYTES_PER_LED			(BYTES_PER_COLOR*3)
-#define LED_COUNT				(1)
+#define LED_COUNT				(3)
 #define GROUP_COUNT				(8)
 
 #define LED_CODE_1				(0b1100) //msb is transmitted first

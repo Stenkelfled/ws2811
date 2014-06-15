@@ -25,6 +25,7 @@
 #define CLR_YELLOW	255,255,0
 #define CLR_CYAN	0  ,255,255
 #define CLR_MAGENTA	255,0  ,255
+#define CLR_WHITE	255,255,255
 
 
 typedef struct{

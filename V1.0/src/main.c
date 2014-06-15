@@ -48,20 +48,13 @@ int main (void)
 	sei();
 	//LED_RD_ON
 	
-	eeprom_write_page("abcdef", 6, 2);
+	/*eeprom_write_page("abcdef", 6, 2);
 	
 	while(1){
 		asm volatile ("nop");
-	}
-
-    /*define_group(0,0,2,1);
-    define_group(1,3,7,2);
-    append_to_group(0,4);
-
-    rgbcolor_t clr={0x11,0x11,0x88};
-    color_group(0,clr);
-    clr.red=0xFF;clr.green=0x0F;clr.blue=0x00;
-    color_group(1,clr);*/
+	}*/
+	uint8_t gid = 0;
+    define_group(gid,0,LED_COUNT-1,1);
 	
 	rgbcolor_t clr={0x00,0x00,0x00};
 
@@ -87,36 +80,27 @@ int main (void)
 			case 3:
 				set_predefined_color(&clr,CLR_BLUE);
 				break;
+			case 4:
+				set_predefined_color(&clr,CLR_WHITE);
+				break;
 		}
 		sei();
-		color_led(0,clr);
+		color_group(gid,clr);
 		fill_buffer();
 		refresh_leds();
 		_delay_ms(20);
 	}
-	
-	color_led(0,clr);
-
-    fill_buffer();
-	
-	refresh_leds();
-
-    while(1){
-		asm volatile("nop");
-	}
-
-
 	// Insert application code here, after the board has been initialized.
 }
 
 ISR(PORTE_INT0_vect){ //Button 1 pressed
-	if(++mode > 3){
+	if(++mode > 4){
 		mode = 0;
 	}
 }
 
 ISR(PORTE_INT1_vect){ //Button 2 pressed
 	if(mode-- == 0){
-		mode = 3;
+		mode = 4;
 	}
 }
