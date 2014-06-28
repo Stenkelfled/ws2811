@@ -32,6 +32,7 @@
 #include <leds.h>
 #include <ledbuffer.h>
 #include <rgbhsv.h>
+#include <usb.h>
 
 uint8_t mode = 0;
 
@@ -48,11 +49,11 @@ int main (void)
 	sei();
 	//LED_RD_ON
 	
-	/*eeprom_write_page("abcdef", 6, 2);
+	usb_start();
 	
 	while(1){
 		asm volatile ("nop");
-	}*/
+	}
 	uint8_t gid = 0;
     define_group(gid,0,LED_COUNT-1,1);
 	

@@ -11,18 +11,26 @@ void init_clock(void){
 	//Setup: calibrate 32MHz osc as 48MHz for USB
 	//use 2MHz osc with PLL(mul = 10) as 20MHz CPU and peripheral clock
 	//use for USART in SPI mode: BSEL=2 -> Baudrate=3.333333MHz ->1Bit = 300ns -> 4Bit per Color-bit
+	unsigned char timer_calib;	
 
-	OSC.CTRL |= OSC_RC32MEN_bm; //enable 32MHz oscillator
-	while(!(OSC.STATUS&OSC_RC32MRDY_bm)){} //wait for 32MHz oscillator to be ready
+	//////////////////////////////////////
+	//get USBRCOSC
+	NVM.CMD = NVM_CMD_READ_CALIB_ROW_gc;
+	timer_calib = pgm_read_byte(offsetof(NVM_PROD_SIGNATURES_t, USBRCOSC));
+	NVM.CMD = NVM_CMD_NO_OPERATION_gc;
 	
 	//set up the DFLL for 32MHz calibration
 	uint16_t osc_rc32m_comp = 0xB71B;
+	DFLLRC32M.CALB = timer_calib;
 	DFLLRC32M.COMP1 = (osc_rc32m_comp >> 0)&0xFF;
 	DFLLRC32M.COMP2 = (osc_rc32m_comp >> 8)&0xFF;
-	OSC.DFLLCTRL = OSC_RC32MCREF_RC32K_gc;
-	OSC.CTRL |= OSC_RC32KEN_bm; //enable 32kHz oscillator as reference oscillator
-	while(!(OSC.STATUS&OSC_RC32KRDY_bm)){} // wait for 32kHz oscillator to be ready
+	OSC.DFLLCTRL = OSC_RC32MCREF_USBSOF_gc;//OSC_RC32MCREF_RC32K_gc;
+	//OSC.CTRL |= OSC_RC32KEN_bm; //enable 32kHz oscillator as reference oscillator
+	//while(!(OSC.STATUS&OSC_RC32KRDY_bm)){} // wait for 32kHz oscillator to be ready
 	DFLLRC32M.CTRL |= DFLL_ENABLE_bm; // enable DFLL
+	
+	OSC.CTRL |= OSC_RC32MEN_bm; //enable 32MHz oscillator
+	while(!(OSC.STATUS&OSC_RC32MRDY_bm)){} //wait for 32MHz oscillator to be ready
 
 	CLK.USBCTRL = CLK_USBPSDIV_1_gc | CLK_USBSRC_RC32M_gc; //select 32MHz (48Mhz) oscillator as USB clock source
 
