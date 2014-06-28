@@ -45,6 +45,7 @@
 #define _CONF_USB_H_
 
 #define UDD_NO_SLEEP_MGR
+#define USB_DEVICE_ATTACH_AUTO_DISABLE
 
 #include "compiler.h"
 

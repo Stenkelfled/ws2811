@@ -51,16 +51,16 @@ int main (void)
 	
 	usb_start();
 
-	_delay_ms(1000);
-	int8_t uart_char;
-	while(1){
-		uart_char = udi_cdc_getc();
-		TCC2.LCNT = uart_char;
-		asm volatile ("nop");
-		if(udi_cdc_is_tx_ready()){
-			udi_cdc_putc('k');
-		}
-	}
+// 	_delay_ms(1000);
+// 	int8_t uart_char;
+// 	while(1){
+// 		uart_char = udi_cdc_getc();
+// 		TCC2.LCNT = uart_char;
+// 		asm volatile ("nop");
+// 		if(udi_cdc_is_tx_ready()){
+// 			udi_cdc_putc('k');
+// 		}
+// 	}
 	
 	while(1){
 		asm volatile ("nop");

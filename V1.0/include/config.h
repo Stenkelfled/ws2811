@@ -10,9 +10,12 @@
 #define CONFIG_H_
 #include <avr/io.h>
 
-#define BUTTON_PORT		PORTE
-#define BUTTON1_PIN		1
-#define BUTTON2_PIN		2
+#define BUTTON_PORT		(PORTE)
+#define BUTTON1_PIN		(1)
+#define BUTTON2_PIN		(2)
+
+#define USB_PORT		(PORTD)
+#define USB_POWER_PIN	(5)
 
 void init_interrupts(void);
 void init_clock(void);

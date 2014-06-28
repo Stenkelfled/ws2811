@@ -11,6 +11,8 @@
 
 void usb_start(void);
 
+void usb_power_monitor_init(void);
+
 //////////////////////////////////////////////////////////////////////////
 //usb-driver callbacks
 void user_callback_vbus_action(bool b_vbus_high); //voltage on usb-power-line changed
