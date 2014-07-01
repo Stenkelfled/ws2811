@@ -10,10 +10,14 @@
 #include <config.h>
 #include <usb.h>
 
+uint8_t preamble_pos = 0;
+
 void usb_start(void){
 	udc_start();
-#warning "later here should be a real event"
 	usb_power_monitor_init();
+	if(USB_PORT.IN & (1<<USB_POWER_PIN)){
+		UDC_VBUS_EVENT(true);
+	}
 }
 
 
@@ -29,9 +33,15 @@ ISR(PORTD_INT0_vect){
 	UDC_VBUS_EVENT( USB_PORT.IN & (1<<USB_POWER_PIN) );
 }
 
+void usb_rx_ready(void){
+	preamble_pos = 0;
+}
+
 //////////////////////////////////////////////////////////////////////////
 //usb-driver callbacks
-void user_callback_vbus_action(bool b_vbus_high){ //voltage on usb-power-line changed
+
+//voltage on usb-power-line changed
+void user_callback_vbus_action(bool b_vbus_high){
 	if(b_vbus_high){
 		udc_attach();
 		LED_RD_ON
@@ -41,8 +51,27 @@ void user_callback_vbus_action(bool b_vbus_high){ //voltage on usb-power-line ch
 	}
 }
 
-bool my_callback_cdc_enable(void){ //host opens device
-	//TODO: nothing to do here at the moment (maybe later close the connection)
+//there is data to receive
+void my_callback_rx_notify(uint8_t port){ 
+	int8_t preamble[USB_PREAMBLE_LEN] = USB_PREAMBLE;
+	while(udi_cdc_is_rx_ready()){
+		if(preamble_pos == USB_PREAMBLE_LEN){
+			//preamble-check passed -> now evaluate the data
+			usb_rx_ready();
+		}
+		if(preamble_pos < USB_PREAMBLE_LEN){
+			if( udi_cdc_getc() == preamble[preamble_pos]){
+				preamble_pos++;
+			} else {
+				//preamble-check failed. try again.
+				preamble_pos = 0;
+			}
+		}
+	}
+}
+
+/*bool my_callback_cdc_enable(void){ //host opens device
+	//TODO: nothing to do here at the moment (maybe later open the connection)
 	LED_GN_ON
 	return true;
 }
@@ -50,4 +79,4 @@ bool my_callback_cdc_enable(void){ //host opens device
 void my_callback_cdc_disable(void){ //host closes device
 	//TODO: nothing to do here at the moment (maybe later close the connection)
 	LED_GN_OFF
-}
+}*/

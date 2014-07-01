@@ -10,8 +10,9 @@
 #define USB_H_
 
 void usb_start(void);
-
 void usb_power_monitor_init(void);
+
+void usb_rx_ready(void);
 
 //////////////////////////////////////////////////////////////////////////
 //usb-driver callbacks

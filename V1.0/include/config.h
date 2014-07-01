@@ -21,5 +21,8 @@ void init_interrupts(void);
 void init_clock(void);
 void init_ports(void);
 
+#define USB_PREAMBLE		"Led"
+#define USB_PREAMBLE_LEN	(3)
+
 
 #endif /* CONFIG_H_ */
