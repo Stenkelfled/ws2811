@@ -8811,8 +8811,8 @@ DDEController.pdf</description>
 <part name="X2" library="TURAG_Steckverbinder" deviceset="USB-MINI" device="32005-601"/>
 <part name="IC3" library="TURAG_Diode" deviceset="SRV05-4" device=".TCT"/>
 <part name="GND7" library="supply1" deviceset="GND" device=""/>
-<part name="R1" library="rcl" deviceset="R-EU_" device="R0603" value="27k"/>
-<part name="R2" library="rcl" deviceset="R-EU_" device="R0603" value="47k"/>
+<part name="R1" library="rcl" deviceset="R-EU_" device="R0603" value="2k7"/>
+<part name="R2" library="rcl" deviceset="R-EU_" device="R0603" value="4k7"/>
 <part name="GND8" library="supply1" deviceset="GND" device=""/>
 <part name="R3" library="rcl" deviceset="R-EU_" device="R0603" value="1M"/>
 <part name="C11" library="rcl" deviceset="C-EU" device="C0603" value="4n7"/>
