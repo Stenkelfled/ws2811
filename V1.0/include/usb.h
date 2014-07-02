@@ -9,6 +9,8 @@
 #ifndef USB_H_
 #define USB_H_
 
+#include <asf.h>
+
 void usb_start(void);
 void usb_power_monitor_init(void);
 

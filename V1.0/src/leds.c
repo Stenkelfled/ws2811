@@ -6,6 +6,7 @@
  */
 #include <asf.h>
 #include <util/delay.h>
+#include <config.h>
 #include <leds.h>
 
 uint8_t zero = 0;

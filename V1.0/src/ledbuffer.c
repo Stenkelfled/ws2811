@@ -7,6 +7,7 @@
 
 #include <asf.h>
 
+#include <config.h>
 #include <ledbuffer.h>
 #include <leds.h>
 
@@ -71,7 +72,7 @@ void define_group(uint8_t group_id, uint8_t start_led,uint8_t end_led, uint8_t s
     leds[end_led].next_led = NULL;
 }
 
-void append_to_group(uint8_t group_id, uint8_t led_id){
+void append_led_to_group(uint8_t group_id, uint8_t led_id){
 	if(led_id >= LED_COUNT){
 		while(1){asm volatile ("nop");}
 	}
