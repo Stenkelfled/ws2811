@@ -49,18 +49,21 @@ void fill_buffer(void){
 
 }
 
-void define_group(uint8_t group_id, uint8_t start_led,uint8_t end_led, uint8_t step){    
+uint8_t define_group(uint8_t group_id, uint8_t start_led,uint8_t end_led, uint8_t step){    
     uint8_t current_led = start_led;
     uint8_t next_led = -1;
     groups[group_id].start_led = &leds[start_led];
 
 	if(end_led >= LED_COUNT){
-		LED_RD_ON
-		while(1){asm volatile ("nop");}
+		//LED_RD_ON
+		return FALSE;
 	}
 	if(group_id >= GROUP_COUNT){
-		LED_RD_ON
-		while(1){asm volatile ("nop");}
+		//LED_RD_ON
+		return FALSE;
+	}
+	if(step == 0){
+		return FALSE;
 	}
 
     while(current_led != end_led){
@@ -70,6 +73,7 @@ void define_group(uint8_t group_id, uint8_t start_led,uint8_t end_led, uint8_t s
         current_led = next_led;
     }
     leds[end_led].next_led = NULL;
+	return TRUE;
 }
 
 void append_led_to_group(uint8_t group_id, uint8_t led_id){

@@ -46,12 +46,14 @@ int main (void)
 	init_dma(ledbuffer_get_data_pointer());
 	init_eeprom();
 	start_leds();
+	usb_print_init();
 	sei();
 	//LED_RD_ON
 	
 	usb_start();
 
-// 	_delay_ms(1000);
+ 	//_delay_ms(1000);
+
 // 	int8_t uart_char;
 // 	while(1){
 // 		uart_char = udi_cdc_getc();
@@ -111,10 +113,12 @@ ISR(PORTE_INT0_vect){ //Button 1 pressed
 	if(++mode > 4){
 		mode = 0;
 	}
+	usb_print("Button 1\n");
 }
 
 ISR(PORTE_INT1_vect){ //Button 2 pressed
 	if(mode-- == 0){
 		mode = 4;
 	}
+	usb_print("Button 2\n");
 }

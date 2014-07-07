@@ -10,8 +10,14 @@
 #define CONFIG_H_
 #include <avr/io.h>
 
-#define LED_COUNT				(3)
-#define GROUP_COUNT				(8)
+#define TRUE			(1)
+#define FALSE			(0)
+#define YES				(TRUE)
+
+#define USB_DEBUG_ENABLE	(YES)
+
+#define LED_COUNT		(3)
+#define GROUP_COUNT		(8)
 
 #define BUTTON_PORT		(PORTE)
 #define BUTTON1_PIN		(1)

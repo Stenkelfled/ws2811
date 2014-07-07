@@ -20,41 +20,41 @@
 ### Sequenz definieren
 0xB0  Sequenz start
   #für jede Gruppe:
+  0xB4  Gruppe wählen
   ...   ID Gruppe
-  
-  #eine der folgenden Gruppenoptionen wählen:
-  ## mit dem Vorsatz
-    0xEF
-    ...   LED-ID
-  ## gilt das nachfolgende Kommando für exakt eine LED
-  0xE0  LEDs aus (shortcut für RGB=000)
-  
-  0xE1  RGB setzen
-  ...   R
-  ...   G
-  ...   B
-  
-  0xE2  HSB setzen
-  ...   H
-  ...   S
-  ...   V
-  
-  0xE3  Regenbogen
-  ...   Geschwindigkeit
-  
-  0xEE  Innerhalb der Gruppe schieben
-  ...   Geschwindigkeit in 10ms
-  
-  #Optional:
-  0xF0  Helligkeit der Gruppe
-  ...   Helligkeit
-  
-  0xF1  Gruppe dimmen
-  ...   Geschwindigkeit
-  
-  0xF2  Delay, danach kann eine andere Gruppenoption gewählt werden
-  ...   Delay in 100ms
-
+    
+    #eine der folgenden Gruppenoptionen wählen:
+    ## mit dem Vorsatz
+      0xEF
+      ...   LED-ID
+    ## gilt das nachfolgende Kommando für exakt eine LED
+    0xE0  LEDs aus (shortcut für RGB=000)
+    
+    0xE1  RGB setzen
+    ...   R
+    ...   G
+    ...   B
+    
+    0xE2  HSB setzen
+    ...   H
+    ...   S
+    ...   V
+    
+    0xE3  Regenbogen
+    ...   Geschwindigkeit
+    
+    0xEE  Innerhalb der Gruppe schieben
+    ...   Geschwindigkeit in 10ms
+    
+    #Optional:
+    0xF0  Helligkeit der Gruppe
+    ...   Helligkeit
+    
+    0xF1  Gruppe dimmen
+    ...   Geschwindigkeit
+    
+    0xF2  Delay, danach kann eine andere Gruppenoption gewählt werden
+    ...   Delay in 100ms
 
   #nach den Gruppendefinitionen
   0xB2  Schieben start #es werden alle Gruppen zwischen Schieben start und schieben ende geschoben; es können auch mehrere Schiebeoperationen eingestellt werden. 
@@ -64,3 +64,6 @@
   0xB3 Schieben ende
 
 0xB1  Sequenz Ende
+
+#am Ende:
+0xFF START
