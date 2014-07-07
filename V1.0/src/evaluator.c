@@ -39,8 +39,8 @@ void seq_rgb_statefunc2(uint8_t usb_data);
 void seq_rgb_statefunc3(uint8_t usb_data);
 
 //state data:
-group_data_t group_data = {.current_group=-1, .first_led=-1, .last_led=-1, .step=-1};
-seq_data_t seq_data = {.group_id = -1};
+group_data_t group_data = {.current_group=INVALID_1, .first_led=INVALID_1, .last_led=INVALID_1, .step=INVALID_1};
+seq_data_t seq_data = {.group_id = INVALID_1};
 
 //states:
 state_t idle_state = {NULL, &idle_statefunc};
@@ -90,14 +90,14 @@ void idle_statefunc(uint8_t usb_data){
 
 void group_entryfunc(void){
 	usb_print("group entry\n");
-	if(group_data.current_group < (GROUP_COUNT-1)){
+	if( (group_data.current_group < (GROUP_COUNT-1)) || (group_data.current_group == INVALID_1) ){
 		group_data.current_group++;
 	} else {
 		ev_abort_all();
 	}
-	group_data.first_led = -1;
-	group_data.last_led = -1;
-	group_data.step = -1;
+	group_data.first_led = INVALID_1;
+	group_data.last_led = INVALID_1;
+	group_data.step = INVALID_1;
 }
 
 void group_statefunc(uint8_t usb_data){
@@ -137,14 +137,15 @@ void led_statefunc(uint8_t usb_data){
 }
 
 void seq_entryfunc(void){
-	seq_data.group_id = -1;
+	seq_data.group_id = INVALID_1;
 }
 
 void seq_statefunc(uint8_t usb_data){
 	usb_print("state\n");
-	if(seq_data.group_id == -1){ //invalid group id
+	if(seq_data.group_id == INVALID_1){ //invalid group id
 		if(usb_data == EV_SEQ_GROUP){
 			ev_switch_state(&seq_group_state);
+			return;
 		} else {
 			ev_abort_all();
 		}
@@ -160,7 +161,7 @@ void seq_statefunc(uint8_t usb_data){
 }
 
 void seq_group_statefunc(uint8_t usb_data){
-	if(usb_data == -1){ //invalid group id
+	if(usb_data == INVALID_1){ //invalid group id
 		ev_abort_all();
 		return;
 	}
@@ -200,8 +201,8 @@ void evaluate(uint8_t usb_data){
 
 void evaluator_new_evaluation(void){
 	current_state = &idle_state;
-	group_data.current_group = -1;
-	seq_data.group_id = -1;
+	group_data.current_group = INVALID_1;
+	seq_data.group_id = INVALID_1;
 }
 
 //private functions

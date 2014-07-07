@@ -11,6 +11,8 @@
 
 #include <stdint.h>
 
+#define INVALID_1		((uint8_t)-1)
+
 typedef struct{
 	void (*entry_func)(void);
 	void (*state_func)(uint8_t);
