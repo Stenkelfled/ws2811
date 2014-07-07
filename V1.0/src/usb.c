@@ -53,8 +53,12 @@ void usb_print_overflow(void){
 		print_buf[USB_PRINT_BUFFER_LEN-1] = '@';
 		print_buf[USB_PRINT_BUFFER_LEN-2] = '@';
 		print_buf_write = print_buf+USB_PRINT_BUFFER_LEN-1;
+	} else if(print_buf_write == (print_buf+1)){
+		print_buf[0] = '@';
+		print_buf[USB_PRINT_BUFFER_LEN-1] = '@';
+		print_buf_write = print_buf;
 	} else {
-		*print_buf_write-- = '@';
+		*--print_buf_write = '@';
 		*(print_buf_write-1) = '@';
 	}
 }
@@ -65,6 +69,10 @@ void usb_print_init(void){
 }
 
 void usb_print(char *buf){
+	uint8_t isempty = FALSE;
+	if(print_buf_read == print_buf_write){
+		isempty = TRUE;
+	}
 	while(*buf != '\0'){
 		*print_buf_write++ = *buf++;
 		if(print_buf_write == (print_buf+USB_PRINT_BUFFER_LEN)){
@@ -72,10 +80,10 @@ void usb_print(char *buf){
 		}
 		if(print_buf_write == print_buf_read){ //Buffer Overflow
 			usb_print_overflow();
-			return;
+			break;
 		}
 	}
-	if(udi_cdc_is_tx_ready()){
+	if(isempty && udi_cdc_is_tx_ready()){
 		//write first byte
 		udi_cdc_putc(*print_buf_read++);
  	}
