@@ -19,12 +19,15 @@ typedef struct{
 }state_t;
 
 void evaluate(uint8_t usb_data);
-void evaluator_new_evaluation(void);
+void evaluator_new_evaluation(void (*rdy_fctn)(void));
 
 
 //////////////////////////////////////////////////////////////////////////
 // evaluator commands
 //////////////////////////////////////////////////////////////////////////
+
+#define EV_ON_THE_GO	(0xC0)
+#define EV_TO_EEPROM	(0xC1)
 
 #define EV_GROUP_START	(0xA0)
 	#define EV_DEF_ROW		(0xA2)
@@ -45,6 +48,8 @@ void evaluator_new_evaluation(void);
 	
 	#define EV_SHIFT_GROUP_START	(0xB2)
 	#define EB_SHIFT_GROUP_END		(0xB3)
+	
+	#define EV_DELAY		(0xEF)
 #define EV_SEQ_END		(0xB1)
 
 #define EV_START		(0xFF)
@@ -69,5 +74,11 @@ typedef struct{
 	uint8_t group_id;
 	uint8_t tmp[3];
 } seq_data_t;
+
+typedef struct{
+	uint16_t len;
+	uint8_t num_groups;
+	uint8_t num_seqs;
+} eeprom_data_t;
 
 #endif /* EVALUATOR_H_ */

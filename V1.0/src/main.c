@@ -33,6 +33,7 @@
 #include <ledbuffer.h>
 #include <rgbhsv.h>
 #include <usb.h>
+#include <usbprint.h>
 
 uint8_t mode = 0;
 

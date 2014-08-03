@@ -293,13 +293,25 @@
     <Compile Include="include\rgbhsv.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="include\seq_processor.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="include\usb.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\usbprint.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\evaluator.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\seq_processor.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\usb.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\usbprint.c">
       <SubType>compile</SubType>
     </Compile>
     <None Include="atmel_devices_cdc.cat">
