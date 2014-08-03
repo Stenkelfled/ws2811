@@ -1,0 +1,5 @@
+#präambel:
+Led
+# LEDS: 0-2 = rot
+A0A2000201A1B0B400E1FF0000B1FF
+
