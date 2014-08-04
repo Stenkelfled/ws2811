@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QStringList>
 
+#include "ledscene.h"
 #include "serial.h"
 
 namespace Ui {
@@ -24,10 +25,14 @@ public slots:
 
 private slots:
     void on_transmitPushButton_clicked();
+    void on_actionClose_triggered();
 
 private:
     Ui::Lui *ui;
     Serial *serial;
+    LedScene *scene;
+
+    int led_count;
 };
 
 #endif // LUI_H

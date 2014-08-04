@@ -9,15 +9,26 @@ QT       += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets\
                                         serialport
 
+CONFIG += c++11
+
 TARGET = LUI
 TEMPLATE = app
 
 
 SOURCES += main.cpp\
         lui.cpp \
-    serial.cpp
+    serial.cpp \
+    ledscene.cpp \
+    leditem.cpp
 
 HEADERS  += lui.h \
-    serial.h
+    serial.h \
+    ../../protocoll.h \
+    ledscene.h \
+    ../../global.h \
+    leditem.h \
+    settings.h
+
+INCLUDEPATH += ../../
 
 FORMS    += lui.ui
