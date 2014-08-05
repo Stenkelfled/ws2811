@@ -12,10 +12,11 @@ LedItem::LedItem(int id, qreal x, qreal y, QGraphicsItem *parent):
 {
     setBrush(QBrush(settings::leditem::color));
     setPen(QPen(Qt::NoPen));
-    this->id_text = new QGraphicsTextItem(QString::number(this->my_id), this); //items will be removed automtically on led deletion
+    this->id_text = new QGraphicsTextItem(QString::number(this->id()), this); //items will be removed automtically on led deletion
     this->id_text->setFont(QFont("MS Shell Dlg 2", settings::leditem::height/2, QFont::DemiBold));
     this->id_text->setPos(this->rect().center() - this->id_text->boundingRect().center());
     updateTextColor();
+    //setAcceptedMouseButtons(Qt::LeftButton);
 }
 
 void LedItem::updateTextColor(){
@@ -27,3 +28,7 @@ void LedItem::updateTextColor(){
     this->id_text->setDefaultTextColor(color);
 }
 
+void LedItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    qDebug() << "Mouse press on Led" << this->id();
+}

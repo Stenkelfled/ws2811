@@ -10,6 +10,9 @@ public:
     explicit LedItem(int id, qreal x, qreal y, QGraphicsItem *parent = 0);
     void updateTextColor();
 
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+
 private:
     QGraphicsTextItem *id_text;
 };

@@ -1,3 +1,5 @@
+#include <QtDebug>
+
 #include <global.h>
 #include <groupitem.h>
 #include <leditem.h>
@@ -13,3 +15,8 @@ LedScene::LedScene(QObject *parent) :
         grp->addLed(led);
     }
 }
+
+/*void LedScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    qDebug() << "Mouse press on scene";
+}*/

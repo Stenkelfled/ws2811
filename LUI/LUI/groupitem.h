@@ -10,8 +10,11 @@ public:
     explicit GroupItem(int id, QGraphicsItem *parent = 0);
     void addLed(LedItem *led);
 
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+
 private:
-    QGraphicsItemGroup *grp;
+    QList<LedItem*> *grp;
 };
 
 #endif // GROUPITEM_H

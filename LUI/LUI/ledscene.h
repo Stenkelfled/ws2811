@@ -13,6 +13,9 @@ signals:
 
 public slots:
 
+protected:
+//    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+
 };
 
 #endif // LEDSCENE_H

@@ -11,6 +11,8 @@ public:
     int id();
 
 protected:
+
+private:
     int my_id;
 
 };
