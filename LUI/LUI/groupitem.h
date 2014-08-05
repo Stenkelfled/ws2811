@@ -8,7 +8,7 @@ class GroupItem : public LuiItem
 {
 public:
     explicit GroupItem(int id, QGraphicsItem *parent = 0);
-//    void addLed(LedItem led);
+    void addLed(LedItem *led);
 
 private:
     QGraphicsItemGroup *grp;
