@@ -1,19 +1,17 @@
 #ifndef LEDITEM_H
 #define LEDITEM_H
 
-#include <QGraphicsRectItem>
-
+#include <luiitem.h>
 #include <settings.h>
 
-class LedItem : public QGraphicsRectItem
+class LedItem : public LuiItem
 {
 public:
-    explicit LedItem(int id, qreal x, qreal y);
-    int id();
+    explicit LedItem(int id, qreal x, qreal y, QGraphicsItem *parent = 0);
+    void updateTextColor();
 
 private:
-    int my_id;
-
+    QGraphicsTextItem *id_text;
 };
 
 #endif // LEDITEM_H

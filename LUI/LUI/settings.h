@@ -3,10 +3,14 @@
 
 namespace settings{
     namespace leditem{
-        constexpr int height = 10;
-        constexpr int width = 10;
+        constexpr int height = 20;
+        constexpr int width = 20;
         constexpr Qt::GlobalColor color = Qt::black;
         constexpr int spacing = 5;
+    }
+
+    namespace groupitem{
+        constexpr int border = 10;
     }
 }
 

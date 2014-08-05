@@ -19,7 +19,9 @@ SOURCES += main.cpp\
         lui.cpp \
     serial.cpp \
     ledscene.cpp \
-    leditem.cpp
+    leditem.cpp \
+    groupitem.cpp \
+    luiitem.cpp
 
 HEADERS  += lui.h \
     serial.h \
@@ -27,8 +29,12 @@ HEADERS  += lui.h \
     ledscene.h \
     ../../global.h \
     leditem.h \
-    settings.h
+    settings.h \
+    groupitem.h \
+    luiitem.h
 
 INCLUDEPATH += ../../
+
+DEPENPATH += ../../
 
 FORMS    += lui.ui

@@ -8,7 +8,6 @@ class LedScene : public QGraphicsScene
     Q_OBJECT
 public:
     explicit LedScene(QObject *parent = 0);
-    ~LedScene();
 
 signals:
 
