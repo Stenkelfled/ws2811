@@ -9,6 +9,7 @@ public:
     explicit LuiItem(int id, QGraphicsItem *parent = 0);
     explicit LuiItem(int id, qreal x, qreal y, int rect_width, int rect_height, QGraphicsItem *parent = 0);
     int id();
+    //void setSelected(bool selected);
 
 protected:
 

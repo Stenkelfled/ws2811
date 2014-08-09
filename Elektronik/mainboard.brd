@@ -2382,7 +2382,7 @@ DDEController.pdf</description>
 <wire x1="11.15" y1="4.55" x2="10.4" y2="4.55" width="0.2" layer="16"/>
 <wire x1="10.4" y1="4.55" x2="10.4" y2="3.25" width="0.2" layer="16"/>
 </signal>
-<signal name="/RESET">
+<signal name="!RESET!">
 <contactref element="U$1" pad="57"/>
 <contactref element="TA1" pad="1"/>
 <contactref element="R4" pad="1"/>
@@ -2408,7 +2408,7 @@ DDEController.pdf</description>
 <wire x1="16.25" y1="16" x2="16.25" y2="17.4" width="0.3" layer="1"/>
 <wire x1="16.25" y1="17.4" x2="17.6" y2="17.4" width="0.3" layer="1"/>
 </signal>
-<signal name="/TASTER1">
+<signal name="!TASTER1!">
 <contactref element="TA2" pad="1"/>
 <contactref element="R5" pad="1"/>
 <contactref element="TA2" pad="3"/>
@@ -2424,7 +2424,7 @@ DDEController.pdf</description>
 <wire x1="1.6" y1="14.4" x2="4.3962" y2="14.4" width="0.3" layer="16"/>
 <wire x1="4.3962" y1="14.4" x2="4.4403" y2="14.4441" width="0.3" layer="16"/>
 </signal>
-<signal name="/TASTER2">
+<signal name="!TASTER2!">
 <contactref element="TA3" pad="1"/>
 <contactref element="R6" pad="1"/>
 <contactref element="TA3" pad="3"/>

@@ -9345,7 +9345,7 @@ DDEController.pdf</description>
 <junction x="111.76" y="147.32"/>
 </segment>
 </net>
-<net name="/RESET" class="0">
+<net name="!RESET!" class="0">
 <segment>
 <pinref part="U$1" gate="G$1" pin="PDI-CLK/!RESET"/>
 <wire x1="27.94" y1="81.28" x2="25.4" y2="81.28" width="0.1524" layer="91"/>
@@ -9373,7 +9373,7 @@ DDEController.pdf</description>
 <label x="193.04" y="88.9" size="1.778" layer="95" rot="MR0"/>
 </segment>
 </net>
-<net name="/TASTER1" class="0">
+<net name="!TASTER1!" class="0">
 <segment>
 <pinref part="TA2" gate="G$1" pin="S"/>
 <wire x1="38.1" y1="25.4" x2="38.1" y2="27.94" width="0.1524" layer="91"/>
@@ -9396,7 +9396,7 @@ DDEController.pdf</description>
 <label x="99.06" y="132.08" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="/TASTER2" class="0">
+<net name="!TASTER2!" class="0">
 <segment>
 <pinref part="TA3" gate="G$1" pin="S"/>
 <wire x1="63.5" y1="25.4" x2="63.5" y2="27.94" width="0.1524" layer="91"/>

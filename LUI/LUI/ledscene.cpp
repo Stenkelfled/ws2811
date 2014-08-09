@@ -1,8 +1,10 @@
+#include <QGraphicsSceneMouseEvent>
 #include <QtDebug>
 
 #include <global.h>
 #include <groupitem.h>
 #include <leditem.h>
+#include <luiitem.h>
 #include "ledscene.h"
 
 LedScene::LedScene(QObject *parent) :
@@ -16,7 +18,14 @@ LedScene::LedScene(QObject *parent) :
     }
 }
 
-/*void LedScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void LedScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    qDebug() << "Mouse press on scene";
-}*/
+    qDebug() << "Mouse press on scene: " << event->scenePos();
+    if(itemAt(event->scenePos(), QTransform())){
+        QGraphicsScene::mousePressEvent(event);
+    } else {
+        foreach(QGraphicsItem *itm, selectedItems()){
+            itm->setSelected(false);
+        }
+    }
+}

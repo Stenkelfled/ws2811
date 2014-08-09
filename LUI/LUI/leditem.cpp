@@ -31,4 +31,5 @@ void LedItem::updateTextColor(){
 void LedItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     qDebug() << "Mouse press on Led" << this->id();
+    setSelected(true);
 }

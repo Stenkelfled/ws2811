@@ -14,7 +14,7 @@ signals:
 public slots:
 
 protected:
-//    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
 };
 
