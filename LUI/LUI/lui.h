@@ -26,6 +26,8 @@ public slots:
 private slots:
     void on_transmitPushButton_clicked();
     void on_actionClose_triggered();
+    void on_actionGroup_triggered();
+    void on_actionUngroup_triggered();
 
 private:
     Ui::Lui *ui;

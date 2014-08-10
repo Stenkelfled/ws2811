@@ -3,15 +3,23 @@
 
 #include <QGraphicsRectItem>
 
-class LuiItem : public QGraphicsRectItem
+enum class LuiItemType: char {none, led, group};
+
+class LuiItem : public QObject, public QGraphicsRectItem
 {
+    Q_OBJECT
+
 public:
     explicit LuiItem(int id, QGraphicsItem *parent = 0);
     explicit LuiItem(int id, qreal x, qreal y, int rect_width, int rect_height, QGraphicsItem *parent = 0);
     int id();
-    //void setSelected(bool selected);
+    virtual LuiItemType luitype();
+
+public slots:
 
 protected:
+
+signals:
 
 private:
     int my_id;

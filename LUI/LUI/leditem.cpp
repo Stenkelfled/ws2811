@@ -28,8 +28,13 @@ void LedItem::updateTextColor(){
     this->id_text->setDefaultTextColor(color);
 }
 
+LuiItemType LedItem::luitype()
+{
+    return LuiItemType::led;
+}
+
 void LedItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    qDebug() << "Mouse press on Led" << this->id();
+    //qDebug() << "Mouse press on Led" << this->id();
     setSelected(true);
 }

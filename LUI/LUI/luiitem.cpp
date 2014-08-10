@@ -22,3 +22,8 @@ int LuiItem::id()
 {
     return this->my_id;
 }
+
+LuiItemType LuiItem::luitype()
+{
+    return LuiItemType::none;
+}

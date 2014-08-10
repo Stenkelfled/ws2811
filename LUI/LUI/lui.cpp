@@ -61,3 +61,13 @@ void Lui::on_actionClose_triggered()
 {
     qApp->quit();
 }
+
+void Lui::on_actionGroup_triggered()
+{
+    this->scene->group();
+}
+
+void Lui::on_actionUngroup_triggered()
+{
+    this->scene->ungroup();
+}

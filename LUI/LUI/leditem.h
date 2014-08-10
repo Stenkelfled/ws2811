@@ -9,6 +9,7 @@ class LedItem : public LuiItem
 public:
     explicit LedItem(int id, qreal x, qreal y, QGraphicsItem *parent = 0);
     void updateTextColor();
+    virtual LuiItemType luitype();
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);

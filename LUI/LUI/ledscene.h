@@ -3,6 +3,8 @@
 
 #include <QGraphicsScene>
 
+#include <groupitem.h>
+
 class LedScene : public QGraphicsScene
 {
     Q_OBJECT
@@ -12,6 +14,9 @@ public:
 signals:
 
 public slots:
+    void ungroup();
+    void group();
+    void removeGroup(GroupItem *grp);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);

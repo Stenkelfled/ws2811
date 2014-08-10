@@ -1,4 +1,5 @@
 #include <QGraphicsSceneMouseEvent>
+#include <QKeyEvent>
 #include <QtDebug>
 
 #include <global.h>
@@ -18,10 +19,33 @@ LedScene::LedScene(QObject *parent) :
     }
 }
 
+void LedScene::group()
+{
+    foreach(QGraphicsItem *itm, selectedItems()){
+
+    }
+}
+
+void LedScene::removeGroup(GroupItem* grp)
+{
+    removeItem((QGraphicsItem*)grp);
+}
+
+void LedScene::ungroup()
+{
+    foreach(QGraphicsItem *itm, selectedItems()){
+        LuiItem *led = ((LuiItem*)itm);
+        if( led->luitype() == LuiItemType::led){
+            GroupItem *grp = (GroupItem*)led->parentItem();
+            grp->removeLed((LedItem*)led);
+        }
+    }
+}
+
 void LedScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    qDebug() << "Mouse press on scene: " << event->scenePos();
-    if(itemAt(event->scenePos(), QTransform())){
+    //qDebug() << "Mouse press on scene: " << event->scenePos();
+    if(itemAt(event->scenePos(), QTransform()) != NULL){
         QGraphicsScene::mousePressEvent(event);
     } else {
         foreach(QGraphicsItem *itm, selectedItems()){
@@ -29,3 +53,4 @@ void LedScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         }
     }
 }
+
