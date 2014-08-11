@@ -24,7 +24,18 @@ void GroupItem::removeLed(LedItem *led)
     led->setParentItem(NULL);
     this->grp->removeAll(led);
     refreshArea();
-    //emit groupEmpty();
+    if(this->grp->size() == 0){
+        emit groupEmpty(this);
+    }
+}
+
+void GroupItem::makeEmpty()
+{
+    foreach( LedItem* led, *(this->grp)){
+        led->setParentItem(NULL);
+    }
+    this->grp->clear();
+    emit groupEmpty(this);
 }
 
 LuiItemType GroupItem::luitype()

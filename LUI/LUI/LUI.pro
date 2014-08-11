@@ -30,8 +30,8 @@ HEADERS  += lui.h \
     ../../global.h \
     leditem.h \
     settings.h \
-    groupitem.h \
-    luiitem.h
+    luiitem.h \
+    groupitem.h
 
 INCLUDEPATH += ../../
 

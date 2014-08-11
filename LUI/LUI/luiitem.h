@@ -2,6 +2,7 @@
 #define LUIITEM_H
 
 #include <QGraphicsRectItem>
+#include <QObject>
 
 enum class LuiItemType: char {none, led, group};
 
@@ -20,6 +21,7 @@ public slots:
 protected:
 
 signals:
+    void dummySignal();
 
 private:
     int my_id;

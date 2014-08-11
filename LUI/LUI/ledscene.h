@@ -16,7 +16,7 @@ signals:
 public slots:
     void ungroup();
     void group();
-    void removeGroup(GroupItem *grp);
+    void removeGroup(GroupItem *group);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);

@@ -5,6 +5,7 @@
 #include "luiitem.h"
 
 LuiItem::LuiItem(int id, QGraphicsItem *parent) :
+    QObject(),
     QGraphicsRectItem(parent),
     my_id(id)
 {
