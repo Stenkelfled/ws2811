@@ -19,11 +19,12 @@ public:
 public slots:
 
 protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
 signals:
-    void dummySignal();
 
 private:
+    void initFlags();
     int my_id;
 
 };

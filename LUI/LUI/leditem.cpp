@@ -1,5 +1,6 @@
 #include <QBrush>
 #include <QFont>
+#include <QGraphicsSceneMouseEvent>
 #include <QPen>
 #include <QtDebug>
 
@@ -8,7 +9,8 @@
 
 
 LedItem::LedItem(int id, qreal x, qreal y, QGraphicsItem *parent):
-    LuiItem(id, x, y, settings::leditem::width, settings::leditem::height, parent)
+    LuiItem(id, x, y, settings::leditem::width, settings::leditem::height, parent),
+    is_moving(false)
 {
     setBrush(QBrush(settings::leditem::color));
     setPen(QPen(Qt::NoPen));
@@ -33,8 +35,41 @@ LuiItemType LedItem::luitype()
     return LuiItemType::led;
 }
 
-void LedItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+/*void LedItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    //qDebug() << "Mouse press on Led" << this->id();
-    setSelected(true);
+    LuiItem::mousePressEvent(event);
+}*/
+
+void LedItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    if(this->is_moving){
+        this->is_moving = false;
+        emit itemMoved();
+    }
+    QGraphicsRectItem::mouseReleaseEvent(event);
 }
+
+QVariant LedItem::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)
+{
+    if(change == QGraphicsItem::ItemPositionHasChanged){
+        this->is_moving = true;
+    }
+    return QGraphicsRectItem::itemChange(change, value);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

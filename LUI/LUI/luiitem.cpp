@@ -1,4 +1,5 @@
 #include <QBrush>
+#include <QGraphicsScene>
 #include <QPen>
 #include <QtDebug>
 
@@ -9,14 +10,14 @@ LuiItem::LuiItem(int id, QGraphicsItem *parent) :
     QGraphicsRectItem(parent),
     my_id(id)
 {
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
+    initFlags();
 }
 
 LuiItem::LuiItem(int id, qreal x, qreal y, int rect_width, int rect_height, QGraphicsItem *parent) :
     QGraphicsRectItem(x, y, rect_width, rect_height, parent),
     my_id(id)
 {
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
+    initFlags();
 }
 
 int LuiItem::id()
@@ -27,4 +28,16 @@ int LuiItem::id()
 LuiItemType LuiItem::luitype()
 {
     return LuiItemType::none;
+}
+
+void LuiItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    scene()->clearSelection();
+}
+
+void LuiItem::initFlags()
+{
+    setFlags(QGraphicsItem::ItemIsSelectable
+             | QGraphicsItem::ItemIsMovable
+             | QGraphicsItem::ItemSendsGeometryChanges);
 }

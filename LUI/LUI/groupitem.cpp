@@ -1,4 +1,5 @@
 #include <QBrush>
+#include <QObject>
 #include <QPen>
 #include <QtDebug>
 
@@ -17,11 +18,13 @@ void GroupItem::addLed(LedItem *led)
     this->grp->append(led);
     led->setParentItem(this);
     refreshArea();
+    connect(led, SIGNAL(itemMoved()), this, SLOT(refreshArea()));
 }
 
 void GroupItem::removeLed(LedItem *led)
 {
     led->setParentItem(NULL);
+    disconnect(led, 0, this, 0);
     this->grp->removeAll(led);
     refreshArea();
     if(this->grp->size() == 0){
@@ -33,6 +36,7 @@ void GroupItem::makeEmpty()
 {
     foreach( LedItem* led, *(this->grp)){
         led->setParentItem(NULL);
+        disconnect(led, 0, this, 0);
     }
     this->grp->clear();
     emit groupEmpty(this);
@@ -43,10 +47,11 @@ LuiItemType GroupItem::luitype()
     return LuiItemType::group;
 }
 
-void GroupItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+/*void GroupItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     //qDebug() << "Mouse press on group";
-}
+    LuiItem::mousePressEvent(event);
+}*/
 
 void GroupItem::refreshArea()
 {

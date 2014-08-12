@@ -23,14 +23,14 @@ SOURCES += main.cpp\
     groupitem.cpp \
     luiitem.cpp
 
-HEADERS  += lui.h \
+HEADERS  += settings.h \
     serial.h \
+    lui.h \
     ../../protocoll.h \
     ledscene.h \
     ../../global.h \
-    leditem.h \
-    settings.h \
     luiitem.h \
+    leditem.h \
     groupitem.h
 
 INCLUDEPATH += ../../

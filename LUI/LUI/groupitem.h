@@ -14,14 +14,16 @@ public:
     void makeEmpty();
     virtual LuiItemType luitype();
 
+public slots:
+    void refreshArea();
+
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    //void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
 signals:
     void groupEmpty(GroupItem* group);
 
 private:
-    void refreshArea();
     QList<LedItem*> *grp;
 };
 
