@@ -20,6 +20,10 @@ public slots:
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+    QGraphicsRectItem *selection_rect_item;
+    QPointF selection_start;
 
 };
 
