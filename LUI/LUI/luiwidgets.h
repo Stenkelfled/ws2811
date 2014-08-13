@@ -19,4 +19,20 @@ protected:
 
 };
 
+class LuiColorLabelCustom : public QLabel
+{
+    Q_OBJECT
+public:
+    explicit LuiColorLabelCustom(QWidget *parent = 0);
+
+signals:
+    void clickedColor(QColor color);
+
+public slots:
+
+protected:
+    void mousePressEvent(QMouseEvent *event);
+
+};
+
 #endif // LUICOLORLABEL_H

@@ -35,6 +35,7 @@ Lui::Lui(QWidget *parent) :
     connect(this->ui->color_yellow, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
     connect(this->ui->color_orange, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
     connect(this->ui->color_magenta, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
+    connect(this->ui->color_custom, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
 
     connect(this, SIGNAL(colorChanged(QColor)), this->scene, SLOT(updateColor(QColor)));
 }
@@ -68,7 +69,10 @@ void Lui::enableTransmitPushButton(){
 void Lui::colorDisplayEnable(bool status)
 {
     this->ui->color->setEnabled(status);
+    /*this->ui->color_display_group->setEnabled(status);
+    this->ui->brightness->setEnabled(status);*/
     this->ui->brightness_slider->setEnabled(status);
+    qDebug() << "status" << status << "slider" << this->ui->brightness_slider->isEnabled();
 }
 
 void Lui::colorDisplayChange(QColor color)
