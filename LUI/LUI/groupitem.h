@@ -13,6 +13,7 @@ public:
     void removeLed(LedItem *led);
     void makeEmpty();
     virtual LuiItemType luitype();
+    void setColor(QColor color);
 
 public slots:
     void refreshArea();

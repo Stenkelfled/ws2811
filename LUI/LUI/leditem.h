@@ -11,6 +11,7 @@ class LedItem : public LuiItem
     Q_OBJECT
 public:
     explicit LedItem(int id, qreal x, qreal y, QGraphicsItem *parent = 0);
+    void setColor(QColor color);
     void updateTextColor();
     virtual LuiItemType luitype();
 

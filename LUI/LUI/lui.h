@@ -20,6 +20,9 @@ public:
     explicit Lui(QWidget *parent = 0);
     ~Lui();
 
+signals:
+    void colorChanged(QColor color);
+
 public slots:
     void updatePortComboBox(QStringList &items);
     void enableTransmitPushButton(void);
@@ -33,6 +36,10 @@ private slots:
     void on_actionGroup_triggered();
     void on_actionUngroup_triggered();
     void on_actionSelectAll_triggered();
+
+    void newLedColor(QColor color);
+
+    void on_brightness_slider_sliderMoved(int position);
 
 private:
     Ui::Lui *ui;

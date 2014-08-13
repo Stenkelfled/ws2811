@@ -21,6 +21,14 @@ LedItem::LedItem(int id, qreal x, qreal y, QGraphicsItem *parent):
     //setAcceptedMouseButtons(Qt::LeftButton);
 }
 
+void LedItem::setColor(QColor color)
+{
+    QBrush b = brush();
+    b.setColor(color);
+    setBrush(b);
+    updateTextColor();
+}
+
 void LedItem::updateTextColor(){
     QColor col = this->brush().color();
     QColor color(Qt::white);

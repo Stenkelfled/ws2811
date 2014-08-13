@@ -22,7 +22,6 @@ LuiItem::LuiItem(int id, qreal x, qreal y, int rect_width, int rect_height, QGra
 
 QColor LuiItem::color()
 {
-    qDebug() << this->brush();
     return this->brush().color();
 }
 

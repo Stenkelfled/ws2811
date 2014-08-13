@@ -16,7 +16,7 @@ public:
     QColor color();
     int id();
     virtual LuiItemType luitype();
-    void setColor(QColor color);
+    virtual void setColor(QColor color);
 
 public slots:
 

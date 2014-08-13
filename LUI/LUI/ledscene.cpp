@@ -54,6 +54,12 @@ void LedScene::selectAll()
     }
 }
 
+void LedScene::updateColor(QColor color)
+{
+    //qDebug() << "newColor" << color;
+    this->selected_item->setColor(color);
+}
+
 void LedScene::ungroup()
 {
     foreach(QGraphicsItem *itm, selectedItems()){

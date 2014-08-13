@@ -25,6 +25,18 @@ Lui::Lui(QWidget *parent) :
     this->ui->ledView->setScene(this->scene);
     connect(this->scene, SIGNAL(selectedItemStatusChanged(bool)), this, SLOT(colorDisplayEnable(bool)));
     connect(this->scene, SIGNAL(selectedItemColorChanged(QColor)), this, SLOT(colorDisplayChange(QColor)));
+
+    connect(this->ui->color_white, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
+    connect(this->ui->color_off, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
+    connect(this->ui->color_red, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
+    connect(this->ui->color_blue, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
+    connect(this->ui->color_green, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
+    connect(this->ui->color_cyan, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
+    connect(this->ui->color_yellow, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
+    connect(this->ui->color_orange, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
+    connect(this->ui->color_magenta, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
+
+    connect(this, SIGNAL(colorChanged(QColor)), this->scene, SLOT(updateColor(QColor)));
 }
 
 Lui::~Lui()
@@ -56,15 +68,16 @@ void Lui::enableTransmitPushButton(){
 void Lui::colorDisplayEnable(bool status)
 {
     this->ui->color->setEnabled(status);
+    this->ui->brightness_slider->setEnabled(status);
 }
 
 void Lui::colorDisplayChange(QColor color)
 {
    if(this->ui->color->isEnabled()){
-       qDebug() << "new color";
        QPalette p = this->ui->color_display->palette();
        p.setBrush(QPalette::Window, color);
        this->ui->color_display->setPalette(p);
+       this->ui->brightness_slider->setSliderPosition(color.value());
    }
 }
 
@@ -94,4 +107,18 @@ void Lui::on_actionUngroup_triggered()
 void Lui::on_actionSelectAll_triggered()
 {
     this->scene->selectAll();
+}
+
+void Lui::newLedColor(QColor color)
+{
+    colorDisplayChange(color);
+    emit colorChanged(color);
+}
+
+void Lui::on_brightness_slider_sliderMoved(int position)
+{
+    QColor c = this->ui->color_display->palette().color(QPalette::Window);
+    c.setHsv(c.hue(), c.saturation(), position);
+    colorDisplayChange(c);
+    emit colorChanged(c);
 }

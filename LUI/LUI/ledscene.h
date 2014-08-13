@@ -22,6 +22,8 @@ public slots:
     void removeGroup(GroupItem *group);
     void selectAll();
 
+    void updateColor(QColor color);
+
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);

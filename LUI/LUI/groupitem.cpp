@@ -47,6 +47,13 @@ LuiItemType GroupItem::luitype()
     return LuiItemType::group;
 }
 
+void GroupItem::setColor(QColor color)
+{
+    foreach(LedItem *led, *(this->grp)){
+        led->setColor(color);
+    }
+}
+
 /*void GroupItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     //qDebug() << "Mouse press on group";
