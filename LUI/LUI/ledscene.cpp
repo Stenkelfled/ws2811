@@ -81,9 +81,7 @@ void LedScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     switch(event->button()){
     case Qt::LeftButton:
         {
-        LuiItem *itm = (LuiItem*)(itemAt(event->scenePos(), QTransform()));
-        if(itm != NULL){
-            selectedItemChanged(itm);
+        if(itemAt(event->scenePos(), QTransform()) != NULL){
             QGraphicsScene::mousePressEvent(event);
         } else {
             this->selection_rect_item->setRect(QRectF(event->scenePos(),QSizeF(0.1, 0.1)));
@@ -129,14 +127,14 @@ void LedScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         setSelectionArea(sel_path, Qt::ContainsItemShape);
         this->selection_rect_item->setRect(QRectF(0, 0, 0, 0));
         this->selection_start = settings::ledscene::invalid_pos;
-        QList<QGraphicsItem*> items = selectedItems();
-        if(items.length() == 0){
-            selectedItemChanged(NULL);
-        } else if(items.length() == 1){
-            selectedItemChanged( (LuiItem*)(items.at(0)) );
-        }
     }
     QGraphicsScene::mouseReleaseEvent(event);
+    QList<QGraphicsItem*> items = selectedItems();
+    if(items.length() == 0){
+        selectedItemChanged(NULL);
+    } else if(items.length() == 1){
+        selectedItemChanged( (LuiItem*)(items.at(0)) );
+    }
 }
 
 void LedScene::selectedItemChanged(LuiItem *item)
@@ -146,6 +144,7 @@ void LedScene::selectedItemChanged(LuiItem *item)
             emit selectedItemStatusChanged(false);
         } else {
             emit selectedItemStatusChanged(true);
+            emit selectedItemColorChanged(item->color());
         }
         this->selected_item = item;
     }

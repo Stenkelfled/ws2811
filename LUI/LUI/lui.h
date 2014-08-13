@@ -25,6 +25,7 @@ public slots:
     void enableTransmitPushButton(void);
 
     void colorDisplayEnable(bool status);
+    void colorDisplayChange(QColor color);
 
 private slots:
     void on_transmitPushButton_clicked();

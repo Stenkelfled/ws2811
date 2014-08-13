@@ -20,6 +20,12 @@ LuiItem::LuiItem(int id, qreal x, qreal y, int rect_width, int rect_height, QGra
     initFlags();
 }
 
+QColor LuiItem::color()
+{
+    qDebug() << this->brush();
+    return this->brush().color();
+}
+
 int LuiItem::id()
 {
     return this->my_id;
@@ -28,6 +34,13 @@ int LuiItem::id()
 LuiItemType LuiItem::luitype()
 {
     return LuiItemType::none;
+}
+
+void LuiItem::setColor(QColor color)
+{
+    QBrush b = brush();
+    b.setColor(color);
+    setBrush(b);
 }
 
 void LuiItem::mousePressEvent(QGraphicsSceneMouseEvent *event)

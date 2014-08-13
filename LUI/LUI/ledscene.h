@@ -14,7 +14,7 @@ public:
 
 signals:
     void selectedItemStatusChanged(bool status);
-    //void selectedItemColorChanged(QColor color);
+    void selectedItemColorChanged(QColor color);
 
 public slots:
     void ungroup();

@@ -1,5 +1,6 @@
 #include <QComboBox>
 #include <QObject>
+#include <QPalette>
 #include <QtDebug>
 
 #include <global.h>
@@ -23,6 +24,7 @@ Lui::Lui(QWidget *parent) :
     this->scene = new LedScene(this->ui->ledView);
     this->ui->ledView->setScene(this->scene);
     connect(this->scene, SIGNAL(selectedItemStatusChanged(bool)), this, SLOT(colorDisplayEnable(bool)));
+    connect(this->scene, SIGNAL(selectedItemColorChanged(QColor)), this, SLOT(colorDisplayChange(QColor)));
 }
 
 Lui::~Lui()
@@ -53,7 +55,17 @@ void Lui::enableTransmitPushButton(){
 
 void Lui::colorDisplayEnable(bool status)
 {
-    this->ui->color_display_group->setEnabled(status);
+    this->ui->color->setEnabled(status);
+}
+
+void Lui::colorDisplayChange(QColor color)
+{
+   if(this->ui->color->isEnabled()){
+       qDebug() << "new color";
+       QPalette p = this->ui->color_display->palette();
+       p.setBrush(QPalette::Window, color);
+       this->ui->color_display->setPalette(p);
+   }
 }
 
 void Lui::on_transmitPushButton_clicked()

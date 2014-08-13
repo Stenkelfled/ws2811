@@ -12,7 +12,7 @@ LedItem::LedItem(int id, qreal x, qreal y, QGraphicsItem *parent):
     LuiItem(id, x, y, settings::leditem::width, settings::leditem::height, parent),
     is_moving(false)
 {
-    setBrush(QBrush(settings::leditem::color));
+    setBrush(QBrush(Qt::black));//settings::leditem::color));
     setPen(QPen(Qt::NoPen));
     this->id_text = new QGraphicsTextItem(QString::number(this->id()), this); //items will be removed automtically on led deletion
     this->id_text->setFont(QFont("MS Shell Dlg 2", settings::leditem::height/2, QFont::DemiBold));
