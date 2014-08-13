@@ -1,6 +1,6 @@
 #include <QtDebug>
 
-#include "luicolorlabel.h"
+#include <luiwidgets.h>
 
 LuiColorLabel::LuiColorLabel(QWidget *parent) :
     QLabel(parent)

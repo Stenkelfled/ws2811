@@ -23,7 +23,7 @@ SOURCES += main.cpp\
     groupitem.cpp \
     luiitem.cpp \
     luiview.cpp \
-    luicolorlabel.cpp
+    luiwidgets.cpp
 
 HEADERS  += settings.h \
     serial.h \
@@ -35,7 +35,7 @@ HEADERS  += settings.h \
     leditem.h \
     groupitem.h \
     luiview.h \
-    luicolorlabel.h
+    luiwidgets.h
 
 INCLUDEPATH += ../../
 

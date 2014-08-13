@@ -126,7 +126,7 @@
       </property>
       <widget class="QWidget" name="color">
        <property name="enabled">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <attribute name="title">
         <string>Farbe</string>
@@ -1113,7 +1113,7 @@ definiert</string>
         <item>
          <widget class="QGroupBox" name="color_display_group">
           <property name="enabled">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
           <property name="title">
            <string>Farbe</string>
@@ -1128,7 +1128,7 @@ definiert</string>
            <item>
             <widget class="QLabel" name="color_display">
              <property name="enabled">
-              <bool>true</bool>
+              <bool>false</bool>
              </property>
              <property name="autoFillBackground">
               <bool>true</bool>
@@ -1263,7 +1263,7 @@ definiert</string>
   <customwidget>
    <class>LuiColorLabel</class>
    <extends>QLabel</extends>
-   <header>luicolorlabel.h</header>
+   <header>luiwidgets.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
