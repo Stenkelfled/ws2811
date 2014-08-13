@@ -4,8 +4,9 @@
 #include <QMainWindow>
 #include <QStringList>
 
-#include "ledscene.h"
-#include "serial.h"
+#include <ledscene.h>
+#include <luiitem.h>
+#include <serial.h>
 
 namespace Ui {
 class Lui;
@@ -23,11 +24,14 @@ public slots:
     void updatePortComboBox(QStringList &items);
     void enableTransmitPushButton(void);
 
+    void colorDisplayEnable(bool status);
+
 private slots:
     void on_transmitPushButton_clicked();
     void on_actionClose_triggered();
     void on_actionGroup_triggered();
     void on_actionUngroup_triggered();
+    void on_actionSelectAll_triggered();
 
 private:
     Ui::Lui *ui;

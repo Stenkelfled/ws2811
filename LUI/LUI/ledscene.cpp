@@ -11,7 +11,8 @@
 
 LedScene::LedScene(QObject *parent) :
     QGraphicsScene(parent),
-    selection_start(settings::ledscene::invalid_pos)
+    selection_start(settings::ledscene::invalid_pos),
+    selected_item(NULL)
 {
     this->selection_rect_item = addRect(0, 0, 0, 0, QPen(Qt::black), QBrush(Qt::NoBrush));
     GroupItem *grp = new GroupItem(0, NULL);
@@ -46,6 +47,13 @@ void LedScene::removeGroup(GroupItem* group)
     removeItem((QGraphicsItem*)group);
 }
 
+void LedScene::selectAll()
+{
+    foreach(QGraphicsItem *itm, items()){
+        itm->setSelected(true);
+    }
+}
+
 void LedScene::ungroup()
 {
     foreach(QGraphicsItem *itm, selectedItems()){
@@ -70,14 +78,23 @@ void LedScene::ungroup()
 
 void LedScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(itemAt(event->scenePos(), QTransform()) != NULL){
-        QGraphicsScene::mousePressEvent(event);
-    } else {
-        this->selection_rect_item->setRect(QRectF(event->scenePos(),QSizeF(0.1, 0.1)));
-        this->selection_start = event->scenePos();
-        /*foreach(QGraphicsItem *itm, selectedItems()){
-            itm->setSelected(false);
-        }*/
+    switch(event->button()){
+    case Qt::LeftButton:
+        {
+        LuiItem *itm = (LuiItem*)(itemAt(event->scenePos(), QTransform()));
+        if(itm != NULL){
+            selectedItemChanged(itm);
+            QGraphicsScene::mousePressEvent(event);
+        } else {
+            this->selection_rect_item->setRect(QRectF(event->scenePos(),QSizeF(0.1, 0.1)));
+            this->selection_start = event->scenePos();
+        }
+        break;
+        }
+    case Qt::MiddleButton:
+        break;
+    default:
+        break;
     }
 }
 
@@ -106,11 +123,31 @@ void LedScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void LedScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    QPainterPath sel_path = QPainterPath();
-    sel_path.addRect(this->selection_rect_item->rect());
-    setSelectionArea(sel_path, Qt::ContainsItemShape);
-    this->selection_rect_item->setRect(QRectF(0, 0, 0, 0));
-    this->selection_start = settings::ledscene::invalid_pos;
+    if(this->selection_start != settings::ledscene::invalid_pos){
+        QPainterPath sel_path = QPainterPath();
+        sel_path.addRect(this->selection_rect_item->rect());
+        setSelectionArea(sel_path, Qt::ContainsItemShape);
+        this->selection_rect_item->setRect(QRectF(0, 0, 0, 0));
+        this->selection_start = settings::ledscene::invalid_pos;
+        QList<QGraphicsItem*> items = selectedItems();
+        if(items.length() == 0){
+            selectedItemChanged(NULL);
+        } else if(items.length() == 1){
+            selectedItemChanged( (LuiItem*)(items.at(0)) );
+        }
+    }
     QGraphicsScene::mouseReleaseEvent(event);
+}
+
+void LedScene::selectedItemChanged(LuiItem *item)
+{
+    if(item != this->selected_item){
+        if(item == NULL){
+            emit selectedItemStatusChanged(false);
+        } else {
+            emit selectedItemStatusChanged(true);
+        }
+        this->selected_item = item;
+    }
 }
 

@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     ledscene.cpp \
     leditem.cpp \
     groupitem.cpp \
-    luiitem.cpp
+    luiitem.cpp \
+    luiview.cpp
 
 HEADERS  += settings.h \
     serial.h \
@@ -31,7 +32,8 @@ HEADERS  += settings.h \
     ../../global.h \
     luiitem.h \
     leditem.h \
-    groupitem.h
+    groupitem.h \
+    luiview.h
 
 INCLUDEPATH += ../../
 

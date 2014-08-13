@@ -1,5 +1,6 @@
 #include <QComboBox>
 #include <QObject>
+#include <QtDebug>
 
 #include <global.h>
 #include "lui.h"
@@ -21,6 +22,7 @@ Lui::Lui(QWidget *parent) :
 
     this->scene = new LedScene(this->ui->ledView);
     this->ui->ledView->setScene(this->scene);
+    connect(this->scene, SIGNAL(selectedItemStatusChanged(bool)), this, SLOT(colorDisplayEnable(bool)));
 }
 
 Lui::~Lui()
@@ -37,16 +39,21 @@ Lui::~Lui()
 /// Stuff for communicate with uC
 ///
 
-void Lui::enableTransmitPushButton(){
-    this->ui->transmitPushButton->setEnabled(true);
-}
-
 void Lui::updatePortComboBox(QStringList &items){
     this->ui->portComboBox->clear();
     this->ui->portComboBox->addItems(items);
     for(int i=0; i<items.length(); i++){
         this->ui->portComboBox->setItemData(i, items[i], Qt::ToolTipRole);
     }
+}
+
+void Lui::enableTransmitPushButton(){
+    this->ui->transmitPushButton->setEnabled(true);
+}
+
+void Lui::colorDisplayEnable(bool status)
+{
+    this->ui->color_display_group->setEnabled(status);
 }
 
 void Lui::on_transmitPushButton_clicked()
@@ -70,4 +77,9 @@ void Lui::on_actionGroup_triggered()
 void Lui::on_actionUngroup_triggered()
 {
     this->scene->ungroup();
+}
+
+void Lui::on_actionSelectAll_triggered()
+{
+    this->scene->selectAll();
 }
