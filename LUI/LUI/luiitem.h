@@ -13,12 +13,14 @@ public:
     int type() const {return Type;}
 
     explicit LuiItem(int id, QGraphicsItem *parent = 0);
-    explicit LuiItem(int id, qreal x, qreal y, int rect_width, int rect_height, QGraphicsItem *parent = 0);
+    explicit LuiItem(int id, int rect_width, int rect_height, QGraphicsItem *parent = 0);
     virtual QColor color();
     void changeId(int id);
     int id();
     virtual void setColor(QColor color);
     virtual QByteArray getUsbCmd();
+
+    static bool positionLowerThan(const QGraphicsItem *itm1, const QGraphicsItem *itm2);
 
 public slots:
 

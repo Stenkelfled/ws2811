@@ -31,6 +31,7 @@ protected:
 
 private:
     void selectedItemChanged(LuiItem* item);
+    void sortSelection(QList<QGraphicsItem*> &items);
     GroupItem* newGroup();
     QList<GroupItem*> *groups;
     QGraphicsRectItem *selection_rect_item;

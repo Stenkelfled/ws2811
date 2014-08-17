@@ -2,6 +2,8 @@
 #include <QKeyEvent>
 #include <QtDebug>
 
+#include <algorithm>
+
 #include <global.h>
 #include <groupitem.h>
 #include <leditem.h>
@@ -18,15 +20,17 @@ LedScene::LedScene(QObject *parent) :
     this->selection_rect_item = addRect(0, 0, 0, 0, QPen(Qt::black), QBrush(Qt::NoBrush));
     GroupItem* grp = newGroup();
     for(int i=0; i<GLOBAL_LED_COUNT; i++){
-        LedItem *led = new LedItem(i, i*(settings::leditem::width + settings::leditem::spacing), 0); //items will be removed automatically on scene deletion
+        LedItem *led = new LedItem(i); //items will be removed automatically on scene deletion
         grp->addLed(led);
     }
 }
 
 void LedScene::group()
-{
+{    
     GroupItem *new_grp = newGroup();
-    foreach(QGraphicsItem *itm, selectedItems()){
+    QList<QGraphicsItem*> selection = selectedItems();
+    std::sort(selection.begin(), selection.end(), LuiItem::positionLowerThan);
+    foreach(QGraphicsItem *itm, selection){
         LedItem *led = qgraphicsitem_cast<LedItem*>(itm);
         if(led != NULL){
             new_grp->addLed(led);

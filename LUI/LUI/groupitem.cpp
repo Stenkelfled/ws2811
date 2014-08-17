@@ -134,6 +134,10 @@ QByteArray GroupItem::getUsbCmd()
 
 void GroupItem::refreshArea()
 {
+    for(int i=0; i<this->grp->length(); i++){
+        this->grp->at(i)->setPos(i*(settings::leditem::width + settings::leditem::spacing), 0);
+    }
+
     QRectF r = this->childrenBoundingRect();
     r.setWidth(r.width() + 2*settings::groupitem::border);
     r.setHeight(r.height() + 2*settings::groupitem::border);

@@ -13,8 +13,8 @@ LuiItem::LuiItem(int id, QGraphicsItem *parent) :
     initFlags();
 }
 
-LuiItem::LuiItem(int id, qreal x, qreal y, int rect_width, int rect_height, QGraphicsItem *parent) :
-    QGraphicsRectItem(x, y, rect_width, rect_height, parent),
+LuiItem::LuiItem(int id, int rect_width, int rect_height, QGraphicsItem *parent) :
+    QGraphicsRectItem(0, 0, rect_width, rect_height, parent),
     my_id(id)
 {
     initFlags();
@@ -45,6 +45,22 @@ void LuiItem::setColor(QColor color)
 QByteArray LuiItem::getUsbCmd()
 {
     return QByteArray(); //only return an empty array --> nothing will be added
+}
+
+bool LuiItem::positionLowerThan(const QGraphicsItem *itm1, const QGraphicsItem *itm2)
+{
+    QPointF spos1 = itm1->mapToScene(0,0);
+    QPointF spos2 = itm2->mapToScene(0,0);
+    if(spos1.x() != spos2.x()){
+        return (spos1.x() < spos2.x());
+    }
+    if(itm1->pos().x() != itm2->pos().x()){
+        return (itm1->pos().x() < itm2->pos().x());
+    }
+    if(itm1->pos().y() != itm2->pos().y()){
+        return (itm1->pos().y() < itm2->pos().y());
+    }
+    return (spos1.y() < spos2.y());
 }
 
 void LuiItem::mousePressEvent(QGraphicsSceneMouseEvent *event)

@@ -13,7 +13,7 @@ public:
     enum { Type = UserType + 3 };
     int type() const {return Type;}
 
-    explicit LedItem(int id, qreal x, qreal y, QGraphicsItem *parent = 0);
+    explicit LedItem(int id, QGraphicsItem *parent = 0);
     bool hasColorFromGroup();
     void setColor(QColor color);
     void setColor(QColor color, bool from_group);

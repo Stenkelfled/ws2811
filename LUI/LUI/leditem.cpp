@@ -8,8 +8,8 @@
 
 
 
-LedItem::LedItem(int id, qreal x, qreal y, QGraphicsItem *parent):
-    LuiItem(id, x, y, settings::leditem::width, settings::leditem::height, parent),
+LedItem::LedItem(int id, QGraphicsItem *parent):
+    LuiItem(id, settings::leditem::width, settings::leditem::height, parent),
     is_moving(false),
     color_from_group(true)
 {
