@@ -27,14 +27,26 @@ void LedScene::group()
 {
     GroupItem *new_grp = newGroup();
     foreach(QGraphicsItem *itm, selectedItems()){
-        LuiItem *lui = (LuiItem*)itm;
-        if(lui->luitype() == LuiItemType::led){
-            LedItem *led = (LedItem*)lui;
-            GroupItem *old_grp = (GroupItem*) led->parentItem();
-            if(old_grp != NULL){
-                old_grp->removeLed(led);
-            }
+        LedItem *led = qgraphicsitem_cast<LedItem*>(itm);
+        if(led != NULL){
             new_grp->addLed(led);
+        }
+    }
+}
+
+void LedScene::ungroup()
+{
+    foreach(QGraphicsItem *itm, selectedItems()){
+        LedItem *led = qgraphicsitem_cast<LedItem*>(itm);
+        if(led != NULL){
+            GroupItem *grp = qgraphicsitem_cast<GroupItem*>(led->parentItem());
+            if(grp != NULL){
+                grp->removeLed(led);
+            }
+        }
+        GroupItem *grp = qgraphicsitem_cast<GroupItem*>(itm);
+        if(grp != NULL){
+            grp->makeEmpty();
         }
     }
 }
@@ -70,28 +82,6 @@ GroupItem* LedScene::newGroup()
     connect(grp, SIGNAL(groupEmpty(GroupItem*)), this, SLOT(removeGroup(GroupItem*)));
     addItem(grp);
     return grp;
-}
-
-void LedScene::ungroup()
-{
-    foreach(QGraphicsItem *itm, selectedItems()){
-        LuiItem *lui = ((LuiItem*)itm);
-        switch(lui->luitype()){
-            case LuiItemType::led:
-                {
-                GroupItem *grp = (GroupItem*)lui->parentItem();
-                if(grp != NULL){
-                    grp->removeLed((LedItem*)lui);
-                }
-                break;
-                }
-            case LuiItemType::group:
-                ((GroupItem*)lui)->makeEmpty();
-            case LuiItemType::none:
-                //do nothing
-                break;
-        }
-    }
 }
 
 void LedScene::mousePressEvent(QGraphicsSceneMouseEvent *event)

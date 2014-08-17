@@ -10,12 +10,14 @@ class LedItem : public LuiItem
 {
     Q_OBJECT
 public:
+    enum { Type = UserType + 3 };
+    int type() const {return Type;}
+
     explicit LedItem(int id, qreal x, qreal y, QGraphicsItem *parent = 0);
     bool hasColorFromGroup();
     void setColor(QColor color);
     void setColor(QColor color, bool from_group);
     void updateTextColor();
-    virtual LuiItemType luitype();
 
 protected:
     //void mousePressEvent(QGraphicsSceneMouseEvent *event);

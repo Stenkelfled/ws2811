@@ -35,16 +35,16 @@ int LuiItem::id()
     return this->my_id;
 }
 
-LuiItemType LuiItem::luitype()
-{
-    return LuiItemType::none;
-}
-
 void LuiItem::setColor(QColor color)
 {
     QBrush b = brush();
     b.setColor(color);
     setBrush(b);
+}
+
+QByteArray LuiItem::getUsbCmd()
+{
+    return QByteArray(); //only return an empty array --> nothing will be added
 }
 
 void LuiItem::mousePressEvent(QGraphicsSceneMouseEvent *event)

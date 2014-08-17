@@ -1215,6 +1215,7 @@ definiert</string>
     <property name="title">
      <string>Datei</string>
     </property>
+    <addaction name="actionNew"/>
     <addaction name="actionClose"/>
    </widget>
    <widget class="QMenu" name="menuBearbeiten">
@@ -1286,6 +1287,14 @@ definiert</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="actionNew">
+   <property name="text">
+    <string>Neu</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
    </property>
   </action>
  </widget>

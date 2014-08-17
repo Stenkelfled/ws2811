@@ -50,11 +50,6 @@ void LedItem::updateTextColor(){
     this->id_text->setDefaultTextColor(color);
 }
 
-LuiItemType LedItem::luitype()
-{
-    return LuiItemType::led;
-}
-
 /*void LedItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     LuiItem::mousePressEvent(event);

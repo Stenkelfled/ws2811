@@ -39,10 +39,11 @@
 		#define PR_GRP_SEQ_SET_OFF (0xB0)
 		#define PR_GRP_SEQ_SET_RGB (0xB1) //set a color for this group
 			//## 3Bytes: RGB
-		#define PR_GRP_SEQ_ADD_RGB (0xB2) //add this RGB-value to the current color (until saturation either 0x00 or 0xFF)
+/*		#define PR_GRP_SEQ_ADD_RGB (0xB2) //add this RGB-value to the current color (until saturation either 0x00 or 0xFF)
 			//## 3Bytes(signed): RGB-difference
 		#define PR_GRP_SEQ_ADD_HSV (0xB3) //add this HSV-value to the current color (until saturation either 0x00 or 0xFF)
 			//## 3Bytes(signed): HSV-difference
+*/
 			
 /*		#define PR_GRP_SEQ_SET_LED_RGB (0xC1) //set this RGB-value to a specified LED
 			//## 1Byte: number of LED in group

@@ -8,13 +8,17 @@ class GroupItem : public LuiItem
 {
     Q_OBJECT
 public:
+    enum { Type = UserType + 2 };
+    int type() const {return Type;}
+
     explicit GroupItem(int id, QGraphicsItem *parent = 0);
     void addLed(LedItem *led);
     void removeLed(LedItem *led);
     void makeEmpty();
-    virtual LuiItemType luitype();
     QColor color();
     void setColor(QColor color);
+
+    virtual QByteArray getUsbCmd();
 
 public slots:
     void refreshArea();

@@ -43,6 +43,8 @@ private slots:
     void on_brightness_slider_valueChanged(int position);
     void on_testButton_toggled(bool checked);
 
+    void on_actionNew_triggered();
+
 private:
     Ui::Lui *ui;
     Serial *serial;

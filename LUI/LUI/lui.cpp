@@ -1,4 +1,5 @@
 #include <QComboBox>
+#include <QGraphicsItem>
 #include <QObject>
 #include <QPalette>
 #include <QtDebug>
@@ -26,6 +27,7 @@ Lui::Lui(QWidget *parent) :
     this->ui->ledView->setScene(this->scene);
     connect(this->scene, SIGNAL(selectedItemStatusChanged(bool)), this, SLOT(colorDisplayEnable(bool)));
     connect(this->scene, SIGNAL(selectedItemColorChanged(QColor)), this, SLOT(colorDisplayChange(QColor)));
+    connect(this, SIGNAL(colorChanged(QColor)), this->scene, SLOT(updateColor(QColor)));
 
     connect(this->ui->color_white, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
     connect(this->ui->color_off, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
@@ -37,8 +39,6 @@ Lui::Lui(QWidget *parent) :
     connect(this->ui->color_orange, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
     connect(this->ui->color_magenta, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
     connect(this->ui->color_custom, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
-
-    connect(this, SIGNAL(colorChanged(QColor)), this->scene, SLOT(updateColor(QColor)));
 }
 
 Lui::~Lui()
@@ -83,16 +83,25 @@ void Lui::colorDisplayChange(QColor color)
        QPalette p = this->ui->color_display->palette();
        p.setBrush(QPalette::Window, color);
        this->ui->color_display->setPalette(p);
-       qDebug() << "display color" << p.brush(QPalette::Window).color();
+       //qDebug() << "display color" << p.brush(QPalette::Window).color();
        this->ui->brightness_slider->setSliderPosition(color.value());
    }
 }
 
 void Lui::on_transmitPushButton_clicked()
 {
-    QByteArray cmd = QByteArray(USB_PREAMBLE, USB_PREAMBLE_LEN); //TODO: build command to send...
+    /*QByteArray cmd = QByteArray(USB_PREAMBLE, USB_PREAMBLE_LEN); //TODO: build command to send...
     if(this->serial->openAndWrite(cmd)){
         this->ui->transmitPushButton->setEnabled(false);
+    }*/
+    QByteArray cmd = QByteArray();
+    foreach(QGraphicsItem *itm, this->scene->items()){
+        QGraphicsItem::GraphicsItemFlags flags = itm->flags();
+        if(flags & QGraphicsItem::ItemIsSelectable){
+            LuiItem *group = (LuiItem*)itm;
+            cmd = group->getUsbCmd();
+            qDebug() << cmd.toHex();
+        }
     }
 }
 
@@ -140,7 +149,7 @@ void Lui::on_brightness_slider_valueChanged(int position)
     QColor c = this->ui->color_display->palette().color(QPalette::Window);
     c.setHsv(c.hue(), c.saturation(), position);
     if(c != this->ui->color_display->palette().color(QPalette::Window)){
-        qDebug() << "slider  color" << c;
+        //qDebug() << "slider  color" << c;
         colorDisplayChange(c);
         emit colorChanged(c);
     }
@@ -159,32 +168,16 @@ void Lui::on_testButton_toggled(bool checked)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void Lui::on_actionNew_triggered()
+{
+    LedScene *old = this->scene;
+    this->scene = new LedScene(this->ui->ledView);
+    this->ui->ledView->setScene(this->scene);
+    connect(this->scene, SIGNAL(selectedItemStatusChanged(bool)), this, SLOT(colorDisplayEnable(bool)));
+    connect(this->scene, SIGNAL(selectedItemColorChanged(QColor)), this, SLOT(colorDisplayChange(QColor)));
+    connect(this, SIGNAL(colorChanged(QColor)), this->scene, SLOT(updateColor(QColor)));
+    disconnect(old, SIGNAL(selectedItemStatusChanged(bool)), this, SLOT(colorDisplayEnable(bool)));
+    disconnect(old, SIGNAL(selectedItemColorChanged(QColor)), this, SLOT(colorDisplayChange(QColor)));
+    disconnect(this, SIGNAL(colorChanged(QColor)), old, SLOT(updateColor(QColor)));
+    delete old;
+}
