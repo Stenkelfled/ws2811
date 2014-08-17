@@ -29,7 +29,7 @@ bool LedItem::hasColorFromGroup()
 
 void LedItem::setColor(QColor color)
 {
-    setColor(color, false);
+    this->setColor(color, false);
 }
 
 void LedItem::setColor(QColor color, bool from_group)

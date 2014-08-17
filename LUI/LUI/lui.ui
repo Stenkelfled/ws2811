@@ -1153,9 +1153,6 @@ definiert</string>
            </property>
            <item>
             <widget class="QLabel" name="color_display">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
              <property name="autoFillBackground">
               <bool>true</bool>
              </property>
