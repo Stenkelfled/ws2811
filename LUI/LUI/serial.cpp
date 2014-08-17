@@ -6,7 +6,9 @@
 #include "serial.h"
 
 Serial::Serial(QObject *parent) :
-    QSerialPort(parent)
+    QSerialPort(parent),
+    waiting_data(QList<QByteArray>()),
+    waiting_data_transmitted(false)
 {
     this->port_descr = new QStringList();
     this->is_open = false;
@@ -34,6 +36,11 @@ void Serial::configurePort(){
 
 bool Serial::openAndWrite(const QByteArray &data){
     this->configurePort();
+    if(this->is_open){
+        this->waiting_data.append(data);
+        //qDebug() << "waiting_data" << this->waiting_data.length();
+        return true;
+    }
     if(!this->open(QIODevice::ReadWrite)){
         /*QErrorMessage *err_msg = new QErrorMessage();
         err_msg->showMessage("Could not open serial Port.");
@@ -43,15 +50,31 @@ bool Serial::openAndWrite(const QByteArray &data){
         return false;
     }
     this->is_open = true;
-    qDebug() << "Serial::openAndWrite: data:'" << data << "'";
+    qDebug() << "Serial::openAndWrite: data:'" << data.toHex() << "'";
     this->write(data);
     return true;
 }
 
+bool Serial::isOpen()
+{
+    return this->is_open;
+}
+
 void Serial::closePort(){
-    if(this->is_open){
-        this->close();
-        this->is_open = false;
+    if(this->waiting_data_transmitted){
+        this->waiting_data.removeFirst();
+        //qDebug() << "sill waiting" << this->waiting_data.length();
+    }
+    if(!this->waiting_data.isEmpty()){
+        //qDebug() << "write waiting_data" << this->waiting_data.first().toHex();
+        this->write(this->waiting_data.first());
+        this->waiting_data_transmitted = true;
+    } else {
+        this->waiting_data_transmitted = false;
+        if(this->is_open){
+            this->close();
+            this->is_open = false;
+        }
     }
 }
 

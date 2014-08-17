@@ -11,6 +11,22 @@
 
 #include <asf.h>
 
+typedef enum{
+	msg_none,
+	msg_run,
+	msg_test
+} msg_type_t;
+
+typedef enum{
+	test_color_none,
+	test_color_red,
+	test_color_green,
+	test_color_blue,
+} test_color_t;
+
+#define EEPROM_NEED_DATA_LENGTH_HIGH	(1<<15)
+#define EEPROM_NEED_DATA_LENGTH_LOW		(1<<14)
+
 void usb_start(void);
 void usb_power_monitor_init(void);
 

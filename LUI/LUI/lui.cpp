@@ -64,7 +64,9 @@ void Lui::updatePortComboBox(QStringList &items){
 }
 
 void Lui::enableTransmitPushButton(){
-    this->ui->transmitPushButton->setEnabled(true);
+    if(!this->serial->isOpen()){
+        this->ui->transmitPushButton->setEnabled(true);
+    }
 }
 
 void Lui::colorDisplayEnable(bool status)
@@ -132,7 +134,7 @@ void Lui::testColor(QColor color)
     }
 }
 
-void Lui::on_brightness_slider_sliderMoved(int position)
+void Lui::on_brightness_slider_valueChanged(int position)
 {
     QColor c = this->ui->color_display->palette().color(QPalette::Window);
     c.setHsv(c.hue(), c.saturation(), position);
@@ -152,6 +154,7 @@ void Lui::on_testButton_toggled(bool checked)
         disconnect(this, SIGNAL(colorChanged(QColor)), this, SLOT(testColor(QColor)));
     }
 }
+
 
 
 

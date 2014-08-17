@@ -8,9 +8,16 @@
 #include <asf.h>
 
 #include <config.h>
+#include <global.h>
+#include <protocoll.h>
 #include <evaluator.h>
 #include <usb.h>
 #include <usbprint.h>
+
+#include <rgbhsv.h>
+#include <ledbuffer.h>
+#include <leds.h>
+#include <eeprom.h>
 
 uint8_t preamble_pos = 0;
 
@@ -59,22 +66,86 @@ void user_callback_vbus_action(bool b_vbus_high){
 //there is data to receive
 void my_callback_rx_notify(uint8_t port){ 
 	int8_t preamble[USB_PREAMBLE_LEN] = USB_PREAMBLE;
+	static msg_type_t msg_type = msg_none;
+	static test_color_t test_color_state = test_color_none;
+	static rgbcolor_t test_color;
+	static uint16_t eeprom_data_length;
+	
+	
 	while(udi_cdc_is_rx_ready()){
 		if(preamble_pos == USB_PREAMBLE_LEN){
 			//preamble-check passed -> now evaluate the data
-			evaluate((uint8_t)udi_cdc_getc());
+			//evaluate((uint8_t)udi_cdc_getc());
+			uint8_t usb_data = (uint8_t)udi_cdc_getc();
+			switch(msg_type){
+				case msg_none:
+					{
+					if(usb_data == PR_MSG_TYPE_RUN){
+						msg_type = msg_run;
+						eeprom_data_length = EEPROM_NEED_DATA_LENGTH_HIGH | EEPROM_NEED_DATA_LENGTH_LOW;
+					} else if (usb_data == PR_MSG_TYPE_TEST){
+						usb_print("test\n");
+						msg_type = msg_test;
+						test_color_state = test_color_red;
+					} else {
+						preamble_pos = 0;
+						msg_type = msg_none;
+					}
+					break;
+					}
+				case msg_test:
+					if(test_color_state == test_color_red){
+						usb_print("red\n");
+						test_color.red = usb_data;
+						test_color_state = test_color_green;
+					} else if(test_color_state == test_color_green){
+						usb_print("green\n");
+						test_color.green = usb_data;
+						test_color_state = test_color_blue;
+					} else if(test_color_state == test_color_blue){
+						usb_print("blue\n");
+						test_color.blue = usb_data;
+						preamble_pos = 0;
+						msg_type = msg_none;
+						define_group(0, 0, GLOBAL_LED_COUNT-1, 1);
+						color_group(0, test_color);
+						fill_buffer();
+						refresh_leds();
+					} else {
+						preamble_pos = 0;
+						msg_type = msg_none;
+					}
+					break;
+				case msg_run:
+					if(eeprom_data_length & EEPROM_NEED_DATA_LENGTH_LOW){
+						eeprom_data_length &= ~EEPROM_NEED_DATA_LENGTH_LOW;
+						eeprom_data_length |= usb_data;
+					} else if(eeprom_data_length & EEPROM_NEED_DATA_LENGTH_HIGH){
+						eeprom_data_length &= ~EEPROM_NEED_DATA_LENGTH_HIGH;
+						eeprom_data_length |= usb_data<<8;
+					} else {
+						usb_print("eeprom_write...\n");
+					}
+					break;
+				default:
+					preamble_pos = 0;
+					msg_type = msg_none;
+			}
+			
 		} else if(preamble_pos < USB_PREAMBLE_LEN){
 			if( udi_cdc_getc() == preamble[preamble_pos]){
 				preamble_pos++;
 			} else {
 				//preamble-check failed. try again.
 				preamble_pos = 0;
+				msg_type = msg_none;
 			}
 			if(preamble_pos == USB_PREAMBLE_LEN){
 				//preamble-check passed -> now evaluate the data
 				LED_GN_ON
-				evaluator_new_evaluation( &usb_rx_ready );
+				//evaluator_new_evaluation( &usb_rx_ready );
 				usb_print("preamble passed\n");
+				msg_type = msg_none;
 			}
 		}		
 	}

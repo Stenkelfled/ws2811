@@ -12,7 +12,7 @@
 #include <config.h>
 #include <evaluator.h>
 #include <ledbuffer.h>
-#include <Leds.h>
+#include <leds.h>
 #include <protocoll.h>
 #include <rgbhsv.h>
 #include <usbprint.h>
@@ -30,16 +30,23 @@ void idle_statefunc(uint8_t usb_data);
 void run_red_statefunc(uint8_t usb_data);
 void run_green_statefunc(uint8_t usb_data);
 void run_blue_statefunc(uint8_t usb_data);
+void eeprom_length_low_statefunc(uint8_t usb_data);
+void eeprom_length_high_statefunc(uint8_t usb_data);
+void eeprom_write_statefunc(uint8_t usb_data);
 
 
 //state data:
 rgbcolor_t run_color;
+uint16_t eeprom_data_length;
 
 //states:
 state_t idle_state = {NULL, &idle_statefunc};
 state_t run_red_state = {NULL, &run_red_statefunc};
 state_t run_green_state = {NULL, &run_green_statefunc};
 state_t run_blue_state = {NULL, &run_blue_statefunc};
+state_t eeprom_length_low_state = {NULL, &eeprom_length_low_statefunc};
+state_t eeprom_length_high_state = {NULL, &eeprom_length_high_statefunc};
+state_t eeprom_write_state = {NULL, &eeprom_write_statefunc};
 
 
 //functions:
@@ -48,8 +55,7 @@ void idle_statefunc(uint8_t usb_data){
 	if(usb_data == PR_MSG_TYPE_TEST){
 		ev_switch_state(&run_red_state);
 	} else if(usb_data == PR_MSG_TYPE_RUN){
-		//TODO
-		//ev_switch_state(&eeprom_len_state1);
+		ev_switch_state(&eeprom_length_low_state);
 	} else {
 		usb_print("idle: unknown cmd\n");
 		ev_abort_all(); //cancel current operation and wait for the next transmission
@@ -78,6 +84,22 @@ void run_blue_statefunc(uint8_t usb_data){
 	refresh_leds();
 	
 	ev_ready();
+}
+
+void eeprom_length_low_statefunc(uint8_t usb_data){
+	usb_print("length low\n");
+	eeprom_data_length = usb_data;
+	ev_switch_state(&eeprom_length_high_state);
+}
+
+void eeprom_length_high_statefunc(uint8_t usb_data){
+	usb_print("length high\n");
+	eeprom_data_length |= usb_data<<8;
+	ev_switch_state(&eeprom_write_state);
+}
+
+void eeprom_write_statefunc(uint8_t usb_data){
+	usb_print("eeprom write\n");
 }
 
 //////////////////////////////////////////////////////////////////////////

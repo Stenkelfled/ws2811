@@ -26,10 +26,5 @@ void evaluator_new_evaluation(void (*rdy_fctn)(void));
 //State data structs
 //////////////////////////////////////////////////////////////////////////
 
-// typedef struct{
-// 	uint8_t current_group;
-// } idle_data_t;
-
-
 
 #endif /* EVALUATOR_H_ */

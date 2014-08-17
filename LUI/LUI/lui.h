@@ -40,7 +40,7 @@ private slots:
     void newLedColor(QColor color);
     void testColor(QColor color);
 
-    void on_brightness_slider_sliderMoved(int position);
+    void on_brightness_slider_valueChanged(int position);
     void on_testButton_toggled(bool checked);
 
 private:

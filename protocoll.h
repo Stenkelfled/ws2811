@@ -14,7 +14,7 @@
 																#define PR_MSG_TYPE_TEST	(0xED)	//set all LEDs to the specified color
 																	//## 3 Bytes: RGB
 																	//end of message
-	//## 2 Bytes: message length
+	//## 2 Bytes: message length (little endian)
 	// --- all followed data will be stored in EEPROM ---
 	//for every possible group:
 		//## 2 Bytes: start-Adress of group (0x0000 if unused)

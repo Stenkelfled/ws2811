@@ -14,6 +14,7 @@ public:
     explicit Serial(QObject *parent = 0);
     ~Serial();
     bool openAndWrite(const QByteArray &data);
+    bool isOpen();
 
 signals:
     void updatedPortDescription(QStringList &description);
@@ -33,6 +34,8 @@ private:
     QSerialPortInfo *current_port_info;
     bool is_open;
     bool is_configured;
+    QList<QByteArray> waiting_data;
+    bool waiting_data_transmitted;
 };
 
 #endif // SERIAL_H
