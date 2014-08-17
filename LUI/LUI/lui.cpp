@@ -83,7 +83,7 @@ void Lui::colorDisplayChange(QColor color)
        QPalette p = this->ui->color_display->palette();
        p.setBrush(QPalette::Window, color);
        this->ui->color_display->setPalette(p);
-       //qDebug() << "display color" << p.brush(QPalette::Window).color();
+       qDebug() << "display color" << p.brush(QPalette::Window).color();
        this->ui->brightness_slider->setSliderPosition(color.value());
    }
 }
@@ -148,8 +148,9 @@ void Lui::on_brightness_slider_valueChanged(int position)
 {
     QColor c = this->ui->color_display->palette().color(QPalette::Window);
     c.setHsv(c.hue(), c.saturation(), position);
+    c = c.toRgb();
     if(c != this->ui->color_display->palette().color(QPalette::Window)){
-        //qDebug() << "slider  color" << c;
+        qDebug() << "slider  color" << c;
         colorDisplayChange(c);
         emit colorChanged(c);
     }
