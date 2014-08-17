@@ -12,11 +12,11 @@
 #include <compiler.h>
 #include <rgbhsv.h>
 
-typedef enum{
+/*typedef enum{
     normal = 0,
     shift,
     rainbow
-}led_mode_t;
+}led_mode_t;*/
 
 typedef struct _led_color_t_ led_color_t;
 
@@ -26,8 +26,11 @@ struct _led_color_t_{
 }__attribute__((packed));
 
 typedef struct{
-    led_mode_t mode;
+    //led_mode_t mode;
     led_color_t* start_led;
+	uint16_t remaining_time;
+	uint8_t remaining_repititions;
+	uint16_t next_address;
 }__attribute__((packed)) led_group_t;
 
 void color2data(uint8_t* *data, uint8_t color);

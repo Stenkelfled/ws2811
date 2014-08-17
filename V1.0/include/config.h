@@ -9,6 +9,7 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 #include <avr/io.h>
+#include <global.h>
 
 #define TRUE			(1)
 #define FALSE			(0)
@@ -16,8 +17,7 @@
 
 #define USB_DEBUG_ENABLE	(YES)
 
-#define LED_COUNT		(3)
-#define GROUP_COUNT		(8)
+#define LED_COUNT		(GLOBAL_LED_COUNT)
 
 #define BUTTON_PORT		(PORTE)
 #define BUTTON1_PIN		(1)
@@ -29,9 +29,6 @@
 void init_interrupts(void);
 void init_clock(void);
 void init_ports(void);
-
-#define USB_PREAMBLE		"Led"
-#define USB_PREAMBLE_LEN	(3)
 
 
 #endif /* CONFIG_H_ */

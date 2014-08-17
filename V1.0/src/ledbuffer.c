@@ -49,6 +49,13 @@ void fill_buffer(void){
 
 }
 
+/**
+ * (re)define the given group with a row of leds
+ * @param: uint8_t group_id: the id of the group
+ * @param: uint8_t start_led: the first led of the row
+ * @param: uint8_t end_led: the last led of the row
+ * @param: uint8_t step: the step in the row
+ */
 uint8_t define_group(uint8_t group_id, uint8_t start_led,uint8_t end_led, uint8_t step){    
     uint8_t current_led = start_led;
     uint8_t next_led = -1;
