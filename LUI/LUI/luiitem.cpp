@@ -25,6 +25,11 @@ QColor LuiItem::color()
     return this->brush().color();
 }
 
+void LuiItem::changeId(int id)
+{
+    this->my_id = id;
+}
+
 int LuiItem::id()
 {
     return this->my_id;

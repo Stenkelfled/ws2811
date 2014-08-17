@@ -13,6 +13,7 @@ public:
     void removeLed(LedItem *led);
     void makeEmpty();
     virtual LuiItemType luitype();
+    QColor color();
     void setColor(QColor color);
 
 public slots:
@@ -26,6 +27,7 @@ signals:
 
 private:
     QList<LedItem*> *grp;
+    QColor group_color;
 };
 
 #endif // GROUPITEM_H

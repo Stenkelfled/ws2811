@@ -13,7 +13,8 @@ class LuiItem : public QObject, public QGraphicsRectItem
 public:
     explicit LuiItem(int id, QGraphicsItem *parent = 0);
     explicit LuiItem(int id, qreal x, qreal y, int rect_width, int rect_height, QGraphicsItem *parent = 0);
-    QColor color();
+    virtual QColor color();
+    void changeId(int id);
     int id();
     virtual LuiItemType luitype();
     virtual void setColor(QColor color);

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>809</width>
-    <height>451</height>
+    <width>854</width>
+    <height>466</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,7 +15,7 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="2">
+    <item row="1" column="3">
      <widget class="QGroupBox" name="groupBox">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -31,6 +31,12 @@
       </property>
       <property name="title">
        <string>Übertragen</string>
+      </property>
+      <property name="flat">
+       <bool>true</bool>
+      </property>
+      <property name="checkable">
+       <bool>false</bool>
       </property>
       <layout class="QFormLayout" name="formLayout">
        <property name="fieldGrowthPolicy">
@@ -95,10 +101,27 @@
          </property>
         </widget>
        </item>
+       <item row="4" column="0" colspan="2">
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QPushButton" name="testButton">
+         <property name="text">
+          <string>Farbe testen</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
-    <item row="0" column="1" colspan="2">
+    <item row="0" column="1" colspan="3">
      <widget class="LuiView" name="ledView"/>
     </item>
     <item row="1" column="1">
@@ -1112,6 +1135,12 @@ definiert</string>
         </item>
         <item>
          <widget class="QGroupBox" name="color_display_group">
+          <property name="minimumSize">
+           <size>
+            <width>250</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="title">
            <string>Farbe</string>
           </property>
@@ -1161,6 +1190,19 @@ definiert</string>
       </widget>
      </widget>
     </item>
+    <item row="1" column="2">
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -1168,7 +1210,7 @@ definiert</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>809</width>
+     <width>854</width>
      <height>21</height>
     </rect>
    </property>

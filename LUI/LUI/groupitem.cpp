@@ -7,7 +7,8 @@
 
 GroupItem::GroupItem(int id, QGraphicsItem *parent):
     LuiItem(id, parent),
-    grp(new QList<LedItem*>)
+    grp(new QList<LedItem*>),
+    group_color(Qt::black)
 {
     setPen(Qt::NoPen);
     setBrush(QBrush(Qt::gray));
@@ -47,10 +48,18 @@ LuiItemType GroupItem::luitype()
     return LuiItemType::group;
 }
 
+QColor GroupItem::color()
+{
+    return this->group_color;
+}
+
 void GroupItem::setColor(QColor color)
 {
-    foreach(LedItem *led, *(this->grp)){
-        led->setColor(color);
+    if(color != this->group_color){
+        this->group_color = color;
+        foreach(LedItem *led, *(this->grp)){
+            led->setColor(color, true);
+        }
     }
 }
 

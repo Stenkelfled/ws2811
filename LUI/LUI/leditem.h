@@ -11,7 +11,9 @@ class LedItem : public LuiItem
     Q_OBJECT
 public:
     explicit LedItem(int id, qreal x, qreal y, QGraphicsItem *parent = 0);
+    bool hasColorFromGroup();
     void setColor(QColor color);
+    void setColor(QColor color, bool from_group);
     void updateTextColor();
     virtual LuiItemType luitype();
 
@@ -26,6 +28,7 @@ signals:
 private:
     QGraphicsTextItem *id_text;
     bool is_moving;
+    bool color_from_group;
 };
 
 #endif // LEDITEM_H

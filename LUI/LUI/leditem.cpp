@@ -10,7 +10,8 @@
 
 LedItem::LedItem(int id, qreal x, qreal y, QGraphicsItem *parent):
     LuiItem(id, x, y, settings::leditem::width, settings::leditem::height, parent),
-    is_moving(false)
+    is_moving(false),
+    color_from_group(true)
 {
     setBrush(QBrush(Qt::black));//settings::leditem::color));
     setPen(QPen(Qt::NoPen));
@@ -21,12 +22,23 @@ LedItem::LedItem(int id, qreal x, qreal y, QGraphicsItem *parent):
     //setAcceptedMouseButtons(Qt::LeftButton);
 }
 
+bool LedItem::hasColorFromGroup()
+{
+    return this->color_from_group;
+}
+
 void LedItem::setColor(QColor color)
+{
+    setColor(color, false);
+}
+
+void LedItem::setColor(QColor color, bool from_group)
 {
     QBrush b = brush();
     b.setColor(color);
     setBrush(b);
     updateTextColor();
+    this->color_from_group = from_group;
 }
 
 void LedItem::updateTextColor(){

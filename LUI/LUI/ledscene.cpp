@@ -11,13 +11,12 @@
 
 LedScene::LedScene(QObject *parent) :
     QGraphicsScene(parent),
+    groups(new QList<GroupItem*>),
     selection_start(settings::ledscene::invalid_pos),
     selected_item(NULL)
 {
     this->selection_rect_item = addRect(0, 0, 0, 0, QPen(Qt::black), QBrush(Qt::NoBrush));
-    GroupItem *grp = new GroupItem(0, NULL);
-    connect(grp, SIGNAL(groupEmpty(GroupItem*)), this, SLOT(removeGroup(GroupItem*)));
-    addItem(grp);
+    GroupItem* grp = newGroup();
     for(int i=0; i<GLOBAL_LED_COUNT; i++){
         LedItem *led = new LedItem(i, i*(settings::leditem::width + settings::leditem::spacing), 0); //items will be removed automatically on scene deletion
         grp->addLed(led);
@@ -26,9 +25,7 @@ LedScene::LedScene(QObject *parent) :
 
 void LedScene::group()
 {
-    GroupItem *new_grp = new GroupItem(0, NULL);
-    connect(new_grp, SIGNAL(groupEmpty(GroupItem*)), this, SLOT(removeGroup(GroupItem*)));
-    addItem(new_grp);
+    GroupItem *new_grp = newGroup();
     foreach(QGraphicsItem *itm, selectedItems()){
         LuiItem *lui = (LuiItem*)itm;
         if(lui->luitype() == LuiItemType::led){
@@ -44,7 +41,13 @@ void LedScene::group()
 
 void LedScene::removeGroup(GroupItem* group)
 {
+    int id = group->id();
+    this->groups->removeAt(id);
     removeItem((QGraphicsItem*)group);
+    for(;id<this->groups->length();id++){
+    //foreach(GroupItem *item, this->groups){
+        this->groups->at(id)->changeId(id);
+    }
 }
 
 void LedScene::selectAll()
@@ -58,6 +61,15 @@ void LedScene::updateColor(QColor color)
 {
     //qDebug() << "newColor" << color;
     this->selected_item->setColor(color);
+}
+
+GroupItem* LedScene::newGroup()
+{
+    GroupItem *grp = new GroupItem(this->groups->length(), NULL);
+    this->groups->append(grp);
+    connect(grp, SIGNAL(groupEmpty(GroupItem*)), this, SLOT(removeGroup(GroupItem*)));
+    addItem(grp);
+    return grp;
 }
 
 void LedScene::ungroup()

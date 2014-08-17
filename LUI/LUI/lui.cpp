@@ -4,6 +4,7 @@
 #include <QtDebug>
 
 #include <global.h>
+#include <protocoll.h>
 #include "lui.h"
 #include "ui_lui.h"
 
@@ -72,7 +73,6 @@ void Lui::colorDisplayEnable(bool status)
     /*this->ui->color_display_group->setEnabled(status);
     this->ui->brightness->setEnabled(status);*/
     this->ui->brightness_slider->setEnabled(status);
-    qDebug() << "status" << status << "slider" << this->ui->brightness_slider->isEnabled();
 }
 
 void Lui::colorDisplayChange(QColor color)
@@ -87,8 +87,8 @@ void Lui::colorDisplayChange(QColor color)
 
 void Lui::on_transmitPushButton_clicked()
 {
-    QString cmd = "Led"; //TODO: build command to send...
-    if(this->serial->openAndWrite(cmd.toLocal8Bit())){
+    QByteArray cmd = QByteArray(USB_PREAMBLE, USB_PREAMBLE_LEN); //TODO: build command to send...
+    if(this->serial->openAndWrite(cmd)){
         this->ui->transmitPushButton->setEnabled(false);
     }
 }
@@ -119,6 +119,19 @@ void Lui::newLedColor(QColor color)
     emit colorChanged(color);
 }
 
+void Lui::testColor(QColor color)
+{
+    //QString cmd = USB_PREAMBLE;
+    QByteArray cmd = QByteArray(USB_PREAMBLE, USB_PREAMBLE_LEN);
+    cmd.append(PR_MSG_TYPE_TEST);
+    cmd.append( (char)(color.red()) );
+    cmd.append( (char)(color.green()) );
+    cmd.append( (char)(color.blue()) );
+    if(this->serial->openAndWrite(cmd)){
+        this->ui->transmitPushButton->setEnabled(false);
+    }
+}
+
 void Lui::on_brightness_slider_sliderMoved(int position)
 {
     QColor c = this->ui->color_display->palette().color(QPalette::Window);
@@ -126,3 +139,45 @@ void Lui::on_brightness_slider_sliderMoved(int position)
     colorDisplayChange(c);
     emit colorChanged(c);
 }
+
+void Lui::on_testButton_toggled(bool checked)
+{
+    this->ui->ledView->setEnabled(!checked);
+    colorDisplayEnable(checked);
+    if(checked){
+        disconnect(this, SIGNAL(colorChanged(QColor)), this->scene, SLOT(updateColor(QColor)));
+        connect(this, SIGNAL(colorChanged(QColor)), this, SLOT(testColor(QColor)));
+    } else {
+        connect(this, SIGNAL(colorChanged(QColor)), this->scene, SLOT(updateColor(QColor)));
+        disconnect(this, SIGNAL(colorChanged(QColor)), this, SLOT(testColor(QColor)));
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
