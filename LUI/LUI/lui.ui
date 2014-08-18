@@ -1152,7 +1152,7 @@ definiert</string>
             <enum>QLayout::SetMaximumSize</enum>
            </property>
            <item>
-            <widget class="QLabel" name="color_display">
+            <widget class="LuiColorDisplay" name="color_display">
              <property name="autoFillBackground">
               <bool>true</bool>
              </property>
@@ -1312,6 +1312,11 @@ definiert</string>
   </customwidget>
   <customwidget>
    <class>LuiColorLabelCustom</class>
+   <extends>QLabel</extends>
+   <header>luiwidgets.h</header>
+  </customwidget>
+  <customwidget>
+   <class>LuiColorDisplay</class>
    <extends>QLabel</extends>
    <header>luiwidgets.h</header>
   </customwidget>

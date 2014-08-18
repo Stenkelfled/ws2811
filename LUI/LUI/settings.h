@@ -1,7 +1,10 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include <QColor>
 #include <QPointF>
+
+#define DISPLAY_HSV(x)  ((x-1)*155/254 + 100)
 
 namespace settings{
     namespace ledscene{
@@ -17,6 +20,7 @@ namespace settings{
 
     namespace groupitem{
         constexpr int border = 10;
+        constexpr Qt::GlobalColor color = Qt::gray;
     }
 }
 

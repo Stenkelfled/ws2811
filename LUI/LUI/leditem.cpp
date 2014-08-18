@@ -13,13 +13,19 @@ LedItem::LedItem(int id, QGraphicsItem *parent):
     is_moving(false),
     color_from_group(true)
 {
-    setBrush(QBrush(Qt::black));//settings::leditem::color));
-    setPen(QPen(Qt::NoPen));
     this->id_text = new QGraphicsTextItem(QString::number(this->id()), this); //items will be removed automtically on led deletion
     this->id_text->setFont(QFont("MS Shell Dlg 2", settings::leditem::height/2, QFont::DemiBold));
     this->id_text->setPos(this->rect().center() - this->id_text->boundingRect().center());
-    updateTextColor();
+    QColor c(settings::leditem::color);
+    setBrush(QBrush(c.toHsv()));
+    setColor(c.toHsv());
+    setPen(QPen(Qt::NoPen));
     //setAcceptedMouseButtons(Qt::LeftButton);
+}
+
+QColor LedItem::color()
+{
+    return this->my_color;
 }
 
 bool LedItem::hasColorFromGroup()
@@ -34,6 +40,10 @@ void LedItem::setColor(QColor color)
 
 void LedItem::setColor(QColor color, bool from_group)
 {
+    this->my_color = color;
+    if(color.value() != 0){
+        color.setHsv(color.hue(), color.saturation(), DISPLAY_HSV(color.value()));
+    }
     QBrush b = brush();
     b.setColor(color);
     setBrush(b);

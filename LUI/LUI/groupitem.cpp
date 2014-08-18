@@ -8,11 +8,13 @@
 
 GroupItem::GroupItem(int id, QGraphicsItem *parent):
     LuiItem(id, parent),
-    grp(new QList<LedItem*>),
-    group_color(Qt::black)
+    grp(new QList<LedItem*>)
 {
     setPen(Qt::NoPen);
-    setBrush(QBrush(Qt::gray));
+    QColor c(settings::groupitem::color);
+    setBrush(QBrush(c.toHsv()));
+    c = QColor(settings::leditem::color);
+    this->group_color = c.toHsv();
 }
 
 void GroupItem::addLed(LedItem *led)

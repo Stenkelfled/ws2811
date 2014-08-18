@@ -35,4 +35,17 @@ protected:
 
 };
 
+class LuiColorDisplay : public QLabel
+{
+    Q_OBJECT
+public:
+    explicit LuiColorDisplay(QWidget *parent = 0);
+    QColor color();
+    void setColor(QColor color);
+
+private:
+    QColor my_color;
+
+};
+
 #endif // LUICOLORLABEL_H

@@ -107,7 +107,7 @@ void my_callback_rx_notify(uint8_t port){
 						test_color.blue = usb_data;
 						preamble_pos = 0;
 						msg_type = msg_none;
-						define_group(0, 0, GLOBAL_LED_COUNT-1, 1);
+						define_group(0, 0, LED_COUNT-1, 1);
 						color_group(0, test_color);
 						fill_buffer();
 						refresh_leds();

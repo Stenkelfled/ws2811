@@ -14,6 +14,7 @@ public:
     int type() const {return Type;}
 
     explicit LedItem(int id, QGraphicsItem *parent = 0);
+    QColor color();
     bool hasColorFromGroup();
     void setColor(QColor color);
     void setColor(QColor color, bool from_group);
@@ -31,6 +32,7 @@ private:
     QGraphicsTextItem *id_text;
     bool is_moving;
     bool color_from_group;
+    QColor my_color;
 };
 
 #endif // LEDITEM_H
