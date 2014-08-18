@@ -49,7 +49,7 @@ void LuiColorDisplay::setColor(QColor color)
 {
     this->my_color = color;
     if(color.value() != 0){
-        int value = DISPLAY_HSV(color.value());//(color.value()-1)*155/254 + 100;
+        int value = DISPLAY_HSV(color.value());
         //qDebug() << "change HSV" << color.value() << value;
         color.setHsv(color.hue(), color.saturation(), value);
     }
