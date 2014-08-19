@@ -8,6 +8,7 @@ class GroupItem : public LuiItem
 {
     Q_OBJECT
 public:
+    enum groupAlignment {horizontal, vertical};
     enum { Type = UserType + 2 };
     int type() const {return Type;}
 
@@ -21,10 +22,11 @@ public:
     virtual QByteArray getUsbCmd();
 
 public slots:
-    void refreshArea();
+    void refreshArea(bool item_moving=false);
 
 protected:
-    //void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    //virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
 
 signals:
     void groupEmpty(GroupItem* group);
@@ -32,6 +34,7 @@ signals:
 private:
     QList<LedItem*> *grp;
     QColor group_color;
+    groupAlignment alignment;
 };
 
 #endif // GROUPITEM_H

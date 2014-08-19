@@ -8,7 +8,8 @@
 
 GroupItem::GroupItem(int id, QGraphicsItem *parent):
     LuiItem(id, parent),
-    grp(new QList<LedItem*>)
+    grp(new QList<LedItem*>),
+    alignment(GroupItem::horizontal)
 {
     setPen(Qt::NoPen);
     QColor c(settings::groupitem::color);
@@ -25,13 +26,15 @@ void GroupItem::addLed(LedItem *led)
     }
     this->grp->append(led);
     led->setParentItem(this);
+    led->setGroupIndex(this->grp->length()-1, 0);
     refreshArea();
-    connect(led, SIGNAL(itemMoved()), this, SLOT(refreshArea()));
+    connect(led, SIGNAL(itemMoves(bool)), this, SLOT(refreshArea(bool)));
 }
 
 void GroupItem::removeLed(LedItem *led)
 {
     led->setParentItem(NULL);
+    led->setGroupIndex(-1, -1);
     disconnect(led, 0, this, 0);
     this->grp->removeAll(led);
     refreshArea();
@@ -134,16 +137,32 @@ QByteArray GroupItem::getUsbCmd()
     LuiItem::mousePressEvent(event);
 }*/
 
-void GroupItem::refreshArea()
+void GroupItem::refreshArea(bool item_moving)
 {
-    for(int i=0; i<this->grp->length(); i++){
-        this->grp->at(i)->setPos(i*(settings::leditem::width + settings::leditem::spacing), 0);
+    qreal x,y;
+    foreach(LedItem* led, *(this->grp)){
+        x = led->groupIndex().x()*(settings::leditem::width + settings::leditem::spacing);
+        y = led->groupIndex().y()*(settings::leditem::width + settings::leditem::spacing);
+        if(this->alignment == GroupItem::horizontal){
+            led->setPos(x,y);
+        } else {
+            led->setPos(y,x);
+        }
     }
 
     QRectF r = this->childrenBoundingRect();
-    r.setWidth(r.width() + 2*settings::groupitem::border);
-    r.setHeight(r.height() + 2*settings::groupitem::border);
-    r.translate(-settings::groupitem::border, -settings::groupitem::border);
+    int moving_add = 0;
+    if(item_moving){
+        moving_add = settings::groupitem::move_size_add;
+    }
+    r.setWidth(r.width() + 2*(settings::groupitem::border + moving_add));
+    r.setHeight(r.height() + 2*(settings::groupitem::border + moving_add));
+    r.translate(-(settings::groupitem::border + moving_add), -(settings::groupitem::border + moving_add));
     setRect(r);
+}
+
+void GroupItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+{
+    qDebug() << "contextMenuEvent on group" << id();
 }
 

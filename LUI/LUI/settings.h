@@ -20,6 +20,7 @@ namespace settings{
 
     namespace groupitem{
         constexpr int border = 10;
+        constexpr int move_size_add = 20;
         constexpr Qt::GlobalColor color = Qt::gray;
     }
 }
