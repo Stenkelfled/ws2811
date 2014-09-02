@@ -11,6 +11,7 @@ LuiColorLabel::LuiColorLabel(QWidget *parent) :
 
 void LuiColorLabel::mousePressEvent(QMouseEvent *event)
 {
+    Q_UNUSED(event);
     QPalette p = this->palette();
     //qDebug() << "color:" << p.color(QPalette::Window);
     emit clickedColor(p.color(QPalette::Window).toHsv());
@@ -24,6 +25,7 @@ LuiColorLabelCustom::LuiColorLabelCustom(QWidget *parent) :
 
 void LuiColorLabelCustom::mousePressEvent(QMouseEvent *event)
 {
+    Q_UNUSED(event);
     //const QColorDialog::ColorDialogOptions options = QFlag(colorDialogOptionsWidget->value());
     const QColor c = QColorDialog::getColor(Qt::green, this, "Farbe auswählen");//, options);
 

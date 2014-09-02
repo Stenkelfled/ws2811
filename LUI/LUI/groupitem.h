@@ -22,11 +22,14 @@ public:
     virtual QByteArray getUsbCmd();
 
 public slots:
-    void refreshArea(bool item_moving=false);
+    void refreshArea(bool plus_extra_space=false);
 
 protected:
-    //virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
     virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
+    virtual void dragEnterEvent(QGraphicsSceneDragDropEvent * event);
+    virtual void dragLeaveEvent(QGraphicsSceneDragDropEvent * event);
+    virtual void dropEvent(QGraphicsSceneDragDropEvent * event);
 
 signals:
     void groupEmpty(GroupItem* group);

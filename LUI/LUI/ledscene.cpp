@@ -76,6 +76,7 @@ void LedScene::selectAll()
 void LedScene::updateColor(QColor color)
 {
     //qDebug() << "newColor" << color;
+
     this->selected_item->setColor(color);
 }
 
@@ -152,13 +153,13 @@ void LedScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 void LedScene::selectedItemChanged(LuiItem *item)
 {
     if(item != this->selected_item){
+        this->selected_item = item;
         if(item == NULL){
             emit selectedItemStatusChanged(false);
         } else {
             emit selectedItemStatusChanged(true);
             emit selectedItemColorChanged(item->color());
         }
-        this->selected_item = item;
     }
 }
 

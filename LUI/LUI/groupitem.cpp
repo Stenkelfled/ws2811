@@ -16,6 +16,8 @@ GroupItem::GroupItem(int id, QGraphicsItem *parent):
     setBrush(QBrush(c.toHsv()));
     c = QColor(settings::leditem::color);
     this->group_color = c.toHsv();
+    setAcceptDrops(true);
+
 }
 
 void GroupItem::addLed(LedItem *led)
@@ -28,7 +30,7 @@ void GroupItem::addLed(LedItem *led)
     led->setParentItem(this);
     led->setGroupIndex(this->grp->length()-1, 0);
     refreshArea();
-    connect(led, SIGNAL(itemMoves(bool)), this, SLOT(refreshArea(bool)));
+    //connect(led, SIGNAL(itemMoves(bool)), this, SLOT(refreshArea(bool)));
 }
 
 void GroupItem::removeLed(LedItem *led)
@@ -131,14 +133,9 @@ QByteArray GroupItem::getUsbCmd()
     return cmd;
 }
 
-/*void GroupItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
-    //qDebug() << "Mouse press on group";
-    LuiItem::mousePressEvent(event);
-}*/
-
 void GroupItem::refreshArea(bool item_moving)
 {
+    qDebug() << "refresh" << item_moving;
     qreal x,y;
     foreach(LedItem* led, *(this->grp)){
         x = led->groupIndex().x()*(settings::leditem::width + settings::leditem::spacing);
@@ -148,21 +145,51 @@ void GroupItem::refreshArea(bool item_moving)
         } else {
             led->setPos(y,x);
         }
+        qDebug() << "led" << led->id() << "pos" << led->pos();
     }
 
     QRectF r = this->childrenBoundingRect();
-    int moving_add = 0;
+    int extra_space = 0;
     if(item_moving){
-        moving_add = settings::groupitem::move_size_add;
+        extra_space = settings::groupitem::extra_space;
     }
-    r.setWidth(r.width() + 2*(settings::groupitem::border + moving_add));
-    r.setHeight(r.height() + 2*(settings::groupitem::border + moving_add));
-    r.translate(-(settings::groupitem::border + moving_add), -(settings::groupitem::border + moving_add));
+    r.setWidth(r.width() + 2*(settings::groupitem::border + extra_space));
+    r.setHeight(r.height() + 2*(settings::groupitem::border + extra_space));
+    r.translate(-(settings::groupitem::border + extra_space), -(settings::groupitem::border + extra_space));
     setRect(r);
+}
+
+void GroupItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    qDebug() << "Mouse press on group";
+    refreshArea(false);
+    LuiItem::mousePressEvent(event);
 }
 
 void GroupItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
+    Q_UNUSED(event)
     qDebug() << "contextMenuEvent on group" << id();
+}
+
+void GroupItem::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
+{
+    Q_UNUSED(event)
+    qDebug() << "group drag enter";
+    refreshArea(true);
+}
+
+void GroupItem::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
+{
+    Q_UNUSED(event)
+    qDebug() << "group drag leave";
+    refreshArea(false);
+}
+
+void GroupItem::dropEvent(QGraphicsSceneDragDropEvent *event)
+{
+    Q_UNUSED(event)
+    qDebug() << "group drop";
+    refreshArea(false);
 }
 

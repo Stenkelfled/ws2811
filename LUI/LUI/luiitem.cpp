@@ -18,6 +18,7 @@ LuiItem::LuiItem(int id, int rect_width, int rect_height, QGraphicsItem *parent)
     my_id(id)
 {
     initFlags();
+    this->setBrush(Qt::NoBrush);
 }
 
 QColor LuiItem::color()
@@ -65,6 +66,7 @@ bool LuiItem::positionLowerThan(const QGraphicsItem *itm1, const QGraphicsItem *
 
 void LuiItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    Q_UNUSED(event);
     scene()->clearSelection();
 }
 

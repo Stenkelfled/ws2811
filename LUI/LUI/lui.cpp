@@ -81,7 +81,7 @@ void Lui::colorDisplayChange(QColor color)
 {
    if(this->ui->color->isEnabled()){
        this->ui->color_display->setColor(color);
-       qDebug() << "display color" << this->ui->color_display->color();
+       //qDebug() << "display color" << this->ui->color_display->color();
        this->ui->brightness_slider->setSliderPosition(color.value());
    }
 }
@@ -148,7 +148,7 @@ void Lui::on_brightness_slider_valueChanged(int position)
     c.setHsv(c.hue(), c.saturation(), position);
     c = c.toHsv();
     if(c != this->ui->color_display->color()){
-        qDebug() << "slider  color" << c;
+        //qDebug() << "slider  color" << c;
         colorDisplayChange(c);
         emit colorChanged(c);
     }
