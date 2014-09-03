@@ -2,6 +2,7 @@
 #include <QObject>
 #include <QPen>
 #include <QtDebug>
+#include <QtWidgets>
 
 #include "groupitem.h"
 #include <protocoll.h>
@@ -135,7 +136,7 @@ QByteArray GroupItem::getUsbCmd()
 
 void GroupItem::refreshArea(bool item_moving)
 {
-    qDebug() << "refresh" << item_moving;
+    //qDebug() << "refresh" << item_moving;
     qreal x,y;
     foreach(LedItem* led, *(this->grp)){
         x = led->groupIndex().x()*(settings::leditem::width + settings::leditem::spacing);
@@ -145,7 +146,7 @@ void GroupItem::refreshArea(bool item_moving)
         } else {
             led->setPos(y,x);
         }
-        qDebug() << "led" << led->id() << "pos" << led->pos();
+        //qDebug() << "led" << led->id() << "pos" << led->pos();
     }
 
     QRectF r = this->childrenBoundingRect();
@@ -191,5 +192,7 @@ void GroupItem::dropEvent(QGraphicsSceneDragDropEvent *event)
     Q_UNUSED(event)
     qDebug() << "group drop";
     refreshArea(false);
+    //event->setDropAction(Qt::MoveAction);
+    //event->accept();
 }
 

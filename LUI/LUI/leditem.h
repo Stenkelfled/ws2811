@@ -31,10 +31,10 @@ protected:
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant & value);
 
 signals:
-    void itemMoves(bool state); //is emitted if the item begins or stops moving; true, on begin
+    //void itemMoves(bool state); //is emitted if the item begins or stops moving; true, on begin
 
 private:
-    bool is_moving;
+    bool is_dragging;
     bool color_from_group;
     QPoint group_index;
     QColor my_color;
