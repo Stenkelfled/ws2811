@@ -14,6 +14,7 @@
 LedScene::LedScene(QObject *parent) :
     QGraphicsScene(parent),
     groups(new QList<GroupItem*>),
+    leds(new QList<LedItem*>),
     selection_start(settings::ledscene::invalid_pos),
     selected_item(NULL)
 {
@@ -21,6 +22,7 @@ LedScene::LedScene(QObject *parent) :
     GroupItem* grp = newGroup();
     for(int i=0; i<GLOBAL_LED_COUNT; i++){
         LedItem *led = new LedItem(i); //items will be removed automatically on scene deletion
+        this->leds->append(led);
         grp->addLed(led);
     }
 }
@@ -71,6 +73,11 @@ void LedScene::selectAll()
     foreach(QGraphicsItem *itm, items()){
         itm->setSelected(true);
     }
+}
+
+LedItem *LedScene::getLed(int id)
+{
+    return (*(this->leds))[id];
 }
 
 void LedScene::updateColor(QColor color)

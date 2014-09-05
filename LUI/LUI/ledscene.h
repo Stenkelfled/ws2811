@@ -21,6 +21,7 @@ public slots:
     void group();
     void removeGroup(GroupItem *group);
     void selectAll();
+    LedItem* getLed(int id);
 
     void updateColor(QColor color);
 
@@ -34,6 +35,7 @@ private:
     void sortSelection(QList<QGraphicsItem*> &items);
     GroupItem* newGroup();
     QList<GroupItem*> *groups;
+    QList<LedItem*> *leds;
     QGraphicsRectItem *selection_rect_item;
     QPointF selection_start;
     LuiItem* selected_item;

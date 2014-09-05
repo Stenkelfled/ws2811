@@ -14,8 +14,8 @@
 LedItem::LedItem(int id, QGraphicsItem *parent):
     LuiItem(id, settings::leditem::width, settings::leditem::height, parent),
     is_dragging(false),
-    color_from_group(true),
-    group_index(QPoint(-1,-1))
+    color_from_group(true)//,
+    //group_index(QPoint(-1,-1))
 {
     setAcceptedMouseButtons(Qt::LeftButton);
 }
@@ -31,10 +31,10 @@ QColor LedItem::color()
     return this->my_color;
 }
 
-QPoint LedItem::groupIndex()
+/*QPoint LedItem::groupIndex()
 {
     return this->group_index;
-}
+}*/
 
 bool LedItem::hasColorFromGroup()
 {
@@ -86,7 +86,7 @@ void LedItem::setColor(QColor color, bool from_group)
     this->color_from_group = from_group;
 }
 
-void LedItem::setGroupIndex(QPoint pos)
+/*void LedItem::setGroupIndex(QPoint pos)
 {
     this->group_index = pos;
 }
@@ -95,7 +95,7 @@ void LedItem::setGroupIndex(int x, int y)
 {
     this->group_index.setX(x);
     this->group_index.setY(y);
-}
+}*/
 
 /*void LedItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
@@ -113,7 +113,9 @@ void LedItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     QDrag *drag = new QDrag(event->widget());
     QMimeData *mime = new QMimeData;
     drag->setMimeData(mime);
-    mime->setText("Led"+this->id());
+    mime->setText("Led");
+    qintptr my_address = (qintptr)this;
+    mime->setData(settings::leditem::mimetype, QByteArray(QByteArray::number(my_address)));
 
     QPixmap pixmap(settings::leditem::height, settings::leditem::width);
     pixmap.fill(Qt::white);
@@ -143,13 +145,13 @@ void LedItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsRectItem::mouseReleaseEvent(event);
 }*/
 
-QVariant LedItem::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)
+/*QVariant LedItem::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)
 {
     if(change == QGraphicsItem::ItemPositionHasChanged){
         qDebug() << "led pos changed" << this->pos();
     }
     return QGraphicsRectItem::itemChange(change, value);
-}
+}*/
 
 
 

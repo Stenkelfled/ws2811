@@ -16,6 +16,7 @@ namespace settings{
         constexpr int width = 20;
         constexpr Qt::GlobalColor color = Qt::black;
         constexpr int spacing = 5;
+        const QString mimetype("ledmime");
     }
 
     namespace groupitem{

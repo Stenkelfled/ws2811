@@ -1,5 +1,6 @@
 #ifndef GROUPITEM_H
 #define GROUPITEM_H
+#include <QtWidgets>
 
 #include <leditem.h>
 #include <luiitem.h>
@@ -13,6 +14,7 @@ public:
     int type() const {return Type;}
 
     explicit GroupItem(int id, QGraphicsItem *parent = 0);
+    ~GroupItem();
     void addLed(LedItem *led);
     void removeLed(LedItem *led);
     void makeEmpty();
@@ -28,6 +30,7 @@ protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
     virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
     virtual void dragEnterEvent(QGraphicsSceneDragDropEvent * event);
+    virtual void dragMoveEvent(QGraphicsSceneDragDropEvent * event);
     virtual void dragLeaveEvent(QGraphicsSceneDragDropEvent * event);
     virtual void dropEvent(QGraphicsSceneDragDropEvent * event);
 
@@ -35,7 +38,9 @@ signals:
     void groupEmpty(GroupItem* group);
 
 private:
-    QList<LedItem*> *grp;
+    LedItem* unpackDragData(const QMimeData *data);
+
+    QList<QList<LedItem*>*> *leds; //list(pointer) of row(pointer)s of led(pointer)s
     QColor group_color;
     groupAlignment alignment;
 };

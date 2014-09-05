@@ -96,9 +96,12 @@ void Lui::on_transmitPushButton_clicked()
     foreach(QGraphicsItem *itm, this->scene->items()){
         QGraphicsItem::GraphicsItemFlags flags = itm->flags();
         if(flags & QGraphicsItem::ItemIsSelectable){
-            LuiItem *group = (LuiItem*)itm;
-            cmd = group->getUsbCmd();
-            qDebug() << cmd.toHex();
+            //LuiItem *group = (LuiItem*)itm;
+            GroupItem *group = qgraphicsitem_cast<GroupItem*>(itm);
+            if(group != NULL){
+                cmd = group->getUsbCmd();
+                qDebug() << cmd.toHex();
+            }
         }
     }
 }
