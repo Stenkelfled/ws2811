@@ -19,7 +19,10 @@ LedScene::LedScene(QObject *parent) :
     selected_item(NULL),
     current_drag_item(NULL)
 {
-    this->selection_rect_item = addRect(0, 0, 0, 0, QPen(Qt::black), QBrush(Qt::NoBrush));
+    QColor selection_rect_color(Qt::black);
+    selection_rect_color.setAlpha(80);
+    this->selection_rect_item = addRect(0, 0, 0, 0, QPen(Qt::black, 1, Qt::DashLine), QBrush(selection_rect_color));
+    this->selection_rect_item->setZValue(10000);
     GroupItem* grp = newGroup();
     for(int i=0; i<GLOBAL_LED_COUNT; i++){
         LedItem *led = new LedItem(i); //items will be removed automatically on scene deletion
