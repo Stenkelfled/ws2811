@@ -225,7 +225,7 @@ void GroupItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 
 void GroupItem::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
-    qDebug() << "group drag enter";
+    //qDebug() << "group drag enter";
     LedItem* led = LedItem::unpackDragData(event->mimeData());
     if(led == NULL){
         LuiItem::dragEnterEvent(event);
@@ -239,7 +239,7 @@ void GroupItem::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 
 void GroupItem::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
-    qDebug() << "group drag move";
+    //qDebug() << "group drag move";
     LedItem* led = LedItem::unpackDragData(event->mimeData());
     if(led == NULL){
         LuiItem::dragMoveEvent(event);
@@ -294,7 +294,7 @@ void GroupItem::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 
 void GroupItem::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 {
-    qDebug() << "group leave";
+    //qDebug() << "group leave";
     LedItem* led = LedItem::unpackDragData(event->mimeData());
     if(led == NULL){
         LuiItem::dragLeaveEvent(event);
@@ -306,7 +306,7 @@ void GroupItem::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 
 void GroupItem::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
-    qDebug() << "Group drop";
+    //qDebug() << "Group drop";
     LedItem* led = LedItem::unpackDragData(event->mimeData());
     if(led == NULL){
         LuiItem::dropEvent(event);

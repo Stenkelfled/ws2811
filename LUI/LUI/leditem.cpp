@@ -142,8 +142,8 @@ void LedItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 /*void LedItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     qDebug() << "led release";
-    this->is_dragging = false;
-    QGraphicsRectItem::mouseReleaseEvent(event);
+    //this->is_dragging = false;
+    LuiItem::mouseReleaseEvent(event);
 }*/
 
 /*QVariant LedItem::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)

@@ -100,7 +100,9 @@ GroupItem* LedScene::newGroup()
 
 void LedScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-
+    //qDebug() << "scene press";
+    //qDebug() << "item:" << itemAt(event->scenePos(), QTransform());
+    //qDebug() << "mousegrabber:" << mouseGrabberItem();
     switch(event->button()){
     case Qt::LeftButton:
         {
@@ -166,7 +168,7 @@ void LedScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
         event->ignore();
         return;
     }
-    qDebug() << "scene drag enter";
+    //qDebug() << "scene drag enter";
     QGraphicsItem *itm = itemAt(event->scenePos(), QTransform());
     if(itm != NULL){
         while(!itm->acceptDrops()){
@@ -187,7 +189,7 @@ void LedScene::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
         event->ignore();
         return;
     }
-    qDebug() << "scene drag move";
+    //qDebug() << "scene drag move";
     QGraphicsItem *itm = itemAt(event->scenePos(), QTransform());
     if(itm != NULL){
         while(!itm->acceptDrops()){
@@ -223,7 +225,7 @@ void LedScene::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
         event->ignore();
         return;
     }
-    qDebug() << "scene drag leave";
+    //qDebug() << "scene drag leave";
     QGraphicsItem *itm = itemAt(event->scenePos(), QTransform());
     if(itm != NULL){
         while(!itm->acceptDrops()){
@@ -238,7 +240,7 @@ void LedScene::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
         if(this->current_drag_item != NULL){
             event->setPos(event->scenePos());
             sendEvent(this->current_drag_item, copyEvent(event, QEvent::GraphicsSceneDragLeave));
-            this->current_drag_item == NULL;
+            this->current_drag_item = NULL;
         }
     }
     event->accept();
@@ -250,11 +252,15 @@ void LedScene::dropEvent(QGraphicsSceneDragDropEvent *event)
         event->ignore();
         return;
     }
-    qDebug() << "scene drop";
+    //qDebug() << "scene drop";
     if(this->current_drag_item != NULL){
         event->setPos(event->scenePos());
         sendEvent(this->current_drag_item, event);
-        this->current_drag_item == NULL;
+        this->current_drag_item = NULL;
+    }
+    if(mouseGrabberItem() != NULL){
+        //qDebug() << "mousegrabber:" << mouseGrabberItem();
+        QGraphicsScene::mouseReleaseEvent(new QGraphicsSceneMouseEvent(QEvent::GraphicsSceneMouseRelease));
     }
     event->accept();
 }
