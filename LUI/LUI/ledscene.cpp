@@ -16,7 +16,8 @@ LedScene::LedScene(QObject *parent) :
     groups(new QList<GroupItem*>),
     leds(new QList<LedItem*>),
     selection_start(settings::ledscene::invalid_pos),
-    selected_item(NULL)
+    selected_item(NULL),
+    current_drag_item(NULL)
 {
     this->selection_rect_item = addRect(0, 0, 0, 0, QPen(Qt::black), QBrush(Qt::NoBrush));
     GroupItem* grp = newGroup();
@@ -25,6 +26,7 @@ LedScene::LedScene(QObject *parent) :
         this->leds->append(led);
         grp->addLed(led);
     }
+
 }
 
 void LedScene::group()
@@ -98,6 +100,7 @@ GroupItem* LedScene::newGroup()
 
 void LedScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+
     switch(event->button()){
     case Qt::LeftButton:
         {
@@ -157,6 +160,105 @@ void LedScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
+void LedScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
+{
+    if(LedItem::unpackDragData(event->mimeData()) == NULL){
+        event->ignore();
+        return;
+    }
+    qDebug() << "scene drag enter";
+    QGraphicsItem *itm = itemAt(event->scenePos(), QTransform());
+    if(itm != NULL){
+        while(!itm->acceptDrops()){
+            if(itm->parentItem() == NULL){
+                break;
+            }
+            itm = itm->parentItem();
+        }
+        this->current_drag_item = itm;
+        event->setPos(event->scenePos());
+        sendEvent(itm, event);
+    }
+}
+
+void LedScene::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
+{
+    if(LedItem::unpackDragData(event->mimeData()) == NULL){
+        event->ignore();
+        return;
+    }
+    qDebug() << "scene drag move";
+    QGraphicsItem *itm = itemAt(event->scenePos(), QTransform());
+    if(itm != NULL){
+        while(!itm->acceptDrops()){
+            if(itm->parentItem() == NULL){
+                break;
+            }
+            itm = itm->parentItem();
+        }
+        event->setPos(event->scenePos());
+        if(itm != this->current_drag_item){
+            if(this->current_drag_item != NULL){
+                sendEvent(this->current_drag_item, copyEvent(event, QEvent::GraphicsSceneDragLeave));
+            }
+            sendEvent(itm, copyEvent(event, QEvent::GraphicsSceneDragEnter));
+            this->current_drag_item = itm;
+        }
+        sendEvent(itm, event);
+        return;
+    }
+    //no item under mouse
+    if(this->current_drag_item != NULL){
+        //send dragLeaveEvent to current_dragItem
+        event->setPos(event->scenePos());
+        sendEvent(this->current_drag_item, copyEvent(event, QEvent::GraphicsSceneDragLeave));
+        this->current_drag_item = NULL;
+    }
+    event->accept();
+}
+
+void LedScene::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
+{
+    if(LedItem::unpackDragData(event->mimeData()) == NULL){
+        event->ignore();
+        return;
+    }
+    qDebug() << "scene drag leave";
+    QGraphicsItem *itm = itemAt(event->scenePos(), QTransform());
+    if(itm != NULL){
+        while(!itm->acceptDrops()){
+            if(itm->parentItem() == NULL){
+                break;
+            }
+            itm = itm->parentItem();
+        }
+        event->setPos(event->scenePos());
+        sendEvent(itm, event);
+    } else {
+        if(this->current_drag_item != NULL){
+            event->setPos(event->scenePos());
+            sendEvent(this->current_drag_item, copyEvent(event, QEvent::GraphicsSceneDragLeave));
+            this->current_drag_item == NULL;
+        }
+    }
+    event->accept();
+}
+
+void LedScene::dropEvent(QGraphicsSceneDragDropEvent *event)
+{
+    if(LedItem::unpackDragData(event->mimeData()) == NULL){
+        event->ignore();
+        return;
+    }
+    qDebug() << "scene drop";
+    if(this->current_drag_item != NULL){
+        event->setPos(event->scenePos());
+        sendEvent(this->current_drag_item, event);
+        this->current_drag_item == NULL;
+    }
+    event->accept();
+}
+
 void LedScene::selectedItemChanged(LuiItem *item)
 {
     if(item != this->selected_item){
@@ -170,3 +272,10 @@ void LedScene::selectedItemChanged(LuiItem *item)
     }
 }
 
+QGraphicsSceneDragDropEvent *LedScene::copyEvent(QGraphicsSceneDragDropEvent *old_event, QEvent::Type type)
+{
+    QGraphicsSceneDragDropEvent *new_event = new QGraphicsSceneDragDropEvent(type);
+    new_event->setMimeData(old_event->mimeData());
+    new_event->setPos(old_event->pos());
+    return new_event;
+}

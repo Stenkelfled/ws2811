@@ -15,7 +15,6 @@ public slots:
 
 protected:
     virtual void wheelEvent(QWheelEvent* event);
-
 };
 
 #endif // LUIVIEW_H

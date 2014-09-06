@@ -1,11 +1,10 @@
 #include <QApplication>
-#include <QBrush>
+/*#include <QBrush>
 #include <QFont>
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
-#include <QPen>
+#include <QPen>*/
 #include <QtDebug>
-#include <QtWidgets>
 
 #include "leditem.h"
 
@@ -30,11 +29,6 @@ QColor LedItem::color()
 {
     return this->my_color;
 }
-
-/*QPoint LedItem::groupIndex()
-{
-    return this->group_index;
-}*/
 
 bool LedItem::hasColorFromGroup()
 {
@@ -86,16 +80,21 @@ void LedItem::setColor(QColor color, bool from_group)
     this->color_from_group = from_group;
 }
 
-/*void LedItem::setGroupIndex(QPoint pos)
+LedItem *LedItem::unpackDragData(const QMimeData *data)
 {
-    this->group_index = pos;
+    if(!data->hasText()){
+        return NULL;
+    }
+    if(data->text().compare("Led") != 0){
+        return NULL;
+    }
+    bool ok;
+    LedItem* led = (LedItem*)(data->data(settings::leditem::mimetype).toULongLong(&ok));
+    if(!ok){
+        return NULL;
+    }
+    return led;
 }
-
-void LedItem::setGroupIndex(int x, int y)
-{
-    this->group_index.setX(x);
-    this->group_index.setY(y);
-}*/
 
 /*void LedItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
@@ -107,9 +106,11 @@ void LedItem::setGroupIndex(int x, int y)
 void LedItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (QLineF(event->screenPos(), event->buttonDownScreenPos(Qt::LeftButton)).length() < QApplication::startDragDistance()) {
+        event->ignore();
         return;
     }
 
+    event->accept();
     QDrag *drag = new QDrag(event->widget());
     QMimeData *mime = new QMimeData;
     drag->setMimeData(mime);

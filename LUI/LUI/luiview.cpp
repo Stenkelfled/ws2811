@@ -1,10 +1,12 @@
 #include <QWheelEvent>
+#include <QtDebug>
 
-#include "luiview.h"
+#include <luiview.h>
 
 LuiView::LuiView(QWidget *parent) :
     QGraphicsView(parent)
 {
+    setAcceptDrops(true);
 }
 
 void LuiView::wheelEvent(QWheelEvent *event)

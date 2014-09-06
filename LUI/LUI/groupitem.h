@@ -17,11 +17,13 @@ public:
     ~GroupItem();
     void addLed(LedItem *led);
     void removeLed(LedItem *led);
+    QPoint indexOf(LedItem *led);
     void makeEmpty();
     QColor color();
     void setColor(QColor color);
 
     virtual QByteArray getUsbCmd();
+    //LedItem* unpackDragData(const QMimeData *data);
 
 public slots:
     void refreshArea(bool plus_extra_space=false);
@@ -38,7 +40,6 @@ signals:
     void groupEmpty(GroupItem* group);
 
 private:
-    LedItem* unpackDragData(const QMimeData *data);
 
     QList<QList<LedItem*>*> *leds; //list(pointer) of row(pointer)s of led(pointer)s
     QColor group_color;

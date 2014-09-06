@@ -11,7 +11,7 @@ GroupItem::GroupItem(int id, QGraphicsItem *parent):
     leds(new QList<QList<LedItem*>*>),
     alignment(GroupItem::horizontal)
 {
-    setPen(Qt::NoPen);
+    setPen(Qt::SolidLine);
     QColor c(settings::groupitem::color);
     setBrush(QBrush(c.toHsv()));
     c = QColor(settings::leditem::color);
@@ -66,6 +66,20 @@ void GroupItem::removeLed(LedItem *led)
     if(this->leds->isEmpty()){
         emit groupEmpty(this);
     }
+}
+
+QPoint GroupItem::indexOf(LedItem *led)
+{
+    QList<LedItem*> *row;
+    int row_idx, col_idx;
+    for(row_idx=0; row_idx<this->leds->size(); row_idx++){
+        row = this->leds->at(row_idx);
+        col_idx = row->indexOf(led);
+        if(col_idx != -1){
+            return QPoint(row_idx, col_idx);
+        }
+    }
+    return QPoint(-1,-1);
 }
 
 void GroupItem::makeEmpty()
@@ -211,24 +225,33 @@ void GroupItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 
 void GroupItem::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
-    Q_UNUSED(event)
-    //qDebug() << "group drag enter";
+    qDebug() << "group drag enter";
+    LedItem* led = LedItem::unpackDragData(event->mimeData());
+    if(led == NULL){
+        LuiItem::dragEnterEvent(event);
+    }
+    event->accept();
+    if(indexOf(led) == QPoint(-1,-1)){
+        addLed(led);
+    }
     refreshArea(true);
 }
 
 void GroupItem::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
-    LedItem* led = unpackDragData(event->mimeData());
+    qDebug() << "group drag move";
+    LedItem* led = LedItem::unpackDragData(event->mimeData());
     if(led == NULL){
         LuiItem::dragMoveEvent(event);
         return;
     }
+    event->accept();
     int new_col_idx = int(event->pos().x()+settings::leditem::spacing/2)/(settings::leditem::width+settings::leditem::spacing);
     int new_row_idx = int(event->pos().y()+settings::leditem::spacing/2)/(settings::leditem::height+settings::leditem::spacing);
     if(event->pos().y() < 0){
         new_row_idx--;
     }
-    qDebug() << "idx" << new_col_idx << "," << new_row_idx;
+    //qDebug() << "idx" << new_col_idx << "," << new_row_idx;
     QList<LedItem*>* row;
     int led_idx;
     int row_idx;
@@ -264,30 +287,37 @@ void GroupItem::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
         this->leds->removeAll(row);
         delete row;
         row = NULL;
-        qDebug() << "row deleted" << row_idx;
+        //qDebug() << "row deleted" << row_idx;
     }
     refreshArea(true);
 }
 
 void GroupItem::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 {
-    Q_UNUSED(event)
-    //qDebug() << "group drag leave";
+    qDebug() << "group leave";
+    LedItem* led = LedItem::unpackDragData(event->mimeData());
+    if(led == NULL){
+        LuiItem::dragLeaveEvent(event);
+        return;
+    }
+    event->accept();
     refreshArea(false);
 }
 
 void GroupItem::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
-    LedItem* led = unpackDragData(event->mimeData());
+    qDebug() << "Group drop";
+    LedItem* led = LedItem::unpackDragData(event->mimeData());
     if(led == NULL){
         LuiItem::dropEvent(event);
         return;
     }
+    event->accept();
     //qDebug() << "dropped Led" << led_id << ok;
     refreshArea(false);
 }
 
-LedItem *GroupItem::unpackDragData(const QMimeData *data)
+/*LedItem *GroupItem::unpackDragData(const QMimeData *data)
 {
     if(!data->hasText()){
         return NULL;
@@ -301,7 +331,7 @@ LedItem *GroupItem::unpackDragData(const QMimeData *data)
         return NULL;
     }
     return led;
-}
+}*/
 
 
 
