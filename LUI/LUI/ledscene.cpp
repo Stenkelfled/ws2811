@@ -251,15 +251,25 @@ void LedScene::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 
 void LedScene::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
-    if(LedItem::unpackDragData(event->mimeData()) == NULL){
+    LedItem* led = LedItem::unpackDragData(event->mimeData());
+    if(led == NULL){
         event->ignore();
         return;
     }
     //qDebug() << "scene drop";
     if(this->current_drag_item != NULL){
+        //dropping it on some item
         event->setPos(event->scenePos());
         sendEvent(this->current_drag_item, event);
         this->current_drag_item = NULL;
+    } else {
+        //dropping it directly on the scene
+        GroupItem* grp = newGroup();
+        grp->addLed(led);
+        QPointF grp_pos(event->scenePos());
+        grp->setX(grp->x() - (settings::leditem::width+settings::groupitem::border) );
+        grp->setY(grp->y() - (settings::leditem::height+settings::groupitem::border) );
+        grp->setPos(grp_pos);
     }
     if(mouseGrabberItem() != NULL){
         //qDebug() << "mousegrabber:" << mouseGrabberItem();

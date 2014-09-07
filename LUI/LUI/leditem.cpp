@@ -38,6 +38,9 @@ bool LedItem::hasColorFromGroup()
 void LedItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget);
+    if(this->parentItem() == NULL){
+        return;
+    }
     QColor color = this->color();
     if(color.value() != 0){
         int value = DISPLAY_HSV(color.value());

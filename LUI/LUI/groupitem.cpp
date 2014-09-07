@@ -205,17 +205,19 @@ void GroupItem::refreshArea(bool item_moving)
     setRect(r);
 }
 
-void GroupItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+/*void GroupItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    qDebug() << "Mouse press on group";
+    //qDebug() << "Mouse press on group";
     //refreshArea(false);
-    /*QString leds;
+#if 0
+    QString leds;
     foreach(LedItem* led, *(this->grp)){
         leds += QString::number(led->id());
     }
-    qDebug() << "leds:" << leds;*/
+    qDebug() << "leds:" << leds;
+#endif
     LuiItem::mousePressEvent(event);
-}
+}*/
 
 void GroupItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
@@ -300,6 +302,8 @@ void GroupItem::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
         LuiItem::dragLeaveEvent(event);
         return;
     }
+    removeLed(led);
+    led->update();
     event->accept();
     refreshArea(false);
 }
@@ -316,22 +320,6 @@ void GroupItem::dropEvent(QGraphicsSceneDragDropEvent *event)
     //qDebug() << "dropped Led" << led_id << ok;
     refreshArea(false);
 }
-
-/*LedItem *GroupItem::unpackDragData(const QMimeData *data)
-{
-    if(!data->hasText()){
-        return NULL;
-    }
-    if(data->text().compare("Led") != 0){
-        return NULL;
-    }
-    bool ok;
-    LedItem* led = (LedItem*)(data->data(settings::leditem::mimetype).toULongLong(&ok));
-    if(!ok){
-        return NULL;
-    }
-    return led;
-}*/
 
 
 

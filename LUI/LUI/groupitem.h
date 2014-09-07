@@ -29,7 +29,7 @@ public slots:
     void refreshArea(bool plus_extra_space=false);
 
 protected:
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    //virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
     virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
     virtual void dragEnterEvent(QGraphicsSceneDragDropEvent * event);
     virtual void dragMoveEvent(QGraphicsSceneDragDropEvent * event);
