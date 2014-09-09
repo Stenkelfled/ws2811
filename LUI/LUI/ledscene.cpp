@@ -201,7 +201,7 @@ void LedScene::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
             }
             itm = itm->parentItem();
         }
-        event->setPos(event->scenePos());
+        event->setPos(itm->mapFromScene(event->scenePos()));
         if(itm != this->current_drag_item){
             if(this->current_drag_item != NULL){
                 sendEvent(this->current_drag_item, copyEvent(event, QEvent::GraphicsSceneDragLeave));
@@ -215,7 +215,7 @@ void LedScene::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
     //no item under mouse
     if(this->current_drag_item != NULL){
         //send dragLeaveEvent to current_dragItem
-        event->setPos(event->scenePos());
+        event->setPos(this->current_drag_item->mapFromScene(event->scenePos()));
         sendEvent(this->current_drag_item, copyEvent(event, QEvent::GraphicsSceneDragLeave));
         this->current_drag_item = NULL;
     }
