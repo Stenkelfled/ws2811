@@ -119,7 +119,64 @@ void GroupItem::setColor(QColor color)
  */
 QByteArray GroupItem::getUsbCmd()
 {
+
     QByteArray cmd = QByteArray();
+
+    //first: define leds in group
+    #define STEP_NO_SER             (1<<10)
+    #define STEP_WAIT_FOR_VALUE     (2<<10)
+    int first_led;
+    int current_led;
+    int step = STEP_NO_SER;
+    foreach(QList<LedItem*>* row, *(this->leds)){
+        foreach(LedItem* led, *(row)){
+            switch(step){
+                case STEP_NO_SER:
+                    //start a new series
+                    first_led = led->id();
+                    step = STEP_WAIT_FOR_VALUE;
+                    break;
+                case STEP_WAIT_FOR_VALUE:
+                    current_led = led->id();
+                    step = current_led - first_led;
+                    break;
+                default:
+                    if( (led->id()-current_led) != step ){
+                        //step does not fit any more --> end series
+                        cmd.append(PR_GRP_LED_SER);
+                        cmd.append(first_led);
+                        cmd.append(current_led);
+                        cmd.append(step);
+                        first_led = led->id();
+                        step = STEP_WAIT_FOR_VALUE;
+                    } else {
+                        current_led = led->id();
+                    }
+                    break;
+            }
+        }
+    }
+    switch(step){
+        case STEP_NO_SER:
+            //shold not happen, because then the group would be empty...
+            break;
+        case STEP_WAIT_FOR_VALUE:
+            //there is one led not assigned to a group -> append as single led
+            cmd.append(PR_GRP_LED_ADD);
+            cmd.append(first_led);
+            break;
+        default:
+            //unfinished series -> finish it
+            cmd.append(PR_GRP_LED_SER);
+            cmd.append(first_led);
+            cmd.append(current_led);
+            cmd.append(step);
+            break;
+    }
+
+    //second: define static colors
+
+
 /*    int first_led;
     int current_led;
     int next_led;
@@ -166,13 +223,14 @@ QByteArray GroupItem::getUsbCmd()
         }
     }
     */
-
+#if 0
     //for debugging: only print all leds-ids in the group's order
     foreach(QList<LedItem*>* row, *(this->leds)){
         foreach(LedItem* led, *(row)){
             cmd.append(led->id());
         }
     }
+#endif
     return cmd;
 }
 

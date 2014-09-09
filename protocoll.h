@@ -22,7 +22,7 @@
 	//for every used group:
 	
 	//first: add as much leds as you like ;)
-		#define PR_GRP_LED_ROW (0xA2) //add a row of LEDs; add first-ID + n*step until ID>=last-ID
+		#define PR_GRP_LED_SER (0xA2) //add a series of LEDs; add first-ID + n*step until ID>=last-ID
 			//## 1 Byte: ID of first LED
 			//## 1 Byte: ID of last LED
 			//## 1 Byte: step size
