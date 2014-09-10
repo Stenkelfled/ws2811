@@ -47,9 +47,7 @@ void GroupItem::addLed(LedItem *led, qint16 row)
     }
     this->leds->at(row)->append(led);
     led->setParentItem(this);
-    //led->setGroupIndex(this->leds->length()-1, 0);
     refreshArea();
-    //connect(led, SIGNAL(itemMoves(bool)), this, SLOT(refreshArea(bool)));
 }
 
 quint16 GroupItem::rows() const
@@ -60,9 +58,7 @@ quint16 GroupItem::rows() const
 void GroupItem::removeLed(LedItem *led)
 {
     led->setParentItem(NULL);
-    //led->setGroupIndex(-1, -1);
     disconnect(led, 0, this, 0);
-    //this->leds->removeAll(led);
     foreach(QList<LedItem*>* row, *(this->leds)){
         int idx = row->indexOf(led);
         if(idx != -1){
@@ -352,10 +348,8 @@ QDataStream &operator<<(QDataStream &stream, const GroupItem &group){
     stream << group.my_alignment;
     stream << group.pos();
     stream << (quint16)(group.leds->size());
-    qDebug() << "group <<" << group.my_color << group.my_alignment << group.pos() << (quint16)(group.leds->size());
     foreach(QList<LedItem*>* row, *(group.leds)){
         stream << (quint16)(row->size());
-        qDebug() << "row size" << (quint16)(row->size());
         foreach(LedItem* led, *row){
             stream << *led;
         }
@@ -382,18 +376,14 @@ QDataStream &operator>>(QDataStream &stream, GroupItem &group){
     stream >> row_count;
     LedItem* led;
     quint16 led_count;
-    qDebug() << "group >>" << group.my_color << group.my_alignment << group.pos() << row_count;
     for(quint16 row_num=0; row_num<row_count; row_num++){
         stream >> led_count;
-        qDebug() << "row" << row_num << "size" << led_count;
         for(quint16 led_num=0; led_num<led_count; led_num++){
             led = ((LedScene*)(group.scene()))->newLed(0);
             stream >> *led;
             group.addLed(led, row_num);
         }
     }
-
-
     return stream;
 }
 

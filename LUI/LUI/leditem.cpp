@@ -157,7 +157,6 @@ QDataStream &operator<<(QDataStream &stream, const LedItem &led)
     stream << (LuiItem&)(led);
     stream << led.my_color;
     stream << led.my_color_from_group;
-    qDebug() << "led<<" << led.my_color << led.my_color_from_group;
     return stream;
 }
 
@@ -166,7 +165,6 @@ QDataStream &operator>>(QDataStream &stream, LedItem &led)
     stream >> (LuiItem&)(led);
     stream >> led.my_color;
     stream >> led.my_color_from_group;
-    qDebug() << "led>>" << led.my_color << led.my_color_from_group;
     return stream;
 }
 

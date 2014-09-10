@@ -320,7 +320,6 @@ QDataStream &operator<<(QDataStream &stream, const LedScene &scene){
 QDataStream &operator>>(QDataStream &stream, LedScene &scene){
     quint16 group_count;
     stream >> group_count;
-    qDebug() << "scene<<" << group_count << "groups";
     GroupItem *group;
     for(quint16 i=0;i<group_count;i++){
         group = scene.newGroup();
