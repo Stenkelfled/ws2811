@@ -4,18 +4,19 @@
 #include <QtDebug>
 
 #include "groupitem.h"
+#include <ledscene.h>
 #include <protocoll.h>
 
 GroupItem::GroupItem(qint16 id, QGraphicsItem *parent):
     LuiItem(id, parent),
     leds(new QList<QList<LedItem*>*>),
-    alignment(GroupItem::horizontal)
+    my_alignment(GroupItem::horizontal)
 {
     setPen(Qt::SolidLine);
     QColor c(settings::groupitem::color);
     setBrush(QBrush(c.toHsv()));
     c = QColor(settings::leditem::color);
-    this->group_color = c.toHsv();
+    this->my_color = c.toHsv();
     setAcceptDrops(true);
 
 }
@@ -28,21 +29,32 @@ GroupItem::~GroupItem()
     delete this->leds;
 }
 
-void GroupItem::addLed(LedItem *led)
+void GroupItem::addLed(LedItem *led, qint16 row)
 {
-    if(this->leds->length() == 0){
+    if( (this->leds->size() == 0) || (row < 0) ){
         QList<LedItem*>* new_row = new QList<LedItem*>;
         leds->append(new_row);
+        row = 0;
+    }
+    if( row >= this->leds->size()){
+        QList<LedItem*>* new_row = new QList<LedItem*>;
+        leds->append(new_row);
+        row = this->leds->size() - 1;
     }
     if(led->parentItem() != NULL){
         GroupItem *group = qgraphicsitem_cast<GroupItem *>(led->parentItem());
         group->removeLed(led);
     }
-    this->leds->last()->append(led);
+    this->leds->at(row)->append(led);
     led->setParentItem(this);
     //led->setGroupIndex(this->leds->length()-1, 0);
     refreshArea();
     //connect(led, SIGNAL(itemMoves(bool)), this, SLOT(refreshArea(bool)));
+}
+
+quint16 GroupItem::rows() const
+{
+    return (quint16 const)this->leds->size();
 }
 
 void GroupItem::removeLed(LedItem *led)
@@ -97,13 +109,13 @@ void GroupItem::makeEmpty()
 
 QColor GroupItem::color()
 {
-    return this->group_color;
+    return this->my_color;
 }
 
 void GroupItem::setColor(QColor color)
 {
-    if(color != this->group_color){
-        this->group_color = color;
+    if(color != this->my_color){
+        this->my_color = color;
         foreach(QList<LedItem*>* row, *(this->leds)){
             foreach(LedItem *led, *(row)){
                 led->setColor(color, true);
@@ -196,7 +208,7 @@ void GroupItem::refreshArea(bool item_moving)
     foreach(QList<LedItem*>* row, *(this->leds)){
         x = 0;
         foreach(LedItem* led, *(row)){
-            if(this->alignment == GroupItem::horizontal){
+            if(this->my_alignment == GroupItem::horizontal){
                 led->setPos(x,y);
             } else {
                 led->setPos(y,x);
@@ -334,7 +346,66 @@ void GroupItem::dropEvent(QGraphicsSceneDragDropEvent *event)
     refreshArea(false);
 }
 
+QDataStream &operator<<(QDataStream &stream, const GroupItem &group){
+    stream << (LuiItem&)(group);
+    stream << group.my_color;
+    stream << group.my_alignment;
+    stream << group.pos();
+    stream << (quint16)(group.leds->size());
+    qDebug() << "group <<" << group.my_color << group.my_alignment << group.pos() << (quint16)(group.leds->size());
+    foreach(QList<LedItem*>* row, *(group.leds)){
+        stream << (quint16)(row->size());
+        qDebug() << "row size" << (quint16)(row->size());
+        foreach(LedItem* led, *row){
+            stream << *led;
+        }
+    }
 
+
+    return stream;
+}
+
+QDataStream &operator>>(QDataStream &stream, GroupItem &group){
+    stream >> (LuiItem&)(group);
+
+    QColor group_color;
+    stream >> group_color;
+
+    group.setColor(group_color);
+    stream >> group.my_alignment;
+
+    QPointF group_pos;
+    stream >> group_pos;
+    group.setPos(group_pos);
+
+    quint16 row_count;
+    stream >> row_count;
+    LedItem* led;
+    quint16 led_count;
+    qDebug() << "group >>" << group.my_color << group.my_alignment << group.pos() << row_count;
+    for(quint16 row_num=0; row_num<row_count; row_num++){
+        stream >> led_count;
+        qDebug() << "row" << row_num << "size" << led_count;
+        for(quint16 led_num=0; led_num<led_count; led_num++){
+            led = ((LedScene*)(group.scene()))->newLed(0);
+            stream >> *led;
+            group.addLed(led, row_num);
+        }
+    }
+
+
+    return stream;
+}
+
+QDataStream &operator<<(QDataStream &stream, const GroupItem::groupAlignment &alignment){
+    stream << (qint32&)alignment;
+    return stream;
+}
+
+QDataStream &operator>>(QDataStream &stream, GroupItem::groupAlignment &alignment){
+    stream >> (qint32&)alignment;
+    return stream;
+}
 
 
 

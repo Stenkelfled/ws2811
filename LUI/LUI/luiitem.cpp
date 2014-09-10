@@ -76,3 +76,22 @@ void LuiItem::initFlags()
              | QGraphicsItem::ItemIsMovable
              | QGraphicsItem::ItemSendsGeometryChanges);
 }
+
+QDataStream &operator<<(QDataStream &stream, const LuiItem &lui)
+{
+    stream << lui.my_id;
+    return stream;
+}
+
+QDataStream &operator>>(QDataStream &stream, LuiItem &lui)
+{
+    stream >> lui.my_id;
+    return stream;
+}
+
+
+
+
+
+
+

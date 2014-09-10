@@ -23,13 +23,23 @@ LedScene::LedScene(QObject *parent) :
     selection_rect_color.setAlpha(80);
     this->selection_rect_item = addRect(0, 0, 0, 0, QPen(Qt::black, 1, Qt::DashLine), QBrush(selection_rect_color));
     this->selection_rect_item->setZValue(10000);
+
+}
+
+void LedScene::fillDefault()
+{
     GroupItem* grp = newGroup();
-    for(int i=0; i<GLOBAL_LED_COUNT; i++){
-        LedItem *led = new LedItem(i); //items will be removed automatically on scene deletion
-        this->leds->append(led);
+    for(qint16 i=0; i<GLOBAL_LED_COUNT; i++){
+        LedItem* led = newLed(i);
         grp->addLed(led);
     }
+}
 
+LedItem *LedScene::newLed(qint16 id)
+{
+    LedItem *led = new LedItem(id); //items will be removed automatically on scene deletion
+    this->leds->append(led);
+    return led;
 }
 
 void LedScene::group()
@@ -298,3 +308,47 @@ QGraphicsSceneDragDropEvent *LedScene::copyEvent(QGraphicsSceneDragDropEvent *ol
     new_event->setPos(old_event->pos());
     return new_event;
 }
+
+QDataStream &operator<<(QDataStream &stream, const LedScene &scene){
+    stream << (quint16)scene.groups->size();
+    foreach(GroupItem* group, *(scene.groups)){
+        stream << *group;
+    }
+    return stream;
+}
+
+QDataStream &operator>>(QDataStream &stream, LedScene &scene){
+    quint16 group_count;
+    stream >> group_count;
+    qDebug() << "scene<<" << group_count << "groups";
+    GroupItem *group;
+    for(quint16 i=0;i<group_count;i++){
+        group = scene.newGroup();
+        stream >> *group;
+    }
+    return stream;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

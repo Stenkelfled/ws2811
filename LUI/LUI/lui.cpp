@@ -25,6 +25,7 @@ Lui::Lui(QWidget *parent) :
     this->serial->refreshPortData();
 
     this->scene = new LedScene(this->ui->ledView);
+    this->scene->fillDefault();
     this->ui->ledView->setScene(this->scene);
     connect(this->scene, SIGNAL(selectedItemStatusChanged(bool)), this, SLOT(colorDisplayEnable(bool)));
     connect(this->scene, SIGNAL(selectedItemColorChanged(QColor)), this, SLOT(colorDisplayChange(QColor)));
@@ -146,6 +147,21 @@ void Lui::testColor(QColor color)
     }
 }
 
+void Lui::newScene()
+{
+    colorDisplayEnable(false);
+    LedScene *old = this->scene;
+    this->scene = new LedScene(this->ui->ledView);
+    this->ui->ledView->setScene(this->scene);
+    connect(this->scene, SIGNAL(selectedItemStatusChanged(bool)), this, SLOT(colorDisplayEnable(bool)));
+    connect(this->scene, SIGNAL(selectedItemColorChanged(QColor)), this, SLOT(colorDisplayChange(QColor)));
+    connect(this, SIGNAL(colorChanged(QColor)), this->scene, SLOT(updateColor(QColor)));
+    disconnect(old, SIGNAL(selectedItemStatusChanged(bool)), this, SLOT(colorDisplayEnable(bool)));
+    disconnect(old, SIGNAL(selectedItemColorChanged(QColor)), this, SLOT(colorDisplayChange(QColor)));
+    disconnect(this, SIGNAL(colorChanged(QColor)), old, SLOT(updateColor(QColor)));
+    delete old;
+}
+
 void Lui::on_brightness_slider_valueChanged(int position)
 {
     QColor c = this->ui->color_display->color();
@@ -173,17 +189,8 @@ void Lui::on_testButton_toggled(bool checked)
 
 void Lui::on_actionNew_triggered()
 {
-    colorDisplayEnable(false);
-    LedScene *old = this->scene;
-    this->scene = new LedScene(this->ui->ledView);
-    this->ui->ledView->setScene(this->scene);
-    connect(this->scene, SIGNAL(selectedItemStatusChanged(bool)), this, SLOT(colorDisplayEnable(bool)));
-    connect(this->scene, SIGNAL(selectedItemColorChanged(QColor)), this, SLOT(colorDisplayChange(QColor)));
-    connect(this, SIGNAL(colorChanged(QColor)), this->scene, SLOT(updateColor(QColor)));
-    disconnect(old, SIGNAL(selectedItemStatusChanged(bool)), this, SLOT(colorDisplayEnable(bool)));
-    disconnect(old, SIGNAL(selectedItemColorChanged(QColor)), this, SLOT(colorDisplayChange(QColor)));
-    disconnect(this, SIGNAL(colorChanged(QColor)), old, SLOT(updateColor(QColor)));
-    delete old;
+    newScene();
+    this->scene->fillDefault();
 }
 
 void Lui::on_actionSave_triggered()
@@ -194,17 +201,47 @@ void Lui::on_actionSave_triggered()
         return;
     }
     qDebug() << "file:" << this->file_name;
+    QFile file(this->file_name);
+    if(!file.open(QIODevice::WriteOnly)){
+        QMessageBox::critical(this, tr("Error"), tr("Datei konnte nicht geöffnet werden!"));
+        return;
+    }
+    QDataStream out(&file);
+    out.setVersion(QDataStream::Qt_5_3);
+    out << *(this->scene);
+    file.close();
+
 }
 
 void Lui::on_actionSaveAs_triggered()
 {
-    QString new_file_name = QFileDialog::getSaveFileName(this, tr("Save File"), QString(),
-                tr("Text Files (*.txt)"));
+    QString new_file_name = QFileDialog::getSaveFileName(this, tr("Speichern unter..."), QString(),
+                tr("Lui-Dateien (*.dat)"));
 
     if(!new_file_name.isEmpty()){
         this->file_name = new_file_name;
         Lui::on_actionSave_triggered();
     }
 
+
+}
+
+void Lui::on_actionOpen_triggered()
+{
+    newScene();
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Öffnen"), QString(),
+                tr("Lui-Dateien (*.dat)"));
+
+    if (!fileName.isEmpty()) {
+        QFile file(fileName);
+        if (!file.open(QIODevice::ReadOnly)) {
+            QMessageBox::critical(this, tr("Error"), tr("Datei konnte nicht geöffnet werden!"));
+            return;
+        }
+        QDataStream in(&file);
+        in.setVersion(QDataStream::Qt_5_3);
+        in >> *(this->scene);
+        file.close();
+    }
 
 }

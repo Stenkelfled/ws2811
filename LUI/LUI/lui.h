@@ -39,15 +39,15 @@ private slots:
 
     void newLedColor(QColor color);
     void testColor(QColor color);
+    void newScene();
 
     void on_brightness_slider_valueChanged(int position);
     void on_testButton_toggled(bool checked);
 
     void on_actionNew_triggered();
-
     void on_actionSave_triggered();
-
     void on_actionSaveAs_triggered();
+    void on_actionOpen_triggered();
 
 private:
     Ui::Lui *ui;

@@ -12,10 +12,11 @@ public:
     enum groupAlignment {horizontal, vertical};
     enum { Type = UserType + 2 };
     int type() const {return Type;}
-
     explicit GroupItem(qint16 id, QGraphicsItem *parent = 0);
     ~GroupItem();
-    void addLed(LedItem *led);
+
+    quint16 rows() const;
+    void addLed(LedItem *led, qint16 row = 0);
     void removeLed(LedItem *led);
     QPoint indexOf(LedItem *led);
     void makeEmpty();
@@ -42,8 +43,13 @@ signals:
 private:
 
     QList<QList<LedItem*>*> *leds; //list(pointer) of row(pointer)s of led(pointer)s
-    QColor group_color;
-    groupAlignment alignment;
+    QColor my_color;
+    groupAlignment my_alignment;
+
+    friend QDataStream &operator<<(QDataStream &, const GroupItem &);
+    friend QDataStream &operator>>(QDataStream &, GroupItem &);
+    friend QDataStream &operator<<(QDataStream &, const GroupItem::groupAlignment &);
+    friend QDataStream &operator>>(QDataStream &, GroupItem::groupAlignment &);
 };
 
 #endif // GROUPITEM_H

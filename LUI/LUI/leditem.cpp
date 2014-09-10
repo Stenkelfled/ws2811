@@ -1,9 +1,4 @@
 #include <QApplication>
-/*#include <QBrush>
-#include <QFont>
-#include <QGraphicsSceneMouseEvent>
-#include <QPainter>
-#include <QPen>*/
 #include <QtDebug>
 
 #include "leditem.h"
@@ -13,7 +8,7 @@
 LedItem::LedItem(qint16 id, QGraphicsItem *parent):
     LuiItem(id, settings::leditem::width, settings::leditem::height, parent),
     is_dragging(false),
-    color_from_group(true)//,
+    my_color_from_group(true)//,
     //group_index(QPoint(-1,-1))
 {
     setAcceptedMouseButtons(Qt::LeftButton);
@@ -32,7 +27,7 @@ QColor LedItem::color()
 
 bool LedItem::hasColorFromGroup()
 {
-    return this->color_from_group;
+    return this->my_color_from_group;
 }
 
 void LedItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -80,7 +75,7 @@ void LedItem::setColor(QColor color, bool from_group)
 {
     this->my_color = color;
     update();
-    this->color_from_group = from_group;
+    this->my_color_from_group = from_group;
 }
 
 LedItem *LedItem::unpackDragData(const QMimeData *data)
@@ -156,6 +151,40 @@ void LedItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     }
     return QGraphicsRectItem::itemChange(change, value);
 }*/
+
+QDataStream &operator<<(QDataStream &stream, const LedItem &led)
+{
+    stream << (LuiItem&)(led);
+    stream << led.my_color;
+    stream << led.my_color_from_group;
+    qDebug() << "led<<" << led.my_color << led.my_color_from_group;
+    return stream;
+}
+
+QDataStream &operator>>(QDataStream &stream, LedItem &led)
+{
+    stream >> (LuiItem&)(led);
+    stream >> led.my_color;
+    stream >> led.my_color_from_group;
+    qDebug() << "led>>" << led.my_color << led.my_color_from_group;
+    return stream;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

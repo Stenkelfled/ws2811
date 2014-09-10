@@ -12,9 +12,9 @@ class LedItem : public LuiItem
     Q_OBJECT
 public:
     enum { Type = UserType + 3 };
+    explicit LedItem(qint16 id, QGraphicsItem *parent = 0);
     int type() const {return Type;}
 
-    explicit LedItem(qint16 id, QGraphicsItem *parent = 0);
     QRectF boundingRect() const;
     QColor color();
     bool hasColorFromGroup();
@@ -34,8 +34,11 @@ signals:
 
 private:
     bool is_dragging;
-    bool color_from_group;
+    bool my_color_from_group;
     QColor my_color;
+
+    friend QDataStream &operator<<(QDataStream &, const LedItem &);
+    friend QDataStream &operator>>(QDataStream &, LedItem &);
 };
 
 #endif // LEDITEM_H

@@ -11,6 +11,8 @@ class LedScene : public QGraphicsScene
     Q_OBJECT
 public:
     explicit LedScene(QObject *parent = 0);
+    void fillDefault();
+    LedItem* newLed(qint16 id=0);
 
 signals:
     void selectedItemStatusChanged(bool status);
@@ -45,6 +47,9 @@ private:
     QPointF selection_start;
     LuiItem* selected_item;
     QGraphicsItem *current_drag_item;
+
+    friend QDataStream &operator<<(QDataStream &, const LedScene &);
+    friend QDataStream &operator>>(QDataStream &, LedScene &);
 
 };
 
