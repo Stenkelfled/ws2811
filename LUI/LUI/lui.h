@@ -30,6 +30,8 @@ public slots:
     void colorDisplayEnable(bool status);
     void colorDisplayChange(QColor color);
 
+    void updateGroupLabel(QString name="");
+
 private slots:
     void on_transmitPushButton_clicked();
     void on_actionClose_triggered();
@@ -39,7 +41,6 @@ private slots:
 
     void newLedColor(QColor color);
     void testColor(QColor color);
-    void newScene();
 
     void on_brightness_slider_valueChanged(int position);
     void on_testButton_toggled(bool checked);
@@ -50,9 +51,11 @@ private slots:
     void on_actionOpen_triggered();
 
 private:
+    void newScene();
     Ui::Lui *ui;
     Serial *serial;
     LedScene *scene;
+    QLabel *group_name_label;
 
     qint16 led_count;
     QString file_name;

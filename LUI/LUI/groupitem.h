@@ -22,6 +22,8 @@ public:
     void makeEmpty();
     QColor color();
     void setColor(QColor color);
+    QString name();
+    void setName(QString const name);
 
     virtual QByteArray getUsbCmd();
     //LedItem* unpackDragData(const QMimeData *data);
@@ -45,6 +47,7 @@ private:
     QList<QList<LedItem*>*> *leds; //list(pointer) of row(pointer)s of led(pointer)s
     QColor my_color;
     groupAlignment my_alignment;
+    QString my_name;
 
     friend QDataStream &operator<<(QDataStream &, const GroupItem &);
     friend QDataStream &operator>>(QDataStream &, GroupItem &);

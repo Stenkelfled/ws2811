@@ -29,6 +29,7 @@ Lui::Lui(QWidget *parent) :
     this->ui->ledView->setScene(this->scene);
     connect(this->scene, SIGNAL(selectedItemStatusChanged(bool)), this, SLOT(colorDisplayEnable(bool)));
     connect(this->scene, SIGNAL(selectedItemColorChanged(QColor)), this, SLOT(colorDisplayChange(QColor)));
+    connect(this->scene, SIGNAL(selectedGroupChanged(QString)), this, SLOT(updateGroupLabel(QString)));
     connect(this, SIGNAL(colorChanged(QColor)), this->scene, SLOT(updateColor(QColor)));
 
     connect(this->ui->color_white, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
@@ -41,6 +42,10 @@ Lui::Lui(QWidget *parent) :
     connect(this->ui->color_orange, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
     connect(this->ui->color_magenta, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
     connect(this->ui->color_custom, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
+
+    this->group_name_label = new QLabel();
+    this->statusBar()->addWidget(this->group_name_label, 200);
+    updateGroupLabel();;
 }
 
 Lui::~Lui()
@@ -88,6 +93,14 @@ void Lui::colorDisplayChange(QColor color)
    }
 }
 
+void Lui::updateGroupLabel(QString name)
+{
+    if(name.isEmpty()){
+        name = "<keine Gruppe>";
+    }
+    this->group_name_label->setText("Gruppe: '" + name + "'");
+}
+
 void Lui::on_transmitPushButton_clicked()
 {
     /*QByteArray cmd = QByteArray(USB_PREAMBLE, USB_PREAMBLE_LEN); //TODO: build command to send...
@@ -120,7 +133,7 @@ void Lui::on_actionGroup_triggered()
 
 void Lui::on_actionUngroup_triggered()
 {
-    this->scene->ungroup();
+    //this->scene->ungroup();
 }
 
 void Lui::on_actionSelectAll_triggered()

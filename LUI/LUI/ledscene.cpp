@@ -55,7 +55,7 @@ void LedScene::group()
     }
 }
 
-void LedScene::ungroup()
+/*void LedScene::ungroup()
 {
     foreach(QGraphicsItem *itm, selectedItems()){
         LedItem *led = qgraphicsitem_cast<LedItem*>(itm);
@@ -70,7 +70,7 @@ void LedScene::ungroup()
             grp->makeEmpty();
         }
     }
-}
+}*/
 
 void LedScene::removeGroup(GroupItem* group)
 {
@@ -294,9 +294,16 @@ void LedScene::selectedItemChanged(LuiItem *item)
         this->selected_item = item;
         if(item == NULL){
             emit selectedItemStatusChanged(false);
+            emit selectedGroupChanged("");
         } else {
             emit selectedItemStatusChanged(true);
             emit selectedItemColorChanged(item->color());
+            GroupItem* group = qgraphicsitem_cast<GroupItem*>(item);
+            if(group != NULL){
+                emit selectedGroupChanged(group->name());
+            } else {
+                emit selectedGroupChanged("");
+            }
         }
     }
 }

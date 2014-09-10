@@ -17,9 +17,10 @@ public:
 signals:
     void selectedItemStatusChanged(bool status);
     void selectedItemColorChanged(QColor color);
+    void selectedGroupChanged(QString name);
 
 public slots:
-    void ungroup();
+    //void ungroup();
     void group();
     void removeGroup(GroupItem *group);
     void selectAll();

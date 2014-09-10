@@ -10,7 +10,8 @@
 GroupItem::GroupItem(qint16 id, QGraphicsItem *parent):
     LuiItem(id, parent),
     leds(new QList<QList<LedItem*>*>),
-    my_alignment(GroupItem::horizontal)
+    my_alignment(GroupItem::horizontal),
+    my_name(QString::number(id))
 {
     setPen(Qt::SolidLine);
     QColor c(settings::groupitem::color);
@@ -117,6 +118,18 @@ void GroupItem::setColor(QColor color)
                 led->setColor(color, true);
             }
         }
+    }
+}
+
+QString GroupItem::name()
+{
+    return this->my_name;
+}
+
+void GroupItem::setName(const QString name)
+{
+    if(!name.isEmpty()){
+        this->my_name = name;
     }
 }
 
@@ -346,6 +359,7 @@ QDataStream &operator<<(QDataStream &stream, const GroupItem &group){
     stream << (LuiItem&)(group);
     stream << group.my_color;
     stream << group.my_alignment;
+    //stream << group.my_name;
     stream << group.pos();
     stream << (quint16)(group.leds->size());
     foreach(QList<LedItem*>* row, *(group.leds)){
@@ -354,8 +368,6 @@ QDataStream &operator<<(QDataStream &stream, const GroupItem &group){
             stream << *led;
         }
     }
-
-
     return stream;
 }
 
@@ -364,9 +376,10 @@ QDataStream &operator>>(QDataStream &stream, GroupItem &group){
 
     QColor group_color;
     stream >> group_color;
-
     group.setColor(group_color);
+
     stream >> group.my_alignment;
+    //stream >> group.my_name;
 
     QPointF group_pos;
     stream >> group_pos;
