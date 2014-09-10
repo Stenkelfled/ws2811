@@ -12,7 +12,8 @@
 Lui::Lui(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Lui),
-    led_count(GLOBAL_LED_COUNT)
+    led_count(GLOBAL_LED_COUNT),
+    file_name("")
 {
     this->ui->setupUi(this);
     this->serial = new Serial(this);
@@ -183,4 +184,27 @@ void Lui::on_actionNew_triggered()
     disconnect(old, SIGNAL(selectedItemColorChanged(QColor)), this, SLOT(colorDisplayChange(QColor)));
     disconnect(this, SIGNAL(colorChanged(QColor)), old, SLOT(updateColor(QColor)));
     delete old;
+}
+
+void Lui::on_actionSave_triggered()
+{
+    if(this->file_name.isEmpty()){
+        //first get a valid filename
+        Lui::on_actionSaveAs_triggered();
+        return;
+    }
+    qDebug() << "file:" << this->file_name;
+}
+
+void Lui::on_actionSaveAs_triggered()
+{
+    QString new_file_name = QFileDialog::getSaveFileName(this, tr("Save File"), QString(),
+                tr("Text Files (*.txt)"));
+
+    if(!new_file_name.isEmpty()){
+        this->file_name = new_file_name;
+        Lui::on_actionSave_triggered();
+    }
+
+
 }

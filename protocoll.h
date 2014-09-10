@@ -33,7 +33,7 @@
 		//for each sequence:
 		//## 1 Byte: Repetitions of this group !!RESERVED: 0xFF for no repetitions!!
 		//## 2 Byte: address of next sequence (if there is no other sequence: 0x0000; if this is the last sequence: address of first sequence
-		//## 2 Byte: Duration (show this sequence Duration*10ms)
+		//## 2 Byte: Duration (show this sequence Duration*10ms) (0 == do not switch automatically to next sequence)
 		
 		//do color stuff
 		#define PR_GRP_SEQ_SET_OFF (0xB0)

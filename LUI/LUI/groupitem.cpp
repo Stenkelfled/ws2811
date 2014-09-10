@@ -6,7 +6,7 @@
 #include "groupitem.h"
 #include <protocoll.h>
 
-GroupItem::GroupItem(int id, QGraphicsItem *parent):
+GroupItem::GroupItem(qint16 id, QGraphicsItem *parent):
     LuiItem(id, parent),
     leds(new QList<QList<LedItem*>*>),
     alignment(GroupItem::horizontal)
@@ -174,55 +174,10 @@ QByteArray GroupItem::getUsbCmd()
             break;
     }
 
-    //second: define static colors
+    //second: define sequences
+    //TODO
 
 
-/*    int first_led;
-    int current_led;
-    int next_led;
-    int step;
-    int i = 0;
-
-    while(i<this->grp->length()){
-        current_led = this->grp->at(i)->id();
-        i++;
-        if( i >= this->grp->length() ){
-            //only one led left -> don't start a new row and append this led as single led
-            cmd.append(PR_GRP_LED_ADD);
-            cmd.append(current_led);
-            break;
-        }
-        //try a row of leds
-        next_led = this->grp->at(i)->id();
-        step = next_led-current_led;
-        first_led = current_led;
-        while( ++i <= this->grp->length()){
-            current_led = next_led;
-            if(i < this->grp->length()){
-                next_led = this->grp->at(i)->id();
-            } else {
-                //these are the last two leds -> set the next led and step so, that tey won't fit
-                next_led = current_led - 1;
-                step = 1;
-            }
-            if((next_led-current_led)!=step){
-                //the next led does not fit in the row -> finish this row and then start a new one
-                cmd.append(PR_GRP_LED_ROW);
-                cmd.append(first_led);
-                cmd.append(current_led);
-                cmd.append(step);
-                break;
-            }
-            if(i>=(this->grp->length()-1)){
-                cmd.append(PR_GRP_LED_ROW);
-                cmd.append(first_led);
-                cmd.append(next_led);
-                cmd.append(step);
-                i++; //increment the counter, that the outer loop will also exit
-            }
-        }
-    }
-    */
 #if 0
     //for debugging: only print all leds-ids in the group's order
     foreach(QList<LedItem*>* row, *(this->leds)){

@@ -13,7 +13,7 @@ public:
     enum { Type = UserType + 2 };
     int type() const {return Type;}
 
-    explicit GroupItem(int id, QGraphicsItem *parent = 0);
+    explicit GroupItem(qint16 id, QGraphicsItem *parent = 0);
     ~GroupItem();
     void addLed(LedItem *led);
     void removeLed(LedItem *led);

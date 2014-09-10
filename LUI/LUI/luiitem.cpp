@@ -5,7 +5,7 @@
 
 #include "luiitem.h"
 
-LuiItem::LuiItem(int id, QGraphicsItem *parent) :
+LuiItem::LuiItem(const qint16 id, QGraphicsItem *parent) :
     QObject(),
     QGraphicsRectItem(parent),
     my_id(id)
@@ -13,7 +13,7 @@ LuiItem::LuiItem(int id, QGraphicsItem *parent) :
     initFlags();
 }
 
-LuiItem::LuiItem(int id, int rect_width, int rect_height, QGraphicsItem *parent) :
+LuiItem::LuiItem(const qint16 id, int rect_width, int rect_height, QGraphicsItem *parent) :
     QGraphicsRectItem(0, 0, rect_width, rect_height, parent),
     my_id(id)
 {
@@ -31,12 +31,12 @@ void LuiItem::changeId(int id)
     this->my_id = id;
 }
 
-int LuiItem::id()
+qint16 LuiItem::id()
 {
     return this->my_id;
 }
 
-void LuiItem::setColor(QColor color)
+void LuiItem::setColor(const QColor color)
 {
     QBrush b = brush();
     b.setColor(color);

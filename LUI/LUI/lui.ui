@@ -1216,6 +1216,9 @@ definiert</string>
      <string>Datei</string>
     </property>
     <addaction name="actionNew"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionSaveAs"/>
+    <addaction name="separator"/>
     <addaction name="actionClose"/>
    </widget>
    <widget class="QMenu" name="menuBearbeiten">
@@ -1228,6 +1231,9 @@ definiert</string>
     <addaction name="actionSelectAll"/>
    </widget>
    <widget class="QMenu" name="menuExtras">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>Extras</string>
     </property>
@@ -1260,22 +1266,25 @@ definiert</string>
    </property>
   </action>
   <action name="actionUngroup">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Gruppierung aufheben</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+G</string>
    </property>
-  </action>
-  <action name="actionSettings">
-   <property name="enabled">
+   <property name="visible">
     <bool>false</bool>
    </property>
+  </action>
+  <action name="actionSettings">
    <property name="text">
     <string>Einstellungen</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+P</string>
+    <string>Ctrl+Shift+P</string>
    </property>
    <property name="visible">
     <bool>false</bool>
@@ -1295,6 +1304,22 @@ definiert</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>Speichern</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionSaveAs">
+   <property name="text">
+    <string>Speichern unter...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
    </property>
   </action>
  </widget>

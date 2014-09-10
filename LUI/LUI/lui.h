@@ -45,12 +45,17 @@ private slots:
 
     void on_actionNew_triggered();
 
+    void on_actionSave_triggered();
+
+    void on_actionSaveAs_triggered();
+
 private:
     Ui::Lui *ui;
     Serial *serial;
     LedScene *scene;
 
-    int led_count;
+    qint16 led_count;
+    QString file_name;
 };
 
 #endif // LUI_H

@@ -10,7 +10,7 @@
 
 
 
-LedItem::LedItem(int id, QGraphicsItem *parent):
+LedItem::LedItem(qint16 id, QGraphicsItem *parent):
     LuiItem(id, settings::leditem::width, settings::leditem::height, parent),
     is_dragging(false),
     color_from_group(true)//,
