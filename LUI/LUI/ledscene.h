@@ -27,6 +27,7 @@ public slots:
     LedItem* getLed(int id);
 
     void updateColor(QColor color);
+    void updateGroupName(GroupItem *group, QString name);
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);

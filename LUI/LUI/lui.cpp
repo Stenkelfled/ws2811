@@ -168,10 +168,13 @@ void Lui::newScene()
     this->ui->ledView->setScene(this->scene);
     connect(this->scene, SIGNAL(selectedItemStatusChanged(bool)), this, SLOT(colorDisplayEnable(bool)));
     connect(this->scene, SIGNAL(selectedItemColorChanged(QColor)), this, SLOT(colorDisplayChange(QColor)));
+    connect(this->scene, SIGNAL(selectedGroupChanged(QString)), this, SLOT(updateGroupLabel(QString)));
     connect(this, SIGNAL(colorChanged(QColor)), this->scene, SLOT(updateColor(QColor)));
     disconnect(old, SIGNAL(selectedItemStatusChanged(bool)), this, SLOT(colorDisplayEnable(bool)));
     disconnect(old, SIGNAL(selectedItemColorChanged(QColor)), this, SLOT(colorDisplayChange(QColor)));
+    disconnect(old, SIGNAL(selectedGroupChanged(QString)), this, SLOT(updateGroupLabel(QString)));
     disconnect(this, SIGNAL(colorChanged(QColor)), old, SLOT(updateColor(QColor)));
+    updateGroupLabel();
     delete old;
 }
 

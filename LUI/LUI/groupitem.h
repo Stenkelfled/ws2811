@@ -41,6 +41,12 @@ protected:
 
 signals:
     void groupEmpty(GroupItem* group);
+    void nameChanged(GroupItem* group, QString name);
+
+private slots:
+    void horAlign();
+    void verAlign();
+    void getName();
 
 private:
 
@@ -48,6 +54,11 @@ private:
     QColor my_color;
     groupAlignment my_alignment;
     QString my_name;
+
+    QAction *horAlignAct;
+    QAction *verAlignAct;
+    QActionGroup *alignActGroup;
+    QAction *nameAct;
 
     friend QDataStream &operator<<(QDataStream &, const GroupItem &);
     friend QDataStream &operator>>(QDataStream &, GroupItem &);

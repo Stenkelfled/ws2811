@@ -20,6 +20,23 @@ GroupItem::GroupItem(qint16 id, QGraphicsItem *parent):
     this->my_color = c.toHsv();
     setAcceptDrops(true);
 
+    //actions for context menu
+    this->horAlignAct = new QAction(tr("&horizontal anordnen"), this);
+    this->horAlignAct->setCheckable(true);
+    connect(this->horAlignAct, SIGNAL(triggered()), this, SLOT(horAlign()));
+
+    this->verAlignAct = new QAction(tr("&vertikal anordnen"), this);
+    this->verAlignAct->setCheckable(true);
+    connect(this->verAlignAct, SIGNAL(triggered()), this, SLOT(verAlign()));
+
+    this->alignActGroup = new QActionGroup(this);
+    this->alignActGroup->addAction(this->horAlignAct);
+    this->alignActGroup->addAction(this->verAlignAct);
+    this->horAlignAct->setChecked(true);
+
+    this->nameAct = new QAction(tr("Name..."), this);
+    connect(this->nameAct, SIGNAL(triggered()), this, SLOT(getName()));
+
 }
 
 GroupItem::~GroupItem()
@@ -128,8 +145,11 @@ QString GroupItem::name()
 
 void GroupItem::setName(const QString name)
 {
-    if(!name.isEmpty()){
+    if( (!name.isEmpty()) && (name != this->my_name) ){
         this->my_name = name;
+        if(isSelected()){
+            emit nameChanged(this, name);
+        }
     }
 }
 
@@ -239,6 +259,30 @@ void GroupItem::refreshArea(bool item_moving)
     setRect(r);
 }
 
+void GroupItem::horAlign()
+{
+    this->horAlignAct->setChecked(true);
+    this->my_alignment = GroupItem::horizontal;
+    refreshArea();
+}
+
+void GroupItem::verAlign()
+{
+    this->verAlignAct->setChecked(true);
+    this->my_alignment = GroupItem::vertical;
+    refreshArea();
+}
+
+void GroupItem::getName()
+{
+    bool ok;
+    QString name = QInputDialog::getText(NULL, tr("Name..."),
+                                         tr("Name:"), QLineEdit::Normal,
+                                         this->my_name, &ok);
+    if (ok && !name.isEmpty())
+        setName(name);
+}
+
 /*void GroupItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     //qDebug() << "Mouse press on group";
@@ -255,8 +299,12 @@ void GroupItem::refreshArea(bool item_moving)
 
 void GroupItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
-    Q_UNUSED(event)
-    qDebug() << "contextMenuEvent on group" << id();
+    QMenu menu;
+    menu.addAction(this->nameAct);
+    menu.addSeparator();
+    menu.addAction(this->horAlignAct);
+    menu.addAction(this->verAlignAct);
+    menu.exec(event->screenPos());
 }
 
 void GroupItem::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
@@ -286,6 +334,11 @@ void GroupItem::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
     int new_row_idx = int(event->pos().y()+settings::leditem::spacing/2)/(settings::leditem::height+settings::leditem::spacing);
     if(event->pos().y() < 0){
         new_row_idx--;
+    }
+    if(this->my_alignment == GroupItem::vertical){
+        int tmp = new_col_idx;
+        new_col_idx = new_row_idx;
+        new_row_idx = tmp;
     }
     //qDebug() << "idx" << new_col_idx << "," << new_row_idx;
     QList<LedItem*>* row;
@@ -359,7 +412,7 @@ QDataStream &operator<<(QDataStream &stream, const GroupItem &group){
     stream << (LuiItem&)(group);
     stream << group.my_color;
     stream << group.my_alignment;
-    //stream << group.my_name;
+    stream << group.my_name;
     stream << group.pos();
     stream << (quint16)(group.leds->size());
     foreach(QList<LedItem*>* row, *(group.leds)){
@@ -379,7 +432,13 @@ QDataStream &operator>>(QDataStream &stream, GroupItem &group){
     group.setColor(group_color);
 
     stream >> group.my_alignment;
-    //stream >> group.my_name;
+    if(group.my_alignment == GroupItem::horizontal){
+        group.horAlignAct->setChecked(true);
+    } else {
+        group.verAlignAct->setChecked(true);
+    }
+
+    stream >> group.my_name;
 
     QPointF group_pos;
     stream >> group_pos;

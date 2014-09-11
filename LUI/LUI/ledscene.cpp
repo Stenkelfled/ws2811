@@ -102,12 +102,20 @@ void LedScene::updateColor(QColor color)
     this->selected_item->setColor(color);
 }
 
+void LedScene::updateGroupName(GroupItem* group, QString name)
+{
+    if( (GroupItem*)(this->selected_item) == group){
+        emit selectedGroupChanged(name);
+    }
+}
+
 GroupItem* LedScene::newGroup()
 {
     GroupItem *grp = new GroupItem(this->groups->length(), NULL);
     this->groups->append(grp);
     connect(grp, SIGNAL(groupEmpty(GroupItem*)), this, SLOT(removeGroup(GroupItem*)));
     addItem(grp);
+    connect(grp, SIGNAL(nameChanged(GroupItem*,QString)), this, SLOT(updateGroupName(GroupItem*,QString)));
     return grp;
 }
 
