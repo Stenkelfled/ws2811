@@ -18,6 +18,7 @@ void SequenceScene::clear()
     foreach(SequenceGroupItem* item, *(this->my_sequences)){
         delete item;
     }
+    this->my_sequences->clear();
 }
 
 void SequenceScene::newGroup(LedGroupItem *led_group)
