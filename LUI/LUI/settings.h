@@ -19,10 +19,20 @@ namespace settings{
         const QString mimetype("ledmime");
     }
 
-    namespace groupitem{
+    namespace ledgroupitem{
         constexpr int border = 10;
         constexpr int extra_space = 20;
-        constexpr Qt::GlobalColor color = Qt::gray;
+        constexpr Qt::GlobalColor color = Qt::lightGray;
+    }
+
+    namespace sequencegroupitem{
+        constexpr int height = 50; //height of the sequence
+        constexpr int space = 5; //space between two sequences
+        constexpr int name_text_width = 80;
+        constexpr int name_text_chars = 10;
+        constexpr int name_text_size = 10;
+        constexpr Qt::GlobalColor background_color = Qt::lightGray;
+        constexpr Qt::GlobalColor text_color = Qt::black;
     }
 }
 

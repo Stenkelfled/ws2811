@@ -24,13 +24,18 @@ Lui::Lui(QWidget *parent) :
     QObject::connect(this->serial, SIGNAL(bytesWritten(qint64)), this, SLOT(enableTransmitPushButton()));
     this->serial->refreshPortData();
 
-    this->scene = new LedScene(this->ui->ledView);
-    this->scene->fillDefault();
-    this->ui->ledView->setScene(this->scene);
-    connect(this->scene, SIGNAL(selectedItemStatusChanged(bool)), this, SLOT(colorDisplayEnable(bool)));
-    connect(this->scene, SIGNAL(selectedItemColorChanged(QColor)), this, SLOT(colorDisplayChange(QColor)));
-    connect(this->scene, SIGNAL(selectedGroupChanged(QString)), this, SLOT(updateGroupLabel(QString)));
-    connect(this, SIGNAL(colorChanged(QColor)), this->scene, SLOT(updateColor(QColor)));
+    this->sequence_scene = new SequenceScene(this->ui->sequenceView);
+    this->ui->sequenceView->setScene(this->sequence_scene);
+
+    this->led_scene = new LedScene(this->ui->ledView);
+    connect(this->led_scene, SIGNAL(newGroupAdded(LedGroupItem*)), this->sequence_scene, SLOT(newGroup(LedGroupItem*)));
+    connect(this->led_scene, SIGNAL(groupRemoved(LedGroupItem*)), this->sequence_scene, SLOT(removeGroup(LedGroupItem*)));
+    this->led_scene->fillDefault();
+    this->ui->ledView->setScene(this->led_scene);
+    connect(this->led_scene, SIGNAL(selectedItemStatusChanged(bool)), this, SLOT(colorDisplayEnable(bool)));
+    connect(this->led_scene, SIGNAL(selectedItemColorChanged(QColor)), this, SLOT(colorDisplayChange(QColor)));
+    connect(this->led_scene, SIGNAL(selectedGroupChanged(QString)), this, SLOT(updateGroupLabel(QString)));
+    connect(this, SIGNAL(colorChanged(QColor)), this->led_scene, SLOT(updateColor(QColor)));
 
     connect(this->ui->color_white, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
     connect(this->ui->color_off, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
@@ -50,7 +55,8 @@ Lui::Lui(QWidget *parent) :
 
 Lui::~Lui()
 {
-    delete this->scene;
+    delete this->led_scene;
+    delete this->sequence_scene;
     delete this->serial;
     delete this->ui;
 }
@@ -108,11 +114,11 @@ void Lui::on_transmitPushButton_clicked()
         this->ui->transmitPushButton->setEnabled(false);
     }*/
     QByteArray cmd = QByteArray();
-    foreach(QGraphicsItem *itm, this->scene->items()){
+    foreach(QGraphicsItem *itm, this->led_scene->items()){
         QGraphicsItem::GraphicsItemFlags flags = itm->flags();
         if(flags & QGraphicsItem::ItemIsSelectable){
             //LuiItem *group = (LuiItem*)itm;
-            GroupItem *group = qgraphicsitem_cast<GroupItem*>(itm);
+            LedGroupItem *group = qgraphicsitem_cast<LedGroupItem*>(itm);
             if(group != NULL){
                 cmd = group->getUsbCmd();
                 qDebug() << cmd.toHex();
@@ -128,7 +134,7 @@ void Lui::on_actionClose_triggered()
 
 void Lui::on_actionGroup_triggered()
 {
-    this->scene->group();
+    this->led_scene->group();
 }
 
 void Lui::on_actionUngroup_triggered()
@@ -138,7 +144,7 @@ void Lui::on_actionUngroup_triggered()
 
 void Lui::on_actionSelectAll_triggered()
 {
-    this->scene->selectAll();
+    this->led_scene->selectAll();
 }
 
 void Lui::newLedColor(QColor color)
@@ -163,13 +169,17 @@ void Lui::testColor(QColor color)
 void Lui::newScene()
 {
     colorDisplayEnable(false);
-    LedScene *old = this->scene;
-    this->scene = new LedScene(this->ui->ledView);
-    this->ui->ledView->setScene(this->scene);
-    connect(this->scene, SIGNAL(selectedItemStatusChanged(bool)), this, SLOT(colorDisplayEnable(bool)));
-    connect(this->scene, SIGNAL(selectedItemColorChanged(QColor)), this, SLOT(colorDisplayChange(QColor)));
-    connect(this->scene, SIGNAL(selectedGroupChanged(QString)), this, SLOT(updateGroupLabel(QString)));
-    connect(this, SIGNAL(colorChanged(QColor)), this->scene, SLOT(updateColor(QColor)));
+    LedScene *old = this->led_scene;
+    this->led_scene = new LedScene(this->ui->ledView);
+    this->ui->ledView->setScene(this->led_scene);
+    connect(this->led_scene, SIGNAL(selectedItemStatusChanged(bool)), this, SLOT(colorDisplayEnable(bool)));
+    connect(this->led_scene, SIGNAL(selectedItemColorChanged(QColor)), this, SLOT(colorDisplayChange(QColor)));
+    connect(this->led_scene, SIGNAL(selectedGroupChanged(QString)), this, SLOT(updateGroupLabel(QString)));
+    connect(this, SIGNAL(colorChanged(QColor)), this->led_scene, SLOT(updateColor(QColor)));
+    connect(this->led_scene, SIGNAL(newGroupAdded(LedGroupItem*)), this->sequence_scene, SLOT(newGroup(LedGroupItem*)));
+    connect(this->led_scene, SIGNAL(groupRemoved(LedGroupItem*)), this->sequence_scene, SLOT(removeGroup(LedGroupItem*)));
+    disconnect(old, SIGNAL(newGroupAdded(LedGroupItem*)), this->sequence_scene, SLOT(newGroup(LedGroupItem*)));
+    disconnect(old, SIGNAL(groupRemoved(LedGroupItem*)), this->sequence_scene, SLOT(removeGroup(LedGroupItem*)));
     disconnect(old, SIGNAL(selectedItemStatusChanged(bool)), this, SLOT(colorDisplayEnable(bool)));
     disconnect(old, SIGNAL(selectedItemColorChanged(QColor)), this, SLOT(colorDisplayChange(QColor)));
     disconnect(old, SIGNAL(selectedGroupChanged(QString)), this, SLOT(updateGroupLabel(QString)));
@@ -195,10 +205,10 @@ void Lui::on_testButton_toggled(bool checked)
     this->ui->ledView->setEnabled(!checked);
     colorDisplayEnable(checked);
     if(checked){
-        disconnect(this, SIGNAL(colorChanged(QColor)), this->scene, SLOT(updateColor(QColor)));
+        disconnect(this, SIGNAL(colorChanged(QColor)), this->led_scene, SLOT(updateColor(QColor)));
         connect(this, SIGNAL(colorChanged(QColor)), this, SLOT(testColor(QColor)));
     } else {
-        connect(this, SIGNAL(colorChanged(QColor)), this->scene, SLOT(updateColor(QColor)));
+        connect(this, SIGNAL(colorChanged(QColor)), this->led_scene, SLOT(updateColor(QColor)));
         disconnect(this, SIGNAL(colorChanged(QColor)), this, SLOT(testColor(QColor)));
     }
 }
@@ -206,7 +216,8 @@ void Lui::on_testButton_toggled(bool checked)
 void Lui::on_actionNew_triggered()
 {
     newScene();
-    this->scene->fillDefault();
+    this->sequence_scene->clear();
+    this->led_scene->fillDefault();
 }
 
 void Lui::on_actionSave_triggered()
@@ -224,7 +235,7 @@ void Lui::on_actionSave_triggered()
     }
     QDataStream out(&file);
     out.setVersion(QDataStream::Qt_5_3);
-    out << *(this->scene);
+    out << *(this->led_scene);
     file.close();
 
 }
@@ -256,7 +267,7 @@ void Lui::on_actionOpen_triggered()
         }
         QDataStream in(&file);
         in.setVersion(QDataStream::Qt_5_3);
-        in >> *(this->scene);
+        in >> *(this->led_scene);
         file.close();
     }
 

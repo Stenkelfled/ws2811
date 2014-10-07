@@ -3,7 +3,7 @@
 
 #include <QGraphicsScene>
 
-#include <groupitem.h>
+#include <ledgroupitem.h>
 #include <luiitem.h>
 
 class LedScene : public QGraphicsScene
@@ -18,16 +18,18 @@ signals:
     void selectedItemStatusChanged(bool status);
     void selectedItemColorChanged(QColor color);
     void selectedGroupChanged(QString name);
+    void newGroupAdded(LedGroupItem* group);
+    void groupRemoved(LedGroupItem* group);
 
 public slots:
     //void ungroup();
     void group();
-    void removeGroup(GroupItem *group);
+    void removeGroup(LedGroupItem *group);
     void selectAll();
     LedItem* getLed(int id);
 
     void updateColor(QColor color);
-    void updateGroupName(GroupItem *group, QString name);
+    void updateGroupName(QString name, LedGroupItem *group);
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
@@ -42,8 +44,8 @@ private:
     void selectedItemChanged(LuiItem* item);
     void sortSelection(QList<QGraphicsItem*> &items);
     static QGraphicsSceneDragDropEvent* copyEvent(QGraphicsSceneDragDropEvent *old_event, QEvent::Type type);
-    GroupItem* newGroup();
-    QList<GroupItem*> *groups;
+    LedGroupItem* newGroup();
+    QList<LedGroupItem*> *groups;
     QList<LedItem*> *leds;
     QGraphicsRectItem *selection_rect_item;
     QPointF selection_start;

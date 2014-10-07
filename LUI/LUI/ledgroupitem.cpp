@@ -3,18 +3,18 @@
 #include <QPen>
 #include <QtDebug>
 
-#include "groupitem.h"
+#include "ledgroupitem.h"
 #include <ledscene.h>
 #include <protocoll.h>
 
-GroupItem::GroupItem(qint16 id, QGraphicsItem *parent):
+LedGroupItem::LedGroupItem(qint16 id, QGraphicsItem *parent):
     LuiItem(id, parent),
     leds(new QList<QList<LedItem*>*>),
-    my_alignment(GroupItem::horizontal),
+    my_alignment(LedGroupItem::horizontal),
     my_name(QString::number(id))
 {
     setPen(Qt::SolidLine);
-    QColor c(settings::groupitem::color);
+    QColor c(settings::ledgroupitem::color);
     setBrush(QBrush(c.toHsv()));
     c = QColor(settings::leditem::color);
     this->my_color = c.toHsv();
@@ -39,7 +39,7 @@ GroupItem::GroupItem(qint16 id, QGraphicsItem *parent):
 
 }
 
-GroupItem::~GroupItem()
+LedGroupItem::~LedGroupItem()
 {
     foreach(QList<LedItem*>* row, *(this->leds)){
         delete row;
@@ -47,7 +47,7 @@ GroupItem::~GroupItem()
     delete this->leds;
 }
 
-void GroupItem::addLed(LedItem *led, qint16 row)
+void LedGroupItem::addLed(LedItem *led, qint16 row)
 {
     if( (this->leds->size() == 0) || (row < 0) ){
         QList<LedItem*>* new_row = new QList<LedItem*>;
@@ -60,7 +60,7 @@ void GroupItem::addLed(LedItem *led, qint16 row)
         row = this->leds->size() - 1;
     }
     if(led->parentItem() != NULL){
-        GroupItem *group = qgraphicsitem_cast<GroupItem *>(led->parentItem());
+        LedGroupItem *group = qgraphicsitem_cast<LedGroupItem *>(led->parentItem());
         group->removeLed(led);
     }
     this->leds->at(row)->append(led);
@@ -68,12 +68,12 @@ void GroupItem::addLed(LedItem *led, qint16 row)
     refreshArea();
 }
 
-quint16 GroupItem::rows() const
+quint16 LedGroupItem::rows() const
 {
     return (quint16 const)this->leds->size();
 }
 
-void GroupItem::removeLed(LedItem *led)
+void LedGroupItem::removeLed(LedItem *led)
 {
     led->setParentItem(NULL);
     disconnect(led, 0, this, 0);
@@ -94,7 +94,7 @@ void GroupItem::removeLed(LedItem *led)
     }
 }
 
-QPoint GroupItem::indexOf(LedItem *led)
+QPoint LedGroupItem::indexOf(LedItem *led)
 {
     QList<LedItem*> *row;
     int row_idx, col_idx;
@@ -108,7 +108,7 @@ QPoint GroupItem::indexOf(LedItem *led)
     return QPoint(-1,-1);
 }
 
-void GroupItem::makeEmpty()
+void LedGroupItem::makeEmpty()
 {
     foreach(QList<LedItem*>* row, *(this->leds)){
         foreach( LedItem* led, *(row)){
@@ -121,12 +121,12 @@ void GroupItem::makeEmpty()
     emit groupEmpty(this);
 }
 
-QColor GroupItem::color()
+QColor LedGroupItem::color()
 {
     return this->my_color;
 }
 
-void GroupItem::setColor(QColor color)
+void LedGroupItem::setColor(QColor color)
 {
     if(color != this->my_color){
         this->my_color = color;
@@ -138,17 +138,17 @@ void GroupItem::setColor(QColor color)
     }
 }
 
-QString GroupItem::name()
+QString LedGroupItem::name()
 {
     return this->my_name;
 }
 
-void GroupItem::setName(const QString name)
+void LedGroupItem::setName(const QString name)
 {
     if( (!name.isEmpty()) && (name != this->my_name) ){
         this->my_name = name;
         if(isSelected()){
-            emit nameChanged(this, name);
+            emit nameChanged(name, this);
         }
     }
 }
@@ -158,7 +158,7 @@ void GroupItem::setName(const QString name)
  * Generates the USB-command for this group. First generates a list of all leds in this group, then defines the sequence for this group.
  * @return The USB-command for this group
  */
-QByteArray GroupItem::getUsbCmd()
+QByteArray LedGroupItem::getUsbCmd()
 {
 
     QByteArray cmd = QByteArray();
@@ -230,14 +230,14 @@ QByteArray GroupItem::getUsbCmd()
     return cmd;
 }
 
-void GroupItem::refreshArea(bool item_moving)
+void LedGroupItem::refreshArea(bool item_moving)
 {
     //qDebug() << "refresh" << item_moving;
     qreal x=0, y=0;
     foreach(QList<LedItem*>* row, *(this->leds)){
         x = 0;
         foreach(LedItem* led, *(row)){
-            if(this->my_alignment == GroupItem::horizontal){
+            if(this->my_alignment == LedGroupItem::horizontal){
                 led->setPos(x,y);
             } else {
                 led->setPos(y,x);
@@ -251,29 +251,29 @@ void GroupItem::refreshArea(bool item_moving)
     QRectF r = this->childrenBoundingRect();
     int extra_space = 0;
     if(item_moving){
-        extra_space = settings::groupitem::extra_space;
+        extra_space = settings::ledgroupitem::extra_space;
     }
-    r.setWidth(r.width() + 2*(settings::groupitem::border + extra_space));
-    r.setHeight(r.height() + 2*(settings::groupitem::border + extra_space));
-    r.translate(-(settings::groupitem::border + extra_space), -(settings::groupitem::border + extra_space));
+    r.setWidth(r.width() + 2*(settings::ledgroupitem::border + extra_space));
+    r.setHeight(r.height() + 2*(settings::ledgroupitem::border + extra_space));
+    r.translate(-(settings::ledgroupitem::border + extra_space), -(settings::ledgroupitem::border + extra_space));
     setRect(r);
 }
 
-void GroupItem::horAlign()
+void LedGroupItem::horAlign()
 {
     this->horAlignAct->setChecked(true);
-    this->my_alignment = GroupItem::horizontal;
+    this->my_alignment = LedGroupItem::horizontal;
     refreshArea();
 }
 
-void GroupItem::verAlign()
+void LedGroupItem::verAlign()
 {
     this->verAlignAct->setChecked(true);
-    this->my_alignment = GroupItem::vertical;
+    this->my_alignment = LedGroupItem::vertical;
     refreshArea();
 }
 
-void GroupItem::getName()
+void LedGroupItem::getName()
 {
     bool ok;
     QString name = QInputDialog::getText(NULL, tr("Name..."),
@@ -297,7 +297,7 @@ void GroupItem::getName()
     LuiItem::mousePressEvent(event);
 }*/
 
-void GroupItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+void LedGroupItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
     QMenu menu;
     menu.addAction(this->nameAct);
@@ -307,7 +307,7 @@ void GroupItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     menu.exec(event->screenPos());
 }
 
-void GroupItem::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
+void LedGroupItem::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
     //qDebug() << "group drag enter";
     LedItem* led = LedItem::unpackDragData(event->mimeData());
@@ -321,7 +321,7 @@ void GroupItem::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
     refreshArea(true);
 }
 
-void GroupItem::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
+void LedGroupItem::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
     //qDebug() << "group drag move";
     LedItem* led = LedItem::unpackDragData(event->mimeData());
@@ -335,7 +335,7 @@ void GroupItem::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
     if(event->pos().y() < 0){
         new_row_idx--;
     }
-    if(this->my_alignment == GroupItem::vertical){
+    if(this->my_alignment == LedGroupItem::vertical){
         int tmp = new_col_idx;
         new_col_idx = new_row_idx;
         new_row_idx = tmp;
@@ -381,7 +381,7 @@ void GroupItem::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
     refreshArea(true);
 }
 
-void GroupItem::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
+void LedGroupItem::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 {
     //qDebug() << "group leave";
     LedItem* led = LedItem::unpackDragData(event->mimeData());
@@ -395,7 +395,7 @@ void GroupItem::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
     refreshArea(false);
 }
 
-void GroupItem::dropEvent(QGraphicsSceneDragDropEvent *event)
+void LedGroupItem::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
     //qDebug() << "Group drop";
     LedItem* led = LedItem::unpackDragData(event->mimeData());
@@ -408,7 +408,7 @@ void GroupItem::dropEvent(QGraphicsSceneDragDropEvent *event)
     refreshArea(false);
 }
 
-QDataStream &operator<<(QDataStream &stream, const GroupItem &group){
+QDataStream &operator<<(QDataStream &stream, const LedGroupItem &group){
     stream << (LuiItem&)(group);
     stream << group.my_color;
     stream << group.my_alignment;
@@ -424,7 +424,7 @@ QDataStream &operator<<(QDataStream &stream, const GroupItem &group){
     return stream;
 }
 
-QDataStream &operator>>(QDataStream &stream, GroupItem &group){
+QDataStream &operator>>(QDataStream &stream, LedGroupItem &group){
     stream >> (LuiItem&)(group);
 
     QColor group_color;
@@ -432,7 +432,7 @@ QDataStream &operator>>(QDataStream &stream, GroupItem &group){
     group.setColor(group_color);
 
     stream >> group.my_alignment;
-    if(group.my_alignment == GroupItem::horizontal){
+    if(group.my_alignment == LedGroupItem::horizontal){
         group.horAlignAct->setChecked(true);
     } else {
         group.verAlignAct->setChecked(true);
@@ -459,12 +459,12 @@ QDataStream &operator>>(QDataStream &stream, GroupItem &group){
     return stream;
 }
 
-QDataStream &operator<<(QDataStream &stream, const GroupItem::groupAlignment &alignment){
+QDataStream &operator<<(QDataStream &stream, const LedGroupItem::groupAlignment &alignment){
     stream << (qint32&)alignment;
     return stream;
 }
 
-QDataStream &operator>>(QDataStream &stream, GroupItem::groupAlignment &alignment){
+QDataStream &operator>>(QDataStream &stream, LedGroupItem::groupAlignment &alignment){
     stream >> (qint32&)alignment;
     return stream;
 }

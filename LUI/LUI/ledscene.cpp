@@ -5,7 +5,7 @@
 #include <algorithm>
 
 #include <global.h>
-#include <groupitem.h>
+#include <ledgroupitem.h>
 #include <leditem.h>
 #include <luiitem.h>
 #include <ledscene.h>
@@ -13,7 +13,7 @@
 
 LedScene::LedScene(QObject *parent) :
     QGraphicsScene(parent),
-    groups(new QList<GroupItem*>),
+    groups(new QList<LedGroupItem*>),
     leds(new QList<LedItem*>),
     selection_start(settings::ledscene::invalid_pos),
     selected_item(NULL),
@@ -28,7 +28,7 @@ LedScene::LedScene(QObject *parent) :
 
 void LedScene::fillDefault()
 {
-    GroupItem* grp = newGroup();
+    LedGroupItem* grp = newGroup();
     for(qint16 i=0; i<GLOBAL_LED_COUNT; i++){
         LedItem* led = newLed(i);
         grp->addLed(led);
@@ -44,7 +44,7 @@ LedItem *LedScene::newLed(qint16 id)
 
 void LedScene::group()
 {    
-    GroupItem *new_grp = newGroup();
+    LedGroupItem *new_grp = newGroup();
     QList<QGraphicsItem*> selection = selectedItems();
     std::sort(selection.begin(), selection.end(), LuiItem::positionLowerThan);
     foreach(QGraphicsItem *itm, selection){
@@ -72,9 +72,10 @@ void LedScene::group()
     }
 }*/
 
-void LedScene::removeGroup(GroupItem* group)
+void LedScene::removeGroup(LedGroupItem* group)
 {
     int id = group->id();
+    emit groupRemoved(group);
     this->groups->removeAt(id);
     removeItem((QGraphicsItem*)group);
     for(;id<this->groups->length();id++){
@@ -102,20 +103,21 @@ void LedScene::updateColor(QColor color)
     this->selected_item->setColor(color);
 }
 
-void LedScene::updateGroupName(GroupItem* group, QString name)
+void LedScene::updateGroupName(QString name, LedGroupItem* group)
 {
-    if( (GroupItem*)(this->selected_item) == group){
+    if( (LedGroupItem*)(this->selected_item) == group){
         emit selectedGroupChanged(name);
     }
 }
 
-GroupItem* LedScene::newGroup()
+LedGroupItem* LedScene::newGroup()
 {
-    GroupItem *grp = new GroupItem(this->groups->length(), NULL);
+    LedGroupItem *grp = new LedGroupItem(this->groups->length(), NULL);
     this->groups->append(grp);
-    connect(grp, SIGNAL(groupEmpty(GroupItem*)), this, SLOT(removeGroup(GroupItem*)));
+    connect(grp, SIGNAL(groupEmpty(LedGroupItem*)), this, SLOT(removeGroup(LedGroupItem*)));
     addItem(grp);
-    connect(grp, SIGNAL(nameChanged(GroupItem*,QString)), this, SLOT(updateGroupName(GroupItem*,QString)));
+    connect(grp, SIGNAL(nameChanged(QString,LedGroupItem*)), this, SLOT(updateGroupName(QString,LedGroupItem*)));
+    emit newGroupAdded(grp);
     return grp;
 }
 
@@ -282,11 +284,11 @@ void LedScene::dropEvent(QGraphicsSceneDragDropEvent *event)
         this->current_drag_item = NULL;
     } else {
         //dropping it directly on the scene
-        GroupItem* grp = newGroup();
+        LedGroupItem* grp = newGroup();
         grp->addLed(led);
         QPointF grp_pos(event->scenePos());
-        grp->setX(grp->x() - (settings::leditem::width+settings::groupitem::border) );
-        grp->setY(grp->y() - (settings::leditem::height+settings::groupitem::border) );
+        grp->setX(grp->x() - (settings::leditem::width+settings::ledgroupitem::border) );
+        grp->setY(grp->y() - (settings::leditem::height+settings::ledgroupitem::border) );
         grp->setPos(grp_pos);
     }
     if(mouseGrabberItem() != NULL){
@@ -306,7 +308,7 @@ void LedScene::selectedItemChanged(LuiItem *item)
         } else {
             emit selectedItemStatusChanged(true);
             emit selectedItemColorChanged(item->color());
-            GroupItem* group = qgraphicsitem_cast<GroupItem*>(item);
+            LedGroupItem* group = qgraphicsitem_cast<LedGroupItem*>(item);
             if(group != NULL){
                 emit selectedGroupChanged(group->name());
             } else {
@@ -326,7 +328,7 @@ QGraphicsSceneDragDropEvent *LedScene::copyEvent(QGraphicsSceneDragDropEvent *ol
 
 QDataStream &operator<<(QDataStream &stream, const LedScene &scene){
     stream << (quint16)scene.groups->size();
-    foreach(GroupItem* group, *(scene.groups)){
+    foreach(LedGroupItem* group, *(scene.groups)){
         stream << *group;
     }
     return stream;
@@ -335,7 +337,7 @@ QDataStream &operator<<(QDataStream &stream, const LedScene &scene){
 QDataStream &operator>>(QDataStream &stream, LedScene &scene){
     quint16 group_count;
     stream >> group_count;
-    GroupItem *group;
+    LedGroupItem *group;
     for(quint16 i=0;i<group_count;i++){
         group = scene.newGroup();
         stream >> *group;

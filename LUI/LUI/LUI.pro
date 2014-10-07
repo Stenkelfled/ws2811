@@ -20,10 +20,12 @@ SOURCES += main.cpp\
     serial.cpp \
     ledscene.cpp \
     leditem.cpp \
-    groupitem.cpp \
     luiitem.cpp \
     luiview.cpp \
-    luiwidgets.cpp
+    luiwidgets.cpp \
+    sequencescene.cpp \
+    ledgroupitem.cpp \
+    sequencegroupitem.cpp
 
 HEADERS  += settings.h \
     serial.h \
@@ -33,9 +35,11 @@ HEADERS  += settings.h \
     ../../global.h \
     luiitem.h \
     leditem.h \
-    groupitem.h \
     luiview.h \
-    luiwidgets.h
+    luiwidgets.h \
+    sequencescene.h \
+    ledgroupitem.h \
+    sequencegroupitem.h
 
 INCLUDEPATH += ../../
 

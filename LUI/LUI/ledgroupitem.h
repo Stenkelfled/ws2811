@@ -5,15 +5,15 @@
 #include <leditem.h>
 #include <luiitem.h>
 
-class GroupItem : public LuiItem
+class LedGroupItem : public LuiItem
 {
     Q_OBJECT
 public:
     enum groupAlignment {horizontal, vertical};
     enum { Type = UserType + 2 };
     int type() const {return Type;}
-    explicit GroupItem(qint16 id, QGraphicsItem *parent = 0);
-    ~GroupItem();
+    explicit LedGroupItem(qint16 id, QGraphicsItem *parent = 0);
+    ~LedGroupItem();
 
     quint16 rows() const;
     void addLed(LedItem *led, qint16 row = 0);
@@ -40,8 +40,8 @@ protected:
     virtual void dropEvent(QGraphicsSceneDragDropEvent * event);
 
 signals:
-    void groupEmpty(GroupItem* group);
-    void nameChanged(GroupItem* group, QString name);
+    void groupEmpty(LedGroupItem* group);
+    void nameChanged(QString name, LedGroupItem *group);
 
 private slots:
     void horAlign();
@@ -60,10 +60,10 @@ private:
     QActionGroup *alignActGroup;
     QAction *nameAct;
 
-    friend QDataStream &operator<<(QDataStream &, const GroupItem &);
-    friend QDataStream &operator>>(QDataStream &, GroupItem &);
-    friend QDataStream &operator<<(QDataStream &, const GroupItem::groupAlignment &);
-    friend QDataStream &operator>>(QDataStream &, GroupItem::groupAlignment &);
+    friend QDataStream &operator<<(QDataStream &, const LedGroupItem &);
+    friend QDataStream &operator>>(QDataStream &, LedGroupItem &);
+    friend QDataStream &operator<<(QDataStream &, const LedGroupItem::groupAlignment &);
+    friend QDataStream &operator>>(QDataStream &, LedGroupItem::groupAlignment &);
 };
 
 #endif // GROUPITEM_H

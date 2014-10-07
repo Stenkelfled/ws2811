@@ -7,6 +7,7 @@
 #include <ledscene.h>
 #include <luiitem.h>
 #include <serial.h>
+#include <sequencescene.h>
 
 namespace Ui {
 class Lui;
@@ -54,7 +55,8 @@ private:
     void newScene();
     Ui::Lui *ui;
     Serial *serial;
-    LedScene *scene;
+    LedScene *led_scene;
+    SequenceScene *sequence_scene;
     QLabel *group_name_label;
 
     qint16 led_count;
