@@ -6,10 +6,11 @@
 SequenceGroupItem::SequenceGroupItem(LedGroupItem *led_group, QGraphicsItem *parent) :
     QGraphicsObject(parent),
     my_led_group(led_group),
-    my_rect(new QRectF(0,0,settings::sequencegroupitem::name_text_width+10,settings::sequencegroupitem::height))
+    my_rect(new QRectF(0,0,settings::sequencegroupitem::name_text_width+settings::sequencegroupitem::extra_border,settings::sequencegroupitem::height))
 {
     setFlags(QGraphicsItem::ItemIsSelectable);
     connect(led_group, SIGNAL(nameChanged(QString,LedGroupItem*)), this, SLOT(changeName(QString)));
+    connect(led_group, SIGNAL(addedSequenceItem(SequenceItem*)), this, SLOT(addSequenceItem(SequenceItem*)));
 }
 
 SequenceGroupItem::~SequenceGroupItem(){
@@ -18,6 +19,9 @@ SequenceGroupItem::~SequenceGroupItem(){
 }
 
 QRectF SequenceGroupItem::boundingRect() const{
+    //qDebug() << "group children bounding rect" << this->childrenBoundingRect();
+    QRectF const &children_rect = this->childrenBoundingRect();
+    this->my_rect->setWidth(children_rect.x() + children_rect.width() + settings::sequencegroupitem::extra_border);
     return *(this->my_rect);
 }
 
@@ -51,6 +55,18 @@ void SequenceGroupItem::paint(QPainter *painter, const QStyleOptionGraphicsItem 
 
 }
 
+void SequenceGroupItem::initItems()
+{
+    int item_xpos = settings::sequencegroupitem::name_text_width + settings::sequenceitem::space;
+    foreach(SequenceItem *item, *(this->my_led_group->sequences())){
+        item->setParentItem(this);
+        //item->pos().setX(item_xpos);
+        item->setPos(item_xpos, item->pos().y());
+        qDebug() << item_xpos;
+        item_xpos += item->width() + settings::sequenceitem::space;
+    }
+}
+
 void SequenceGroupItem::setVPos(int pos)
 {
     this->setPos(0,pos);
@@ -64,5 +80,11 @@ LedGroupItem *SequenceGroupItem::led_group()
 void SequenceGroupItem::changeName(QString new_name)
 {
     Q_UNUSED(new_name)
+    this->update();
+}
+
+void SequenceGroupItem::addSequenceItem(SequenceItem *item)
+{
+    item->setParentItem(this);
     this->update();
 }

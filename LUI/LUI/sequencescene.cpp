@@ -24,7 +24,7 @@ void SequenceScene::clear()
 
 int SequenceScene::pixelsPer10ms() const
 {
-    return (int const)my_pixels_per_10ms;
+    return (int const)(this->my_pixels_per_10ms);
 }
 
 void SequenceScene::newGroup(LedGroupItem *led_group)
@@ -33,7 +33,8 @@ void SequenceScene::newGroup(LedGroupItem *led_group)
     seq->setVPos( vpos(this->my_sequences->length()) );
     this->my_sequences->append(seq);
     addItem(seq);
-    qDebug() << "new Group. total:" << this->my_sequences->length();
+    seq->initItems();
+    //qDebug() << "new Group. total:" << this->my_sequences->length();
 }
 
 void SequenceScene::removeGroup(LedGroupItem *led_group)

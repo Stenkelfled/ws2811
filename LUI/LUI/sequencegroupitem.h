@@ -3,6 +3,7 @@
 #include <QtWidgets>
 
 #include <ledgroupitem.h>
+#include <sequenceitem.h>
 
 class SequenceGroupItem : public QGraphicsObject
 {
@@ -15,12 +16,15 @@ public:
 
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+    void initItems(); //this has to be done AFTER the group was added to the scene
     void setVPos(int pos);
 
 signals:
 
 public slots:
     void changeName(QString new_name);
+    void addSequenceItem(SequenceItem *item);
 
 private:
     LedGroupItem *my_led_group;

@@ -10,6 +10,7 @@
 LedGroupItem::LedGroupItem(qint16 id, QGraphicsItem *parent):
     LuiItem(id, parent),
     leds(new QList<QList<LedItem*>*>),
+    my_sequences(new QList<SequenceItem*>),
     my_alignment(LedGroupItem::horizontal),
     my_name(QString::number(id))
 {
@@ -37,6 +38,8 @@ LedGroupItem::LedGroupItem(qint16 id, QGraphicsItem *parent):
     this->nameAct = new QAction(tr("Name..."), this);
     connect(this->nameAct, SIGNAL(triggered()), this, SLOT(getName()));
 
+    SequenceItem* seq = new SequenceItem();
+    this->my_sequences->append(seq);
 }
 
 LedGroupItem::~LedGroupItem()
@@ -45,6 +48,10 @@ LedGroupItem::~LedGroupItem()
         delete row;
     }
     delete this->leds;
+    foreach(SequenceItem* seq, *(this->my_sequences)){
+        delete seq;
+    }
+    delete this->my_sequences;
 }
 
 void LedGroupItem::addLed(LedItem *led, qint16 row)
@@ -151,6 +158,11 @@ void LedGroupItem::setName(const QString name)
             emit nameChanged(name, this);
         }
     }
+}
+
+QList<SequenceItem *> *LedGroupItem::sequences()
+{
+    return this->my_sequences;
 }
 
 /**

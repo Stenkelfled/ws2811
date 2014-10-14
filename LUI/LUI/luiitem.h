@@ -2,7 +2,6 @@
 #define LUIITEM_H
 
 #include <QGraphicsRectItem>
-#include <QJsonObject>
 #include <QObject>
 
 class LuiItem : public QObject, public QGraphicsRectItem

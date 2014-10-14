@@ -4,6 +4,7 @@
 
 #include <leditem.h>
 #include <luiitem.h>
+#include <sequenceitem.h>
 
 class LedGroupItem : public LuiItem
 {
@@ -24,6 +25,7 @@ public:
     void setColor(QColor color);
     QString name();
     void setName(QString const name);
+    QList<SequenceItem*>* sequences();
 
     virtual QByteArray getUsbCmd();
     //LedItem* unpackDragData(const QMimeData *data);
@@ -42,6 +44,7 @@ protected:
 signals:
     void groupEmpty(LedGroupItem* group);
     void nameChanged(QString name, LedGroupItem *group);
+    void addedSequenceItem(SequenceItem* item);
 
 private slots:
     void horAlign();
@@ -51,6 +54,7 @@ private slots:
 private:
 
     QList<QList<LedItem*>*> *leds; //list(pointer) of row(pointer)s of led(pointer)s
+    QList<SequenceItem*> *my_sequences;
     QColor my_color;
     groupAlignment my_alignment;
     QString my_name;
