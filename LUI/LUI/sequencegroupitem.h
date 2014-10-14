@@ -8,6 +8,7 @@ class SequenceGroupItem : public QGraphicsObject
 {
     Q_OBJECT
 public:
+    enum { Type = UserType + 4 };
     explicit SequenceGroupItem(LedGroupItem *led_group, QGraphicsItem *parent = 0);
     ~SequenceGroupItem();
     LedGroupItem* led_group();

@@ -14,40 +14,43 @@
    <string>Lui</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout_5">
     <item>
      <widget class="QSplitter" name="splitter">
-      <property name="frameShape">
-       <enum>QFrame::NoFrame</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Plain</enum>
-      </property>
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <property name="handleWidth">
-       <number>10</number>
-      </property>
-      <widget class="LuiView" name="ledView">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+      <widget class="QGroupBox" name="groupBox_3">
+       <property name="title">
+        <string>Ledübersicht</string>
        </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>40</height>
-        </size>
+       <property name="flat">
+        <bool>true</bool>
        </property>
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>900</height>
-        </size>
-       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="LuiView" name="ledView">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>900</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
       <widget class="QGroupBox" name="groupBox_2">
        <property name="sizePolicy">
@@ -65,7 +68,7 @@
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>200</height>
+         <height>400</height>
         </size>
        </property>
        <property name="title">
@@ -121,9 +124,18 @@
          </size>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
+        </property>
+        <property name="usesScrollButtons">
+         <bool>true</bool>
+        </property>
+        <property name="documentMode">
+         <bool>false</bool>
         </property>
         <widget class="QWidget" name="color">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <attribute name="title">
           <string>Farbe</string>
          </attribute>
@@ -1159,8 +1171,11 @@ definiert</string>
          </layout>
         </widget>
         <widget class="QWidget" name="sequence_details">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <attribute name="title">
-          <string>Details</string>
+          <string>Sequenzdetails</string>
          </attribute>
         </widget>
        </widget>

@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     luiwidgets.cpp \
     sequencescene.cpp \
     ledgroupitem.cpp \
-    sequencegroupitem.cpp
+    sequencegroupitem.cpp \
+    sequenceitem.cpp
 
 HEADERS  += settings.h \
     serial.h \
@@ -39,7 +40,8 @@ HEADERS  += settings.h \
     luiwidgets.h \
     sequencescene.h \
     ledgroupitem.h \
-    sequencegroupitem.h
+    sequencegroupitem.h \
+    sequenceitem.h
 
 INCLUDEPATH += ../../
 

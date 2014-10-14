@@ -25,6 +25,10 @@ namespace settings{
         constexpr Qt::GlobalColor color = Qt::lightGray;
     }
 
+    namespace sequenceitem {
+        constexpr int pixels_per_10ms = 1;
+    }
+
     namespace sequencegroupitem{
         constexpr int height = 50; //height of the sequence
         constexpr int space = 5; //space between two sequences

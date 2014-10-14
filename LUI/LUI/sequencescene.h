@@ -13,6 +13,7 @@ public:
     explicit SequenceScene(QObject *parent = 0);
     ~SequenceScene();
     void clear();
+    int pixelsPer10ms() const;
 
 signals:
 
@@ -23,6 +24,7 @@ public slots:
 private:
     int vpos(int idx);
     QList<SequenceGroupItem*> *my_sequences;
+    int my_pixels_per_10ms;
 
 };
 

@@ -3,7 +3,8 @@
 
 SequenceScene::SequenceScene(QObject *parent) :
     QGraphicsScene(parent),
-    my_sequences(new QList<SequenceGroupItem*>)
+    my_sequences(new QList<SequenceGroupItem*>),
+    my_pixels_per_10ms(settings::sequenceitem::pixels_per_10ms)
 {
 }
 
@@ -19,6 +20,11 @@ void SequenceScene::clear()
         delete item;
     }
     this->my_sequences->clear();
+}
+
+int SequenceScene::pixelsPer10ms() const
+{
+    return (int const)my_pixels_per_10ms;
 }
 
 void SequenceScene::newGroup(LedGroupItem *led_group)

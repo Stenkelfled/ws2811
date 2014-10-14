@@ -8,6 +8,7 @@ SequenceGroupItem::SequenceGroupItem(LedGroupItem *led_group, QGraphicsItem *par
     my_led_group(led_group),
     my_rect(new QRectF(0,0,settings::sequencegroupitem::name_text_width+10,settings::sequencegroupitem::height))
 {
+    setFlags(QGraphicsItem::ItemIsSelectable);
     connect(led_group, SIGNAL(nameChanged(QString,LedGroupItem*)), this, SLOT(changeName(QString)));
 }
 
@@ -22,7 +23,6 @@ QRectF SequenceGroupItem::boundingRect() const{
 
 void SequenceGroupItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    Q_UNUSED(option)
     Q_UNUSED(widget)
     painter->setBrush(QBrush(settings::sequencegroupitem::background_color));
     painter->setPen(Qt::NoPen);
@@ -40,6 +40,15 @@ void SequenceGroupItem::paint(QPainter *painter, const QStyleOptionGraphicsItem 
                                 + settings::sequencegroupitem::name_text_size)/2)
                       , name);
 
+    if(option->state & QStyle::State_Selected){
+        painter->setPen(QPen(QBrush(settings::sequencegroupitem::text_color), 1, Qt::DashLine));
+        painter->setBrush(Qt::NoBrush);
+        QRectF rect = QRectF(*(this->my_rect));
+        rect.setHeight(rect.height()-1);
+        rect.setWidth(rect.width()-1);
+        painter->drawRect(rect);
+    }
+
 }
 
 void SequenceGroupItem::setVPos(int pos)
@@ -54,5 +63,6 @@ LedGroupItem *SequenceGroupItem::led_group()
 
 void SequenceGroupItem::changeName(QString new_name)
 {
+    Q_UNUSED(new_name)
     this->update();
 }
