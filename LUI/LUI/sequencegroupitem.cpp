@@ -60,9 +60,7 @@ void SequenceGroupItem::initItems()
     int item_xpos = settings::sequencegroupitem::name_text_width + settings::sequenceitem::space;
     foreach(SequenceItem *item, *(this->my_led_group->sequences())){
         item->setParentItem(this);
-        //item->pos().setX(item_xpos);
         item->setPos(item_xpos, item->pos().y());
-        qDebug() << item_xpos;
         item_xpos += item->width() + settings::sequenceitem::space;
     }
 }

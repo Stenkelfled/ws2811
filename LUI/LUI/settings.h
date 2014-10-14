@@ -25,14 +25,8 @@ namespace settings{
         constexpr Qt::GlobalColor color = Qt::lightGray;
     }
 
-    namespace sequenceitem {
-        constexpr int pixels_per_10ms = 1;
-        constexpr int height = 40;
-        constexpr int space = 5; //vertical space between two sequenceitems
-    }
-
     namespace sequencegroupitem{
-        constexpr int height = 50; //height of the sequence
+        constexpr int height = 40; //height of the sequence
         constexpr int space = 5; //space between two sequences
         constexpr int extra_border = 5;
         constexpr int name_text_width = 80;
@@ -40,6 +34,12 @@ namespace settings{
         constexpr int name_text_size = 10;
         constexpr Qt::GlobalColor background_color = Qt::lightGray;
         constexpr Qt::GlobalColor text_color = Qt::black;
+    }
+
+    namespace sequenceitem {
+        constexpr int pixels_per_10ms = 1;
+        constexpr int height = sequencegroupitem::height - 2*sequencegroupitem::extra_border;
+        constexpr int space = 5; //vertical space between two sequenceitems
     }
 
 }

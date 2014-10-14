@@ -10,7 +10,7 @@ SequenceItem::SequenceItem(sequencetype type, QColor color, QColor gradient, QGr
     my_length(50)
 {
     setFlags(QGraphicsItem::ItemIsSelectable);
-    this->setPos(0, 0.5*(settings::sequencegroupitem::height - settings::sequenceitem::height));
+    this->setPos(0, settings::sequencegroupitem::extra_border);
 }
 
 QRectF SequenceItem::boundingRect() const
