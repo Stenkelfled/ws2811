@@ -16,6 +16,7 @@ Lui::Lui(QWidget *parent) :
     file_name("")
 {
     this->ui->setupUi(this);
+    colorDisplayEnable(false);
     this->serial = new Serial(this);
     QObject::connect(this->ui->refreshPushButton, &QPushButton::clicked, this->serial, &Serial::refreshPortData);
     QObject::connect(this->serial, &Serial::updatedPortDescription, this, &Lui::updatePortComboBox);
@@ -32,10 +33,7 @@ Lui::Lui(QWidget *parent) :
     connect(this->led_scene, SIGNAL(groupRemoved(LedGroupItem*)), this->sequence_scene, SLOT(removeGroup(LedGroupItem*)));
     this->led_scene->fillDefault();
     this->ui->ledView->setScene(this->led_scene);
-    connect(this->led_scene, SIGNAL(selectedItemStatusChanged(bool)), this, SLOT(colorDisplayEnable(bool)));
-    connect(this->led_scene, SIGNAL(selectedItemColorChanged(QColor)), this, SLOT(colorDisplayChange(QColor)));
-    connect(this->led_scene, SIGNAL(selectedGroupChanged(QString)), this, SLOT(updateGroupLabel(QString)));
-    connect(this, SIGNAL(colorChanged(QColor)), this->led_scene, SLOT(updateColor(QColor)));
+    connect(this->led_scene, SIGNAL(selectedGroupNameChanged(QString)), this, SLOT(updateGroupLabel(QString)));
 
     connect(this->ui->color_white, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
     connect(this->ui->color_off, SIGNAL(clickedColor(QColor)), this, SLOT(newLedColor(QColor)));
@@ -60,9 +58,6 @@ Lui::~Lui()
     delete this->serial;
     delete this->ui;
 }
-
-
-
 
 /////////////////////////////////////////////////////////////////////////////
 /// Stuff for communicate with uC

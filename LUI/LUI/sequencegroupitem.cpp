@@ -37,6 +37,7 @@ void SequenceGroupItem::paint(QPainter *painter, const QStyleOptionGraphicsItem 
         name.resize(settings::sequencegroupitem::name_text_chars - 3);
         name.append("...");
     }
+    //name.append("\u221e");
 
     painter->setPen(settings::sequencegroupitem::name_text_size);
     painter->setFont(QFont("MS Shell Dlg 2", settings::leditem::height/2, QFont::DemiBold));

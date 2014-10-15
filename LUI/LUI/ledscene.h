@@ -15,9 +15,8 @@ public:
     LedItem* newLed(qint16 id=0);
 
 signals:
-    void selectedItemStatusChanged(bool status);
-    void selectedItemColorChanged(QColor color);
-    void selectedGroupChanged(QString name);
+    void selectedGroupChanged(LedGroupItem* group);
+    void selectedGroupNameChanged(QString name);
     void newGroupAdded(LedGroupItem* group);
     void groupRemoved(LedGroupItem* group);
 
@@ -25,10 +24,9 @@ public slots:
     //void ungroup();
     void group();
     void removeGroup(LedGroupItem *group);
+    void changeSelectedGroup(bool state, LedGroupItem *group);
     void selectAll();
     LedItem* getLed(int id);
-
-    void updateColor(QColor color);
     void updateGroupName(QString name, LedGroupItem *group);
 
 protected:
@@ -41,7 +39,7 @@ protected:
     virtual void dropEvent(QGraphicsSceneDragDropEvent *event);
 
 private:
-    void selectedItemChanged(LuiItem* item);
+    //void selectedItemChanged(LuiItem* item);
     void sortSelection(QList<QGraphicsItem*> &items);
     static QGraphicsSceneDragDropEvent* copyEvent(QGraphicsSceneDragDropEvent *old_event, QEvent::Type type);
     LedGroupItem* newGroup();
@@ -49,8 +47,8 @@ private:
     QList<LedItem*> *leds;
     QGraphicsRectItem *selection_rect_item;
     QPointF selection_start;
-    LuiItem* selected_item;
     QGraphicsItem *current_drag_item;
+    LedGroupItem *my_selected_group;
 
     friend QDataStream &operator<<(QDataStream &, const LedScene &);
     friend QDataStream &operator>>(QDataStream &, LedScene &);

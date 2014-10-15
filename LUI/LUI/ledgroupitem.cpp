@@ -420,6 +420,15 @@ void LedGroupItem::dropEvent(QGraphicsSceneDragDropEvent *event)
     refreshArea(false);
 }
 
+QVariant LedGroupItem::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)
+{
+    if(change == QGraphicsItem::ItemSelectedHasChanged){
+        emit selectionChanged(value.toBool(), this);
+        return value;
+    }
+    return QGraphicsItem::itemChange(change, value);
+}
+
 QDataStream &operator<<(QDataStream &stream, const LedGroupItem &group){
     stream << (LuiItem&)(group);
     stream << group.my_color;

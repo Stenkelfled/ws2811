@@ -16,8 +16,8 @@ LedScene::LedScene(QObject *parent) :
     groups(new QList<LedGroupItem*>),
     leds(new QList<LedItem*>),
     selection_start(settings::ledscene::invalid_pos),
-    selected_item(NULL),
-    current_drag_item(NULL)
+    current_drag_item(NULL),
+    my_selected_group(NULL)
 {
     QColor selection_rect_color(Qt::black);
     selection_rect_color.setAlpha(80);
@@ -84,6 +84,31 @@ void LedScene::removeGroup(LedGroupItem* group)
     }
 }
 
+void LedScene::changeSelectedGroup(bool state, LedGroupItem *group)
+{
+    if(state == false){
+        this->my_selected_group = NULL;
+        emit selectedGroupChanged(NULL);
+        emit selectedGroupNameChanged("");
+    } else {
+        if(this->my_selected_group != group){
+            if(this->my_selected_group != NULL){
+                this->my_selected_group->setSelected(false);
+            }
+            this->my_selected_group = group;
+            emit selectedGroupChanged(group);
+            emit selectedGroupNameChanged(group->name());
+        }
+    }
+}
+
+void LedScene::updateGroupName(QString name, LedGroupItem* group)
+{
+    if( this->my_selected_group == group){
+        emit selectedGroupNameChanged(name);
+    }
+}
+
 void LedScene::selectAll()
 {
     foreach(QGraphicsItem *itm, items()){
@@ -96,25 +121,12 @@ LedItem *LedScene::getLed(int id)
     return (*(this->leds))[id];
 }
 
-void LedScene::updateColor(QColor color)
-{
-    //qDebug() << "newColor" << color;
-
-    this->selected_item->setColor(color);
-}
-
-void LedScene::updateGroupName(QString name, LedGroupItem* group)
-{
-    if( (LedGroupItem*)(this->selected_item) == group){
-        emit selectedGroupChanged(name);
-    }
-}
-
 LedGroupItem* LedScene::newGroup()
 {
     LedGroupItem *grp = new LedGroupItem(this->groups->length(), NULL);
     this->groups->append(grp);
     connect(grp, SIGNAL(groupEmpty(LedGroupItem*)), this, SLOT(removeGroup(LedGroupItem*)));
+    connect(grp, SIGNAL(selectionChanged(bool,LedGroupItem*)), this, SLOT(changeSelectedGroup(bool,LedGroupItem*)));
     addItem(grp);
     connect(grp, SIGNAL(nameChanged(QString,LedGroupItem*)), this, SLOT(updateGroupName(QString,LedGroupItem*)));
     emit newGroupAdded(grp);
@@ -177,12 +189,12 @@ void LedScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         this->selection_start = settings::ledscene::invalid_pos;
     }
     QGraphicsScene::mouseReleaseEvent(event);
-    QList<QGraphicsItem*> items = selectedItems();
+    /*QList<QGraphicsItem*> items = selectedItems();
     if(items.length() == 0){
         selectedItemChanged(NULL);
     } else if(items.length() == 1){
         selectedItemChanged( (LuiItem*)(items.at(0)) );
-    }
+    }*/
 }
 
 void LedScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
@@ -298,7 +310,7 @@ void LedScene::dropEvent(QGraphicsSceneDragDropEvent *event)
     event->accept();
 }
 
-void LedScene::selectedItemChanged(LuiItem *item)
+/*void LedScene::selectedItemChanged(LuiItem *item)
 {
     if(item != this->selected_item){
         this->selected_item = item;
@@ -316,7 +328,7 @@ void LedScene::selectedItemChanged(LuiItem *item)
             }
         }
     }
-}
+}*/
 
 QGraphicsSceneDragDropEvent *LedScene::copyEvent(QGraphicsSceneDragDropEvent *old_event, QEvent::Type type)
 {

@@ -40,10 +40,12 @@ protected:
     virtual void dragMoveEvent(QGraphicsSceneDragDropEvent * event);
     virtual void dragLeaveEvent(QGraphicsSceneDragDropEvent * event);
     virtual void dropEvent(QGraphicsSceneDragDropEvent * event);
+    virtual QVariant itemChange(GraphicsItemChange change, const QVariant & value);
 
 signals:
     void groupEmpty(LedGroupItem* group);
     void nameChanged(QString name, LedGroupItem *group);
+    void selectionChanged(bool state, LedGroupItem *group);
     void addedSequenceItem(SequenceItem* item);
 
 private slots:
