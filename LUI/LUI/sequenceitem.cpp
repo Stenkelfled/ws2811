@@ -1,6 +1,7 @@
 #include "sequenceitem.h"
 #include <sequencescene.h>
 #include <settings.h>
+#include <utils.h>
 
 SequenceItem::SequenceItem(sequencetype type, QColor color, QColor gradient, QGraphicsItem *parent):
     QGraphicsItem(parent),
@@ -31,14 +32,25 @@ void SequenceItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->setPen(Qt::NoPen);
     painter->drawRect(this->boundingRect());
 
-    /*if(option->state & QStyle::State_Selected){
-        painter->setPen(QPen(QBrush(settings::sequencegroupitem::text_color), 1, Qt::DashLine));
+    if(option->state & QStyle::State_Selected){
+        QColor line_color;
+        if(utils::isBrightBackground(this->my_color)){
+            line_color = Qt::black;
+        } else {
+            line_color = Qt::white;
+        }
+        painter->setPen(QPen(QBrush(line_color), 1, Qt::DashLine));
         painter->setBrush(Qt::NoBrush);
-        QRectF rect = QRectF(*(this->my_rect));
+        QRectF rect = QRectF(this->boundingRect());
         rect.setHeight(rect.height()-1);
         rect.setWidth(rect.width()-1);
         painter->drawRect(rect);
-    }*/
+    }
+}
+
+QColor SequenceItem::color() const
+{
+    return this->my_color;
 }
 
 qreal SequenceItem::width() const

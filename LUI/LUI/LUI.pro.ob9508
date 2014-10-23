@@ -27,11 +27,9 @@ SOURCES += main.cpp\
     ledgroupitem.cpp \
     sequencegroupitem.cpp \
     sequenceitem.cpp \
-    sequencecursoritem.cpp \
-    utils.cpp \
+    sequencecursoritem.cpp
 
 HEADERS  += settings.h \
-    utils.h \
     serial.h \
     lui.h \
     ../../protocoll.h \
@@ -45,7 +43,8 @@ HEADERS  += settings.h \
     ledgroupitem.h \
     sequencegroupitem.h \
     sequenceitem.h \
-    sequencecursoritem.h
+    sequencecursoritem.h \
+    utils.h
 
 INCLUDEPATH += ../../
 

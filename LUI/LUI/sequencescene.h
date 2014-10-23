@@ -4,6 +4,7 @@
 #include <QGraphicsScene>
 
 #include <ledgroupitem.h>
+#include <sequencecursoritem.h>
 #include <sequencegroupitem.h>
 
 class SequenceScene : public QGraphicsScene
@@ -24,6 +25,7 @@ public slots:
 private:
     int vpos(int idx);
     QList<SequenceGroupItem*> *my_sequences;
+    SequenceCursorItem *my_cursor;
     int my_pixels_per_10ms;
 
 };

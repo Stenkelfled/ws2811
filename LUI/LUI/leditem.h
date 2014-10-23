@@ -11,7 +11,7 @@ class LedItem : public LuiItem
 {
     Q_OBJECT
 public:
-    enum { Type = UserType + 3 };
+    enum { Type = UserType + usertype::leditem };
     explicit LedItem(qint16 id, QGraphicsItem *parent = 0);
     int type() const {return Type;}
 

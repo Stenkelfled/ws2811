@@ -4,12 +4,14 @@
 #include <QGraphicsRectItem>
 #include <QObject>
 
+#include <settings.h>
+
 class LuiItem : public QObject, public QGraphicsRectItem
 {
     Q_OBJECT
 
 public:
-    enum { Type = UserType + 1 };
+    enum { Type = UserType + usertype::luiitem };
     int type() const {return Type;}
     explicit LuiItem(const qint16 id, QGraphicsItem *parent = 0);
     explicit LuiItem(const qint16 id, int rect_width, int rect_height, QGraphicsItem *parent = 0);

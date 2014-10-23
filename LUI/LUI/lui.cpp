@@ -167,18 +167,20 @@ void Lui::newScene()
     LedScene *old = this->led_scene;
     this->led_scene = new LedScene(this->ui->ledView);
     this->ui->ledView->setScene(this->led_scene);
-    connect(this->led_scene, SIGNAL(selectedItemStatusChanged(bool)), this, SLOT(colorDisplayEnable(bool)));
+    /*connect(this->led_scene, SIGNAL(selectedItemStatusChanged(bool)), this, SLOT(colorDisplayEnable(bool)));
     connect(this->led_scene, SIGNAL(selectedItemColorChanged(QColor)), this, SLOT(colorDisplayChange(QColor)));
     connect(this->led_scene, SIGNAL(selectedGroupChanged(QString)), this, SLOT(updateGroupLabel(QString)));
-    connect(this, SIGNAL(colorChanged(QColor)), this->led_scene, SLOT(updateColor(QColor)));
+    connect(this, SIGNAL(colorChanged(QColor)), this->led_scene, SLOT(updateColor(QColor)));*/
     connect(this->led_scene, SIGNAL(newGroupAdded(LedGroupItem*)), this->sequence_scene, SLOT(newGroup(LedGroupItem*)));
     connect(this->led_scene, SIGNAL(groupRemoved(LedGroupItem*)), this->sequence_scene, SLOT(removeGroup(LedGroupItem*)));
+    connect(this->led_scene, SIGNAL(selectedGroupNameChanged(QString)), this, SLOT(updateGroupLabel(QString)));
     disconnect(old, SIGNAL(newGroupAdded(LedGroupItem*)), this->sequence_scene, SLOT(newGroup(LedGroupItem*)));
     disconnect(old, SIGNAL(groupRemoved(LedGroupItem*)), this->sequence_scene, SLOT(removeGroup(LedGroupItem*)));
-    disconnect(old, SIGNAL(selectedItemStatusChanged(bool)), this, SLOT(colorDisplayEnable(bool)));
+    disconnect(old, SIGNAL(selectedGroupNameChanged(QString)), this, SLOT(updateGroupLabel(QString)));
+    /*disconnect(old, SIGNAL(selectedItemStatusChanged(bool)), this, SLOT(colorDisplayEnable(bool)));
     disconnect(old, SIGNAL(selectedItemColorChanged(QColor)), this, SLOT(colorDisplayChange(QColor)));
     disconnect(old, SIGNAL(selectedGroupChanged(QString)), this, SLOT(updateGroupLabel(QString)));
-    disconnect(this, SIGNAL(colorChanged(QColor)), old, SLOT(updateColor(QColor)));
+    disconnect(this, SIGNAL(colorChanged(QColor)), old, SLOT(updateColor(QColor)));*/
     updateGroupLabel();
     delete old;
 }

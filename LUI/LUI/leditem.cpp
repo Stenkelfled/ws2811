@@ -2,6 +2,7 @@
 #include <QtDebug>
 
 #include "leditem.h"
+#include <utils.h>
 
 
 
@@ -51,7 +52,7 @@ void LedItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, Q
         painter->setBrush(color);
         painter->drawRect(0.5, 0.5, settings::leditem::height, settings::leditem::width);
         QColor text_color(Qt::white);
-        if( (color.redF()*0.229 + color.greenF()*0.587 + color.blueF()*0.114) > 186.0/360.0){
+        if( utils::isBrightBackground(color) ){
             text_color = Qt::black;
         }
         painter->setPen(text_color);

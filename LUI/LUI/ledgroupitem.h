@@ -5,13 +5,14 @@
 #include <leditem.h>
 #include <luiitem.h>
 #include <sequenceitem.h>
+#include <settings.h>
 
 class LedGroupItem : public LuiItem
 {
     Q_OBJECT
 public:
     enum groupAlignment {horizontal, vertical};
-    enum { Type = UserType + 2 };
+    enum { Type = UserType + usertype::ledgroupitem };
     int type() const {return Type;}
     explicit LedGroupItem(qint16 id, QGraphicsItem *parent = 0);
     ~LedGroupItem();

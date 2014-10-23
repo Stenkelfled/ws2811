@@ -4,12 +4,14 @@
 
 #include <ledgroupitem.h>
 #include <sequenceitem.h>
+#include <settings.h>
 
 class SequenceGroupItem : public QGraphicsObject
 {
     Q_OBJECT
 public:
-    enum { Type = UserType + 4 };
+    enum { Type = UserType + usertype::sequencegroupitem };
+    int type() const {return Type;}
     explicit SequenceGroupItem(LedGroupItem *led_group, QGraphicsItem *parent = 0);
     ~SequenceGroupItem();
     LedGroupItem* led_group();

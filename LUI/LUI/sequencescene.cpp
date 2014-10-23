@@ -4,8 +4,12 @@
 SequenceScene::SequenceScene(QObject *parent) :
     QGraphicsScene(parent),
     my_sequences(new QList<SequenceGroupItem*>),
+    my_cursor(new SequenceCursorItem),
     my_pixels_per_10ms(settings::sequenceitem::pixels_per_10ms)
 {
+    this->addItem(my_cursor);
+    my_cursor->setPos(settings::sequencegroupitem::name_text_width + settings::sequencegroupitem::space + 1, -settings::sequencecursoritem::additional_height);
+    my_cursor->setZValue(1000);
 }
 
 SequenceScene::~SequenceScene()
@@ -34,6 +38,7 @@ void SequenceScene::newGroup(LedGroupItem *led_group)
     this->my_sequences->append(seq);
     addItem(seq);
     seq->initItems();
+    this->my_cursor->setHeight(this->my_sequences->length());
     //qDebug() << "new Group. total:" << this->my_sequences->length();
 }
 
@@ -48,13 +53,14 @@ void SequenceScene::removeGroup(LedGroupItem *led_group)
     }
     this->my_sequences->removeAll(sequence_group);
     delete sequence_group;
-    qDebug() << "remove Group. total:" << this->my_sequences->length();
+    //qDebug() << "remove Group. total:" << this->my_sequences->length();
     for(int i=0; i<this->my_sequences->length(); i++){
         this->my_sequences->at(i)->setVPos( vpos(i) );
     }
+    this->my_cursor->setHeight(this->my_sequences->length());
 }
 
 int SequenceScene::vpos(int idx)
 {
-    return idx*(settings::sequencegroupitem::height + settings::sequencegroupitem::space);
+    return idx*(settings::sequencegroupitem::height + settings::sequencegroupitem::group_space);
 }
