@@ -1,13 +1,13 @@
 #ifndef SEQUENCEITEM_H
 #define SEQUENCEITEM_H
 
-#include <QGraphicsRectItem>
 #include <QtWidgets>
 
 #include <settings.h>
 
-class SequenceItem : public QGraphicsItem
+class SequenceItem : public QGraphicsObject
 {
+    Q_OBJECT
 public:
     enum { Type = UserType + usertype::sequenceitem };
     int type() const {return Type;}
@@ -18,6 +18,16 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     QColor color() const;
     qreal width() const;
+    void refreshGroupColor(int pos);
+
+public slots:
+    void setSingleColor(QColor color);
+
+protected:
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+
+signals:
+    void needs_color_selector();
 
 private:
     sequencetype my_type;

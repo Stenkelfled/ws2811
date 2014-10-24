@@ -11,8 +11,9 @@ class SequenceGroupItem : public QGraphicsObject
     Q_OBJECT
 public:
     enum { Type = UserType + usertype::sequencegroupitem };
+    enum colortype {fixed, gradient};
     int type() const {return Type;}
-    explicit SequenceGroupItem(LedGroupItem *led_group, QGraphicsItem *parent = 0);
+    explicit SequenceGroupItem(LedGroupItem *led_group, colortype col_type = SequenceGroupItem::fixed, QGraphicsItem *parent = 0);
     ~SequenceGroupItem();
     LedGroupItem* led_group();
 
@@ -21,6 +22,7 @@ public:
 
     void initItems(); //this has to be done AFTER the group was added to the scene
     void setVPos(int pos);
+    void refreshGroupColor(QColor color);
 
 signals:
 
@@ -30,6 +32,7 @@ public slots:
 
 private:
     LedGroupItem *my_led_group;
+    colortype my_colortype;
     QRectF *my_rect;
 
 };

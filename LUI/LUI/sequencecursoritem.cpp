@@ -9,6 +9,8 @@ SequenceCursorItem::SequenceCursorItem(QGraphicsItem *parent) :
     my_rect(QRect(0, 0, settings::sequencecursoritem::width, 0))
 {
     this->setFlag(QGraphicsItem::ItemIsMovable, true);
+    this->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
+    this->setCursor(Qt::SizeHorCursor);
 }
 
 QRectF SequenceCursorItem::boundingRect() const
@@ -47,7 +49,35 @@ void SequenceCursorItem::setHeight(int groups)
     this->my_rect.setHeight( 2*settings::sequencecursoritem::additional_height
                              + groups*settings::sequencegroupitem::height
                              + (groups-1)*settings::sequencegroupitem::group_space);
-    qDebug() << "new height:" << this->my_rect << groups;
+    //qDebug() << "new height:" << this->my_rect << groups;
+}
+
+void SequenceCursorItem::refreshColors()
+{
+    SequenceItem *seq;
+    foreach(QGraphicsItem *item, this->collidingItems(Qt::IntersectsItemShape)){
+        seq = qgraphicsitem_cast<SequenceItem*>(item);
+        if(seq != NULL){
+            QPointF itm_pos = mapToItem(item, QPointF(0,0));
+            seq->refreshGroupColor(itm_pos.x());
+        }
+    }
+}
+
+QVariant SequenceCursorItem::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)
+{
+    if(change == QGraphicsItem::ItemPositionChange){
+        QPointF pos = value.toPointF();
+        pos.setY(-settings::sequencecursoritem::additional_height);
+        if(pos.x() < settings::sequencecursoritem::xmin){
+            pos.setX(settings::sequencecursoritem::xmin);
+        }
+
+        this->refreshColors();
+
+        return QVariant(pos);
+    }
+    return QGraphicsItem::itemChange(change, value);
 }
 
 

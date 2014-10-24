@@ -12,11 +12,12 @@
 Lui::Lui(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Lui),
+    my_current_sequence_item(NULL),
     led_count(GLOBAL_LED_COUNT),
     file_name("")
 {
     this->ui->setupUi(this);
-    colorDisplayEnable(false);
+    colorDisplaySetEnabled(false);
     this->serial = new Serial(this);
     QObject::connect(this->ui->refreshPushButton, &QPushButton::clicked, this->serial, &Serial::refreshPortData);
     QObject::connect(this->serial, &Serial::updatedPortDescription, this, &Lui::updatePortComboBox);
@@ -26,6 +27,7 @@ Lui::Lui(QWidget *parent) :
     this->serial->refreshPortData();
 
     this->sequence_scene = new SequenceScene(this->ui->sequenceView);
+    connect(this->sequence_scene, SIGNAL(sequenceItemSelected(SequenceItem*)), this, SLOT(changeCurrentSequenceItem(SequenceItem*)));
     this->ui->sequenceView->setScene(this->sequence_scene);
 
     this->led_scene = new LedScene(this->ui->ledView);
@@ -77,12 +79,20 @@ void Lui::enableTransmitPushButton(){
     }
 }
 
-void Lui::colorDisplayEnable(bool status)
+void Lui::colorDisplaySetEnabled(bool status)
 {
     this->ui->color->setEnabled(status);
     /*this->ui->color_display_group->setEnabled(status);
     this->ui->brightness->setEnabled(status);*/
     this->ui->brightness_slider->setEnabled(status);
+}
+
+void Lui::colorDisplayEnable()
+{
+    colorDisplaySetEnabled(true);
+    if(this->my_current_sequence_item != NULL){
+        colorDisplayChange(this->my_current_sequence_item->color());
+    }
 }
 
 void Lui::colorDisplayChange(QColor color)
@@ -92,6 +102,23 @@ void Lui::colorDisplayChange(QColor color)
        //qDebug() << "display color" << this->ui->color_display->color();
        this->ui->brightness_slider->setSliderPosition(color.value());
    }
+}
+
+void Lui::changeCurrentSequenceItem(SequenceItem *item)
+{
+    if(this->my_current_sequence_item != NULL){
+        //disconnect signals/slots
+        disconnect(this->my_current_sequence_item, SIGNAL(needs_color_selector()), this, SLOT(colorDisplayEnable()));
+        disconnect(this, SIGNAL(colorChanged(QColor)), this->my_current_sequence_item, SLOT(setSingleColor(QColor)));
+        colorDisplaySetEnabled(false);
+        this->my_current_sequence_item = NULL;
+    }
+    if(item != NULL){
+        //connect signals/slots
+        connect(item, SIGNAL(needs_color_selector()), this, SLOT(colorDisplayEnable()));
+        connect(this, SIGNAL(colorChanged(QColor)), item, SLOT(setSingleColor(QColor)));
+        this->my_current_sequence_item = item;
+    }
 }
 
 void Lui::updateGroupLabel(QString name)
@@ -163,7 +190,7 @@ void Lui::testColor(QColor color)
 
 void Lui::newScene()
 {
-    colorDisplayEnable(false);
+    colorDisplaySetEnabled(false);
     LedScene *old = this->led_scene;
     this->led_scene = new LedScene(this->ui->ledView);
     this->ui->ledView->setScene(this->led_scene);
@@ -200,7 +227,7 @@ void Lui::on_brightness_slider_valueChanged(int position)
 void Lui::on_testButton_toggled(bool checked)
 {
     this->ui->ledView->setEnabled(!checked);
-    colorDisplayEnable(checked);
+    colorDisplaySetEnabled(checked);
     if(checked){
         disconnect(this, SIGNAL(colorChanged(QColor)), this->led_scene, SLOT(updateColor(QColor)));
         connect(this, SIGNAL(colorChanged(QColor)), this, SLOT(testColor(QColor)));

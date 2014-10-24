@@ -5,6 +5,7 @@
 
 #include <ledgroupitem.h>
 #include <sequencecursoritem.h>
+#include <sequenceitem.h>
 #include <sequencegroupitem.h>
 
 class SequenceScene : public QGraphicsScene
@@ -17,10 +18,15 @@ public:
     int pixelsPer10ms() const;
 
 signals:
+    void sequenceItemSelected(SequenceItem* item);
 
 public slots:
     void newGroup(LedGroupItem *led_group);
     void removeGroup(LedGroupItem *led_group);
+    void refreshGroupColors();
+
+protected:
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent);
 
 private:
     int vpos(int idx);

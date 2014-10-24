@@ -8,7 +8,7 @@ SequenceScene::SequenceScene(QObject *parent) :
     my_pixels_per_10ms(settings::sequenceitem::pixels_per_10ms)
 {
     this->addItem(my_cursor);
-    my_cursor->setPos(settings::sequencegroupitem::name_text_width + settings::sequencegroupitem::space + 1, -settings::sequencecursoritem::additional_height);
+    my_cursor->setPos(settings::sequencecursoritem::xmin, -settings::sequencecursoritem::additional_height);
     my_cursor->setZValue(1000);
 }
 
@@ -58,6 +58,30 @@ void SequenceScene::removeGroup(LedGroupItem *led_group)
         this->my_sequences->at(i)->setVPos( vpos(i) );
     }
     this->my_cursor->setHeight(this->my_sequences->length());
+}
+
+void SequenceScene::refreshGroupColors()
+{
+    this->my_cursor->refreshColors();
+}
+
+void SequenceScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
+{
+    QGraphicsScene::mousePressEvent(mouseEvent);
+    QList<QGraphicsItem*> sel_items = selectedItems();
+    if(sel_items.length() == 1){
+        SequenceItem *item = qgraphicsitem_cast<SequenceItem*>(sel_items.at(0));
+        if(item != NULL){
+            emit sequenceItemSelected(item);
+            //qDebug() << "scene: item selected";
+        } else {
+            emit sequenceItemSelected(NULL);
+            //qDebug() << "scene: wrong item selected";
+        }
+    } else {
+        emit sequenceItemSelected(NULL);
+        //qDebug() << "scene: no item selected";
+    }
 }
 
 int SequenceScene::vpos(int idx)

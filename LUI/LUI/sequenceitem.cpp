@@ -4,7 +4,7 @@
 #include <utils.h>
 
 SequenceItem::SequenceItem(sequencetype type, QColor color, QColor gradient, QGraphicsItem *parent):
-    QGraphicsItem(parent),
+    QGraphicsObject(parent),
     my_type(type),
     my_color(color),
     my_end_color(gradient),
@@ -23,7 +23,7 @@ void SequenceItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 {
     Q_UNUSED(widget)
     if(this->my_type == singlecolor){
-        painter->setBrush(QBrush(this->my_color));
+        painter->setBrush(QBrush(utils::toDisplayColor(this->my_color)));
     } else {
         QBrush brush(Qt::red);
         //brush.setStyle(Qt::LinearGradientPattern);
@@ -53,8 +53,51 @@ QColor SequenceItem::color() const
     return this->my_color;
 }
 
+void SequenceItem::setSingleColor(QColor color)
+{
+    color.toHsv();
+    if( this->my_color != color){
+        this->my_type = SequenceItem::singlecolor;
+        this->my_color = color;
+        this->update();
+        ((SequenceScene*)(this->scene()))->refreshGroupColors();
+    }
+}
+
 qreal SequenceItem::width() const
 {
     SequenceScene *scene = (SequenceScene*)(this->scene());
     return scene->pixelsPer10ms()*this->my_length;
 }
+
+void SequenceItem::refreshGroupColor(int pos)
+{
+    if(this->my_type == SequenceItem::singlecolor){
+        ((SequenceGroupItem*)(this->parentItem()))->refreshGroupColor(this->my_color);
+    }
+}
+
+void SequenceItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    Q_UNUSED(event)
+    if(this->isSelected()){
+        if(this->my_type == SequenceItem::singlecolor){
+            emit needs_color_selector();
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

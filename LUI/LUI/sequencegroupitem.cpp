@@ -3,9 +3,10 @@
 #include "sequencegroupitem.h"
 #include <settings.h>
 
-SequenceGroupItem::SequenceGroupItem(LedGroupItem *led_group, QGraphicsItem *parent) :
+SequenceGroupItem::SequenceGroupItem(LedGroupItem *led_group, colortype col_type, QGraphicsItem *parent) :
     QGraphicsObject(parent),
     my_led_group(led_group),
+    my_colortype(col_type),
     my_rect(new QRectF(0,0,settings::sequencegroupitem::name_text_width+settings::sequencegroupitem::extra_border,settings::sequencegroupitem::height))
 {
     setFlags(QGraphicsItem::ItemIsSelectable);
@@ -58,17 +59,22 @@ void SequenceGroupItem::paint(QPainter *painter, const QStyleOptionGraphicsItem 
 
 void SequenceGroupItem::initItems()
 {
-    int item_xpos = settings::sequencegroupitem::name_text_width + settings::sequenceitem::space;
+    int item_xpos = settings::sequencegroupitem::name_text_width + settings::sequencegroupitem::extra_border;
     foreach(SequenceItem *item, *(this->my_led_group->sequences())){
         item->setParentItem(this);
         item->setPos(item_xpos, item->pos().y());
-        item_xpos += item->width() + settings::sequenceitem::space;
+        item_xpos += item->width() + settings::sequencegroupitem::extra_border;
     }
 }
 
 void SequenceGroupItem::setVPos(int pos)
 {
     this->setPos(0,pos);
+}
+
+void SequenceGroupItem::refreshGroupColor(QColor color)
+{
+    this->my_led_group->setColor(color);
 }
 
 LedGroupItem *SequenceGroupItem::led_group()

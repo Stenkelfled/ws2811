@@ -37,22 +37,17 @@ void LedItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, Q
     if(this->parentItem() == NULL){
         return;
     }
-    QColor color = this->color();
-    if(color.value() != 0){
-        int value = DISPLAY_HSV(color.value());
-        //qDebug() << "change HSV" << color.value() << value;
-        color.setHsv(color.hue(), color.saturation(), value);
-    }
+    QColor display_color = utils::toDisplayColor(this->color());
     if(this->is_dragging){
-        painter->setPen(QPen(QBrush(color), 2, Qt::SolidLine));
+        painter->setPen(QPen(QBrush(display_color), 2, Qt::SolidLine));
         painter->setBrush(Qt::NoBrush);
         painter->drawRect(2, 2, settings::leditem::height-4, settings::leditem::width-4);
     } else {
         painter->setPen(Qt::NoPen);
-        painter->setBrush(color);
+        painter->setBrush(display_color);
         painter->drawRect(0.5, 0.5, settings::leditem::height, settings::leditem::width);
         QColor text_color(Qt::white);
-        if( utils::isBrightBackground(color) ){
+        if( utils::isBrightBackground(display_color) ){
             text_color = Qt::black;
         }
         painter->setPen(text_color);

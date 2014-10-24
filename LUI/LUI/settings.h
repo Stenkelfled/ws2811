@@ -4,8 +4,6 @@
 #include <QColor>
 #include <QPointF>
 
-#define DISPLAY_HSV(x)  ((x-1)*155/254 + 100)
-
 namespace settings{
     namespace ledscene{
         constexpr QPointF invalid_pos(-9999999999,-9999999999);
@@ -27,7 +25,7 @@ namespace settings{
 
     namespace sequencegroupitem{
         constexpr int height = 40; //height of the sequence
-        constexpr int space = 5; //space(x) between two sequences
+        constexpr int space = 0; //space(x) between two sequenceitems
         constexpr int group_space = 5; //vertical(y) space between two groups
         constexpr int extra_border = 5;
         constexpr int name_text_width = 80;
@@ -37,20 +35,20 @@ namespace settings{
         constexpr Qt::GlobalColor text_color = Qt::black;
     }
 
+    namespace sequenceitem {
+        constexpr int pixels_per_10ms = 1;
+        constexpr int height = sequencegroupitem::height - 2*sequencegroupitem::extra_border;
+        //constexpr int space = 5; //horizontal space between two sequenceitems
+    }
+
     namespace sequencecursoritem{
         constexpr int additional_height = 5;
         constexpr int height_per_group = sequencegroupitem::height + additional_height;
         constexpr int initial_height = sequencegroupitem::height + 2*additional_height;
         constexpr int width = 2;
+        constexpr int xmin = sequencegroupitem::name_text_width + sequencegroupitem::extra_border;
         constexpr Qt::GlobalColor dark_color = Qt::black;
         constexpr Qt::GlobalColor bright_color = Qt::white;
-        //constexpr Qt::GlobalColor color = dark_color;
-    }
-
-    namespace sequenceitem {
-        constexpr int pixels_per_10ms = 1;
-        constexpr int height = sequencegroupitem::height - 2*sequencegroupitem::extra_border;
-        constexpr int space = 5; //vertical space between two sequenceitems
     }
 
 }

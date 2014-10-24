@@ -8,6 +8,7 @@
 #include <luiitem.h>
 #include <serial.h>
 #include <sequencescene.h>
+#include <sequenceitem.h>
 
 namespace Ui {
 class Lui;
@@ -28,8 +29,10 @@ public slots:
     void updatePortComboBox(QStringList &items);
     void enableTransmitPushButton(void);
 
-    void colorDisplayEnable(bool status);
+    void colorDisplaySetEnabled(bool status);
+    void colorDisplayEnable();
     void colorDisplayChange(QColor color);
+    void changeCurrentSequenceItem(SequenceItem *item);
 
     void updateGroupLabel(QString name="");
 
@@ -58,6 +61,7 @@ private:
     LedScene *led_scene;
     SequenceScene *sequence_scene;
     QLabel *group_name_label;
+    SequenceItem *my_current_sequence_item;
 
     qint16 led_count;
     QString file_name;

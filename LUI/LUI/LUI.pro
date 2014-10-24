@@ -43,8 +43,8 @@ HEADERS  += settings.h \
     luiwidgets.h \
     sequencescene.h \
     ledgroupitem.h \
-    sequencegroupitem.h \
     sequenceitem.h \
+    sequencegroupitem.h \
     sequencecursoritem.h
 
 INCLUDEPATH += ../../

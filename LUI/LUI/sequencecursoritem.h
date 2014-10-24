@@ -16,6 +16,10 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     void setHeight(int groups);
+    void refreshColors();
+
+protected:
+    virtual QVariant itemChange(GraphicsItemChange change, const QVariant & value);
 
 private:
     QRect my_rect;
