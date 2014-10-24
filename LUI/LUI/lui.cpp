@@ -227,12 +227,17 @@ void Lui::on_brightness_slider_valueChanged(int position)
 void Lui::on_testButton_toggled(bool checked)
 {
     this->ui->ledView->setEnabled(!checked);
+    this->ui->sequenceView->setEnabled(!checked);
+    if(this->my_current_sequence_item != NULL){
+        this->my_current_sequence_item->setSelected(false);
+        changeCurrentSequenceItem(NULL);
+    }
     colorDisplaySetEnabled(checked);
     if(checked){
-        disconnect(this, SIGNAL(colorChanged(QColor)), this->led_scene, SLOT(updateColor(QColor)));
+        //disconnect(this, SIGNAL(colorChanged(QColor)), this->led_scene, SLOT(updateColor(QColor)));
         connect(this, SIGNAL(colorChanged(QColor)), this, SLOT(testColor(QColor)));
     } else {
-        connect(this, SIGNAL(colorChanged(QColor)), this->led_scene, SLOT(updateColor(QColor)));
+        //connect(this, SIGNAL(colorChanged(QColor)), this->led_scene, SLOT(updateColor(QColor)));
         disconnect(this, SIGNAL(colorChanged(QColor)), this, SLOT(testColor(QColor)));
     }
 }
