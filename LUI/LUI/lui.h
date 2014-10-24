@@ -32,6 +32,7 @@ public slots:
     void colorDisplaySetEnabled(bool status);
     void colorDisplayEnable();
     void colorDisplayChange(QColor color);
+    void sequenceDetailsSetEnabled(bool status);
     void changeCurrentSequenceItem(SequenceItem *item);
 
     void updateGroupLabel(QString name="");

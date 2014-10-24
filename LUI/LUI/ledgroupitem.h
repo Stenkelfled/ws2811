@@ -27,6 +27,7 @@ public:
     QString name();
     void setName(QString const name);
     QList<SequenceItem*>* sequences();
+    void newSequence();
 
     virtual QByteArray getUsbCmd();
     //LedItem* unpackDragData(const QMimeData *data);

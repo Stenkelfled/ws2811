@@ -19,19 +19,22 @@ public:
 
 signals:
     void sequenceItemSelected(SequenceItem* item);
+    void sequenceGroupItemSelected(bool status);
 
 public slots:
     void newGroup(LedGroupItem *led_group);
     void removeGroup(LedGroupItem *led_group);
     void refreshGroupColors();
+    void newSequence();
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent);
 
 private:
     int vpos(int idx);
-    QList<SequenceGroupItem*> *my_sequences;
+    QList<SequenceGroupItem*> *my_sequence_groups;
     SequenceCursorItem *my_cursor;
+    SequenceGroupItem *my_selected_group_item;
     int my_pixels_per_10ms;
 
 };

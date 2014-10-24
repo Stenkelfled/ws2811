@@ -1177,6 +1177,28 @@ definiert</string>
          <attribute name="title">
           <string>Sequenzdetails</string>
          </attribute>
+         <widget class="QPushButton" name="new_sequence">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>10</y>
+            <width>91</width>
+            <height>21</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Neue Sequenz</string>
+          </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="default">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>false</bool>
+          </property>
+         </widget>
         </widget>
        </widget>
       </item>

@@ -18,6 +18,7 @@ Lui::Lui(QWidget *parent) :
 {
     this->ui->setupUi(this);
     colorDisplaySetEnabled(false);
+    sequenceDetailsSetEnabled(false);
     this->serial = new Serial(this);
     QObject::connect(this->ui->refreshPushButton, &QPushButton::clicked, this->serial, &Serial::refreshPortData);
     QObject::connect(this->serial, &Serial::updatedPortDescription, this, &Lui::updatePortComboBox);
@@ -28,6 +29,8 @@ Lui::Lui(QWidget *parent) :
 
     this->sequence_scene = new SequenceScene(this->ui->sequenceView);
     connect(this->sequence_scene, SIGNAL(sequenceItemSelected(SequenceItem*)), this, SLOT(changeCurrentSequenceItem(SequenceItem*)));
+    connect(this->sequence_scene, SIGNAL(sequenceGroupItemSelected(bool)), this, SLOT(sequenceDetailsSetEnabled(bool)));
+    connect(this->ui->new_sequence, SIGNAL(clicked()), this->sequence_scene, SLOT(newSequence()));
     this->ui->sequenceView->setScene(this->sequence_scene);
 
     this->led_scene = new LedScene(this->ui->ledView);
@@ -82,9 +85,10 @@ void Lui::enableTransmitPushButton(){
 void Lui::colorDisplaySetEnabled(bool status)
 {
     this->ui->color->setEnabled(status);
-    /*this->ui->color_display_group->setEnabled(status);
-    this->ui->brightness->setEnabled(status);*/
     this->ui->brightness_slider->setEnabled(status);
+    if(status){
+        this->ui->tabWidget->setCurrentWidget(this->ui->color);
+    }
 }
 
 void Lui::colorDisplayEnable()
@@ -99,9 +103,16 @@ void Lui::colorDisplayChange(QColor color)
 {
    if(this->ui->color->isEnabled()){
        this->ui->color_display->setColor(color);
-       //qDebug() << "display color" << this->ui->color_display->color();
        this->ui->brightness_slider->setSliderPosition(color.value());
    }
+}
+
+void Lui::sequenceDetailsSetEnabled(bool status)
+{
+    this->ui->sequence_details->setEnabled(status);
+    if(status){
+        this->ui->tabWidget->setCurrentWidget(this->ui->sequence_details);
+    }
 }
 
 void Lui::changeCurrentSequenceItem(SequenceItem *item)

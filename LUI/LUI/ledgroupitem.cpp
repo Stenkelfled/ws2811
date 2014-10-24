@@ -38,8 +38,7 @@ LedGroupItem::LedGroupItem(qint16 id, QGraphicsItem *parent):
     this->nameAct = new QAction(tr("Name..."), this);
     connect(this->nameAct, SIGNAL(triggered()), this, SLOT(getName()));
 
-    SequenceItem* seq = new SequenceItem();
-    this->my_sequences->append(seq);
+    this->newSequence();
 }
 
 LedGroupItem::~LedGroupItem()
@@ -164,6 +163,12 @@ void LedGroupItem::setName(const QString name)
 QList<SequenceItem *> *LedGroupItem::sequences()
 {
     return this->my_sequences;
+}
+
+void LedGroupItem::newSequence()
+{
+    SequenceItem* seq = new SequenceItem();
+    this->my_sequences->append(seq);
 }
 
 /**

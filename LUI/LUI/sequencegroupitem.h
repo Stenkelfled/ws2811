@@ -20,9 +20,10 @@ public:
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
-    void initItems(); //this has to be done AFTER the group was added to the scene
+    void refreshItemPotitions(); //this has to be done AFTER the group was added to the scene
     void setVPos(int pos);
     void refreshGroupColor(QColor color);
+    void newSequence();
 
 signals:
 

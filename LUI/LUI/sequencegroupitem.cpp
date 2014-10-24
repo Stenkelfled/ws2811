@@ -57,13 +57,13 @@ void SequenceGroupItem::paint(QPainter *painter, const QStyleOptionGraphicsItem 
 
 }
 
-void SequenceGroupItem::initItems()
+void SequenceGroupItem::refreshItemPotitions()
 {
     int item_xpos = settings::sequencegroupitem::name_text_width + settings::sequencegroupitem::extra_border;
     foreach(SequenceItem *item, *(this->my_led_group->sequences())){
         item->setParentItem(this);
         item->setPos(item_xpos, item->pos().y());
-        item_xpos += item->width() + settings::sequencegroupitem::extra_border;
+        item_xpos += item->width() + settings::sequencegroupitem::space;
     }
 }
 
@@ -75,6 +75,12 @@ void SequenceGroupItem::setVPos(int pos)
 void SequenceGroupItem::refreshGroupColor(QColor color)
 {
     this->my_led_group->setColor(color);
+}
+
+void SequenceGroupItem::newSequence()
+{
+    this->my_led_group->newSequence();
+    this->refreshItemPotitions();
 }
 
 LedGroupItem *SequenceGroupItem::led_group()
