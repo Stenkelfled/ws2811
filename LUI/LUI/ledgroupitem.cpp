@@ -72,6 +72,7 @@ void LedGroupItem::addLed(LedItem *led, qint16 row)
     }
     this->leds->at(row)->append(led);
     led->setParentItem(this);
+    led->setColor(this->color());
     refreshArea();
 }
 
