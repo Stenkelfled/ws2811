@@ -12,7 +12,10 @@
 #include <stdint.h>
 
 void init_eeprom(void);
-void eeprom_write_page(uint8_t* data, uint8_t num, uint8_t page);
+//void eeprom_write_page(uint8_t* data, uint8_t num, uint8_t page);
+void eeprom_new_buffer(void);
+void eeprom_buffer_byte(uint8_t data);
+void eeprom_write_buffer(void);
 
 
 

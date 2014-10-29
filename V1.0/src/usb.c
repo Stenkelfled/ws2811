@@ -118,13 +118,19 @@ void my_callback_rx_notify(uint8_t port){
 					break;
 				case msg_run:
 					if(eeprom_data_length & EEPROM_NEED_DATA_LENGTH_LOW){
+						eeprom_new_buffer();
 						eeprom_data_length &= ~EEPROM_NEED_DATA_LENGTH_LOW;
 						eeprom_data_length |= usb_data;
 					} else if(eeprom_data_length & EEPROM_NEED_DATA_LENGTH_HIGH){
 						eeprom_data_length &= ~EEPROM_NEED_DATA_LENGTH_HIGH;
 						eeprom_data_length |= usb_data<<8;
 					} else {
-						usb_print("eeprom_write...\n");
+						//usb_print("eeprom_write...\n");
+						if(eeprom_data_length--){
+							eeprom_buffer_byte(usb_data);
+						} else {
+							eeprom_write_buffer();
+						}
 					}
 					break;
 				default:
