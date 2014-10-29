@@ -1,3 +1,4 @@
+#include <protocoll.h>
 #include "sequenceitem.h"
 #include <sequencescene.h>
 #include <settings.h>
@@ -75,6 +76,23 @@ void SequenceItem::refreshGroupColor(int pos)
     if(this->my_type == SequenceItem::singlecolor){
         ((SequenceGroupItem*)(this->parentItem()))->refreshGroupColor(this->my_color);
     }
+}
+
+QByteArray SequenceItem::getUsbCmd() const
+{
+    QByteArray cmd = QByteArray();
+    //TODO: im Moment hier aufgrund von Zeitmangel nur die abgespeckte Version...
+    cmd.append((char)0); //Wiederholungen
+    cmd.append("\0\0", 2); //Dauer -> ewig
+    if(this->my_color.value() == 0){
+        cmd.append(PR_GRP_SEQ_SET_OFF);
+    } else {
+        cmd.append(PR_GRP_SEQ_SET_RGB);
+        cmd.append(this->my_color.red());
+        cmd.append(this->my_color.green());
+        cmd.append(this->my_color.blue());
+    }
+    return cmd;
 }
 
 void SequenceItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)

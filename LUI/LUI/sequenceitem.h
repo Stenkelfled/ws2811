@@ -19,6 +19,7 @@ public:
     QColor color() const;
     qreal width() const;
     void refreshGroupColor(int pos);
+    QByteArray getUsbCmd() const;
 
 public slots:
     void setSingleColor(QColor color);

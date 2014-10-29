@@ -20,3 +20,10 @@ QColor toDisplayColor(QColor color)
 }
 
 }
+
+
+void MyQByteArray::prependUint16(QByteArray *array, const quint16 data)
+{
+    array->prepend( (char)((data&0xFF00)>>8) );
+    array->prepend( (char)( data&0xFF ) );
+}

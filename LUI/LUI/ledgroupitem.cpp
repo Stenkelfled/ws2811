@@ -234,7 +234,18 @@ QByteArray LedGroupItem::getUsbCmd()
     }
 
     //second: define sequences
-    //TODO
+    quint16 adress = cmd.length();
+    foreach(SequenceItem* sequence, *(this->my_sequences)){
+        QByteArray sequence_data = sequence->getUsbCmd();
+        cmd.append(PR_GRP_SEQ_START);
+        if(sequence == this->my_sequences->last()){
+            cmd.append((char)0); //this is the last item. It has no next one.
+        } else {
+            adress += sequence_data.length() + 3;
+            cmd.append(adress);
+        }
+        cmd.append(sequence_data);
+    }
 
 
 #if 0

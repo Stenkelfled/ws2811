@@ -9,6 +9,11 @@ namespace utils {
     bool isBrightBackground(QColor color);
 
     QColor toDisplayColor(QColor color);
+
+}
+
+namespace MyQByteArray{
+    void prependUint16(QByteArray *array, quint16 const data);
 }
 
 #endif // UTILS_H

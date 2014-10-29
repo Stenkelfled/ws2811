@@ -6,6 +6,7 @@
 
 #include <global.h>
 #include <protocoll.h>
+#include <utils.h>
 #include "lui.h"
 #include "ui_lui.h"
 
@@ -149,17 +150,31 @@ void Lui::on_transmitPushButton_clicked()
         this->ui->transmitPushButton->setEnabled(false);
     }*/
     QByteArray cmd = QByteArray();
+    QByteArray group_data = QByteArray();
+    QList<quint16> group_adresses;
+    group_adresses.append(0);
     foreach(QGraphicsItem *itm, this->led_scene->items()){
         QGraphicsItem::GraphicsItemFlags flags = itm->flags();
         if(flags & QGraphicsItem::ItemIsSelectable){
             //LuiItem *group = (LuiItem*)itm;
             LedGroupItem *group = qgraphicsitem_cast<LedGroupItem*>(itm);
             if(group != NULL){
-                cmd = group->getUsbCmd();
-                qDebug() << cmd.toHex();
+                group_data = group->getUsbCmd();
+                qDebug() << group_data.toHex();
+                cmd.append(group_data);
+                group_adresses.append(group_adresses.last() + group_data.length());
             }
         }
     }
+    group_adresses.removeLast();
+    int group_offset = 3 + 2*group_adresses.length();
+    for(int i=(group_adresses.length()-1); i>=0; i--){
+        group_adresses[i] += group_offset;
+        MyQByteArray::prependUint16(&cmd, group_adresses[i]);
+    }
+    MyQByteArray::prependUint16(&cmd, cmd.length());
+    cmd.prepend(PR_MSG_TYPE_RUN);
+    qDebug() << cmd.toHex();
 }
 
 void Lui::on_actionClose_triggered()
