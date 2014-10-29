@@ -160,14 +160,14 @@ void Lui::on_transmitPushButton_clicked()
             LedGroupItem *group = qgraphicsitem_cast<LedGroupItem*>(itm);
             if(group != NULL){
                 group_data = group->getUsbCmd();
-                //qDebug() << group_data.toHex();
+                qDebug() << group_data.toHex();
                 cmd.append(group_data);
                 group_adresses.append(group_adresses.last() + group_data.length());
             }
         }
     }
     group_adresses.removeLast();
-    int group_offset = 3 + 2*group_adresses.length();
+    int group_offset = 2*group_adresses.length();
     for(int i=(group_adresses.length()-1); i>=0; i--){
         group_adresses[i] += group_offset;
         MyQByteArray::prependUint16(&cmd, group_adresses[i]);
