@@ -160,7 +160,7 @@ void Lui::on_transmitPushButton_clicked()
             LedGroupItem *group = qgraphicsitem_cast<LedGroupItem*>(itm);
             if(group != NULL){
                 group_data = group->getUsbCmd();
-                qDebug() << group_data.toHex();
+                //qDebug() << group_data.toHex();
                 cmd.append(group_data);
                 group_adresses.append(group_adresses.last() + group_data.length());
             }
@@ -174,7 +174,9 @@ void Lui::on_transmitPushButton_clicked()
     }
     MyQByteArray::prependUint16(&cmd, cmd.length());
     cmd.prepend(PR_MSG_TYPE_RUN);
+    cmd.prepend(USB_PREAMBLE, USB_PREAMBLE_LEN);
     qDebug() << cmd.toHex();
+    this->serial->openAndWrite(cmd);
 }
 
 void Lui::on_actionClose_triggered()
