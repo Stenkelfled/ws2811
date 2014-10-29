@@ -117,18 +117,20 @@ void Lui::sequenceDetailsSetEnabled(bool status)
 
 void Lui::changeCurrentSequenceItem(SequenceItem *item)
 {
-    if(this->my_current_sequence_item != NULL){
-        //disconnect signals/slots
-        disconnect(this->my_current_sequence_item, SIGNAL(needs_color_selector()), this, SLOT(colorDisplayEnable()));
-        disconnect(this, SIGNAL(colorChanged(QColor)), this->my_current_sequence_item, SLOT(setSingleColor(QColor)));
-        colorDisplaySetEnabled(false);
-        this->my_current_sequence_item = NULL;
-    }
-    if(item != NULL){
-        //connect signals/slots
-        connect(item, SIGNAL(needs_color_selector()), this, SLOT(colorDisplayEnable()));
-        connect(this, SIGNAL(colorChanged(QColor)), item, SLOT(setSingleColor(QColor)));
-        this->my_current_sequence_item = item;
+    if(this->my_current_sequence_item != item){
+        if(this->my_current_sequence_item != NULL){
+            //disconnect signals/slots
+            disconnect(this->my_current_sequence_item, SIGNAL(needs_color_selector()), this, SLOT(colorDisplayEnable()));
+            disconnect(this, SIGNAL(colorChanged(QColor)), this->my_current_sequence_item, SLOT(setSingleColor(QColor)));
+            colorDisplaySetEnabled(false);
+            this->my_current_sequence_item = NULL;
+        }
+        if(item != NULL){
+            //connect signals/slots
+            connect(item, SIGNAL(needs_color_selector()), this, SLOT(colorDisplayEnable()));
+            connect(this, SIGNAL(colorChanged(QColor)), item, SLOT(setSingleColor(QColor)));
+            this->my_current_sequence_item = item;
+        }
     }
 }
 

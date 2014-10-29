@@ -25,7 +25,7 @@ namespace settings{
 
     namespace sequencegroupitem{
         constexpr int height = 40; //height of the sequence
-        constexpr int space = 0; //space(x) between two sequenceitems
+        constexpr int space = 2; //space(x) between two sequenceitems
         constexpr int group_space = 5; //vertical(y) space between two groups
         constexpr int extra_border = 5;
         constexpr int name_text_width = 80;
