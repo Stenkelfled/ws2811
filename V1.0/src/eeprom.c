@@ -8,9 +8,47 @@
 #include <eeprom.h>
 #include <asf.h>
 
+uint8_t eeprom_locks = WRITE_LOCK_ENABLED | READ_LOCK_ENABLED;
+
 void init_eeprom(void){
 	//NVM_CTRLB = NVM_EEMAPEN_bm;
 	NVM_ADDR2 = 0;
+}
+
+uint8_t eeprom_get_write_access(void){
+	cli();
+	if(eeprom_locks&READ_LOCK_ENABLED){
+		eeprom_locks &= ~WRITE_LOCK_ENABLED;
+		sei();
+		return RET_OK;
+	} else {
+		sei();
+		return RET_WRITE_LOCK;
+	}
+}
+
+void eeprom_free_write_access(void){
+	cli();
+	eeprom_locks |= WRITE_LOCK_ENABLED;
+	sei();
+}
+
+uint8_t eeprom_get_read_access(void){
+	cli();
+	if(eeprom_locks&WRITE_LOCK_ENABLED){
+		eeprom_locks &= ~READ_LOCK_ENABLED;
+		sei();
+		return RET_OK;
+	} else {
+		sei();
+		return RET_READ_LOCK;
+	}
+}
+
+void eeprom_free_read_access(void){
+	cli();
+	eeprom_locks |= READ_LOCK_ENABLED;
+	sei();
 }
 
 /*void eeprom_write_page(uint8_t* data, uint8_t num, uint8_t page){
@@ -47,16 +85,23 @@ void init_eeprom(void){
 uint8_t current_page = 0;
 uint8_t current_page_addr = 0;
 
-void eeprom_new_buffer(void){
+uint8_t eeprom_new_buffer(void){
+	if(eeprom_locks & WRITE_LOCK_ENABLED){
+		return RET_WRITE_LOCK;
+	}
 	current_page = 0;
 	current_page_addr = 0;
 	while(NVM_STATUS&NVM_NVMBUSY_bm){}
 	//erase page buffer
 	NVM_CMD = NVM_CMD_ERASE_EEPROM_BUFFER_gc;
 	ccp_write_io((void*)&NVM_CTRLA, NVM_CMDEX_bm);
+	return RET_OK;
 }
 
-void eeprom_buffer_byte(uint8_t data){
+uint8_t eeprom_buffer_byte(uint8_t data){
+	if(eeprom_locks & WRITE_LOCK_ENABLED){
+		return RET_WRITE_LOCK;
+	}
 	while(NVM_STATUS&NVM_NVMBUSY_bm){}
 	NVM_CMD = NVM_CMD_LOAD_EEPROM_BUFFER_gc;
 	NVM_ADDR0 = current_page_addr++;
@@ -65,12 +110,16 @@ void eeprom_buffer_byte(uint8_t data){
 	if(current_page_addr >= EEPROM_PAGE_SIZE){
 		eeprom_write_buffer();
 	}
+	return RET_OK;
 }
 
-void eeprom_write_buffer(void){
-	if(current_page_addr == 0){
+uint8_t eeprom_write_buffer(void){
+	if(eeprom_locks & WRITE_LOCK_ENABLED){
+		return RET_WRITE_LOCK;
+	}
+	if( !(NVM_STATUS&NVM_EELOAD_bm) ){
 		//no data in page buffer
-		return;
+		return RET_NO_BUFFER;
 	}
 	uint16_t page_addr = current_page*EEPROM_PAGE_SIZE;
 	while(NVM_STATUS&NVM_NVMBUSY_bm){}
@@ -80,4 +129,5 @@ void eeprom_write_buffer(void){
 	ccp_write_io((void*)&NVM_CTRLA, NVM_CMDEX_bm);
 	current_page++;
 	current_page_addr = 0;
+	return RET_OK;
 }

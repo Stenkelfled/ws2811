@@ -29,6 +29,7 @@
 
 #include <config.h>
 #include <eeprom.h>
+#include <evaluator.h>
 #include <leds.h>
 #include <ledbuffer.h>
 #include <rgbhsv.h>
@@ -36,6 +37,19 @@
 #include <usbprint.h>
 
 uint8_t mode = 0;
+
+void run_from_eeprom_ready_fcn(void);
+void run_from_eeprom(void);
+
+void run_from_eeprom_ready_fcn(void){
+	
+}
+
+void run_from_eeprom(void){
+	while(eeprom_get_read_access() != RET_OK){}
+	uint8_t group_id = 0;
+	uint8_t group_count;
+}
 
 int main (void)
 {
@@ -50,6 +64,8 @@ int main (void)
 	usb_print_init();
 	sei();
 	//LED_RD_ON
+	
+	run_from_eeprom();
 	
 	usb_start();
 

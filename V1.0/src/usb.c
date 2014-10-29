@@ -10,7 +10,7 @@
 #include <config.h>
 #include <global.h>
 #include <protocoll.h>
-#include <evaluator.h>
+//#include <evaluator.h>
 #include <usb.h>
 #include <usbprint.h>
 
@@ -81,6 +81,11 @@ void my_callback_rx_notify(uint8_t port){
 				case msg_none:
 					{
 					if(usb_data == PR_MSG_TYPE_RUN){
+						if(eeprom_get_write_access() != RET_OK){
+							preamble_pos = 0;
+							msg_type = msg_none;
+							break;
+						}
 						msg_type = msg_run;
 						eeprom_data_length = EEPROM_NEED_DATA_LENGTH_HIGH | EEPROM_NEED_DATA_LENGTH_LOW;
 					} else if (usb_data == PR_MSG_TYPE_TEST){
