@@ -52,7 +52,8 @@ void interprete_eeprom(void){
 		eeprom_address += 2;
 		group_set_properties(i, next_sequence, repetitions, duration);
 		data = eeprom_my_read_uint8(eeprom_address++);
-		while(data != PR_GRP_SEQ_START)
+		uint8_t ready = 0;
+		while(!ready)
 		{
 			switch(data){
 				case PR_GRP_SEQ_SET_OFF:{
@@ -68,6 +69,9 @@ void interprete_eeprom(void){
 					color_group(i, color);
 					break;
 					}
+				default:
+					ready = 1;
+					break;
 			}
 			data = eeprom_my_read_uint8(eeprom_address++);
 		}
