@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
@@ -296,7 +296,7 @@
     <Compile Include="include\eeprom.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="include\evaluator.h">
+    <Compile Include="include\ee_interpreter.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="include\rgbhsv.h">
@@ -311,7 +311,7 @@
     <Compile Include="include\usbprint.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\evaluator.c">
+    <Compile Include="src\ee_interpreter.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\seq_processor.c">

@@ -29,7 +29,7 @@
 
 #include <config.h>
 #include <eeprom.h>
-#include <evaluator.h>
+#include <ee_interpreter.h>
 #include <leds.h>
 #include <ledbuffer.h>
 #include <rgbhsv.h>
@@ -65,6 +65,8 @@ int main (void)
 	sei();
 	//LED_RD_ON
 	
+	interprete_eeprom();
+	
 	usb_start();
 
  	//_delay_ms(1000);
@@ -84,7 +86,7 @@ int main (void)
 	}
 
 
-	uint8_t gid = 0;
+	/*uint8_t gid = 0;
     define_group(gid,0,LED_COUNT-1,1);
 	
 	rgbcolor_t clr={0x00,0x00,0x00};
@@ -120,7 +122,7 @@ int main (void)
 		fill_buffer();
 		refresh_leds();
 		_delay_ms(20);
-	}
+	}*/
 	// Insert application code here, after the board has been initialized.
 }
 

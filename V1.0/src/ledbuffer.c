@@ -56,11 +56,16 @@ void fill_buffer(void){
  * @param: uint8_t end_led: the last led of the row
  * @param: uint8_t step: the step in the row
  */
-uint8_t define_group(uint8_t group_id, uint8_t start_led,uint8_t end_led, uint8_t step){    
-    uint8_t current_led = start_led;
-    uint8_t next_led = -1;
+/*void define_group(uint8_t group_id, uint8_t start_led){    
     groups[group_id].start_led = &leds[start_led];
+}*/
 
+void new_group(uint8_t group_id){
+	groups[group_id].start_led = NULL;
+}
+
+uint8_t append_row_to_group(uint8_t group_id, uint8_t start_led,uint8_t end_led, uint8_t step){
+	
 	if(end_led >= LED_COUNT){
 		//LED_RD_ON
 		return FALSE;
@@ -72,14 +77,29 @@ uint8_t define_group(uint8_t group_id, uint8_t start_led,uint8_t end_led, uint8_
 	if(step == 0){
 		return FALSE;
 	}
+	
+	if(groups[group_id].start_led == NULL){
+		groups[group_id].start_led = &leds[start_led];
+	}
+	
+	led_color_t *current_led = groups[group_id].start_led;
+	uint8_t next_led = start_led;
+	
+	while(current_led->next_led != NULL){
+		current_led = current_led->next_led;
+	}
 
-    while(current_led != end_led){
-        next_led = current_led + step;
-        if(next_led > end_led) next_led = end_led;
-        leds[current_led].next_led = &leds[next_led];
-        current_led = next_led;
-    }
-    leds[end_led].next_led = NULL;
+	if(current_led == &(leds[start_led])){
+		next_led += step;
+	}
+
+	while(next_led != end_led){
+		current_led->next_led = &leds[next_led];
+		current_led = current_led->next_led;
+		next_led += step;
+	}
+	current_led->next_led = &leds[end_led];
+	leds[end_led].next_led = NULL;
 	return TRUE;
 }
 
@@ -96,6 +116,7 @@ void append_led_to_group(uint8_t group_id, uint8_t led_id){
         ledptr = ledptr->next_led;
     }
     ledptr->next_led = &leds[led_id];
+	ledptr->next_led->next_led = NULL;
 }
 
 void color_group(uint8_t group_id, rgbcolor_t color){
@@ -113,3 +134,28 @@ void color_group(uint8_t group_id, rgbcolor_t color){
 void color_led(uint8_t led_id, rgbcolor_t color){
     leds[led_id].color = color;
 }
+
+void group_set_properties(uint8_t group_id, uint16_t next_sequence, uint8_t remaining_repititions, uint16_t remaining_time){
+	led_group_t *grp = &groups[group_id];
+	grp->remaining_time = remaining_time;
+	grp->remaining_repititions = remaining_repititions;
+	grp->next_sequence = next_sequence;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -51,6 +51,21 @@ void eeprom_free_read_access(void){
 	sei();
 }
 
+uint8_t eeprom_my_read_uint8(uint16_t addr){
+	NVM_CMD = NVM_CMD_READ_EEPROM_gc;
+	NVM_ADDR1 = (addr&0xFF00)>>8;
+	NVM_ADDR0 = addr&0xFF;
+	ccp_write_io((void*)&NVM_CTRLA, NVM_CMDEX_bm);
+	while(NVM_STATUS&NVM_NVMBUSY_bm){}
+	return NVM_DATA0;
+}
+
+uint16_t eeprom_my_read_uint16(uint16_t addr){
+	uint16_t eeprom_data = eeprom_my_read_uint8(addr);
+	eeprom_data |= (eeprom_my_read_uint8(addr+1) << 8);
+	return eeprom_data;
+}
+
 /*void eeprom_write_page(uint8_t* data, uint8_t num, uint8_t page){
 	uint8_t i;
 	uint16_t page_addr = page*EEPROM_PAGE_SIZE;

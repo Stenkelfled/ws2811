@@ -30,7 +30,7 @@ typedef struct{
     led_color_t* start_led;
 	uint16_t remaining_time;
 	uint8_t remaining_repititions;
-	uint16_t next_address;
+	uint16_t next_sequence;
 }__attribute__((packed)) led_group_t;
 
 void color2data(uint8_t* *data, uint8_t color);
@@ -38,10 +38,14 @@ void fill_buffer(void);
 
 uint8_t* ledbuffer_get_data_pointer(void);
 
-uint8_t define_group(uint8_t group_id, uint8_t start_led,uint8_t end_led, uint8_t step);
+//void define_group(uint8_t group_id, uint8_t start_led);
+void new_group(uint8_t group_id);
+uint8_t append_row_to_group(uint8_t group_id, uint8_t start_led,uint8_t end_led, uint8_t step);
 void append_led_to_group(uint8_t group_id, uint8_t led_id);
 void color_group(uint8_t group_id, rgbcolor_t color);
 void color_led(uint8_t led_id, rgbcolor_t color);
+
+void group_set_properties(uint8_t group_id, uint16_t next_sequence, uint8_t remaining_repititions, uint16_t remaining_time);
 
 
 #endif /* LEDBUFFER_H_ */

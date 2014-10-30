@@ -10,7 +10,6 @@
 #include <config.h>
 #include <global.h>
 #include <protocoll.h>
-//#include <evaluator.h>
 #include <usb.h>
 #include <usbprint.h>
 
@@ -18,6 +17,7 @@
 #include <ledbuffer.h>
 #include <leds.h>
 #include <eeprom.h>
+#include <ee_interpreter.h>
 
 uint8_t preamble_pos = 0;
 
@@ -75,7 +75,6 @@ void my_callback_rx_notify(uint8_t port){
 	while(udi_cdc_is_rx_ready()){
 		if(preamble_pos == USB_PREAMBLE_LEN){
 			//preamble-check passed -> now evaluate the data
-			//evaluate((uint8_t)udi_cdc_getc());
 			uint8_t usb_data = (uint8_t)udi_cdc_getc();
 			switch(msg_type){
 				case msg_none:
@@ -112,7 +111,8 @@ void my_callback_rx_notify(uint8_t port){
 						test_color.blue = usb_data;
 						preamble_pos = 0;
 						msg_type = msg_none;
-						define_group(0, 0, LED_COUNT-1, 1);
+						new_group(0);
+						append_row_to_group(0, 0, LED_COUNT-1, 1);
 						color_group(0, test_color);
 						fill_buffer();
 						refresh_leds();
@@ -134,8 +134,10 @@ void my_callback_rx_notify(uint8_t port){
 						eeprom_buffer_byte(usb_data);
 						if( !(--eeprom_data_length) ){
 							eeprom_write_buffer();
+							eeprom_free_write_access();
 							preamble_pos = 0;
 							msg_type = msg_none;
+							interprete_eeprom();
 						}
 					}
 					break;
@@ -153,9 +155,7 @@ void my_callback_rx_notify(uint8_t port){
 				msg_type = msg_none;
 			}
 			if(preamble_pos == USB_PREAMBLE_LEN){
-				//preamble-check passed -> now evaluate the data
 				LED_GN_ON
-				//evaluator_new_evaluation( &usb_rx_ready );
 				//usb_print("preamble passed\n");
 				msg_type = msg_none;
 			}

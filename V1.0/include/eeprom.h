@@ -26,6 +26,10 @@ uint8_t eeprom_get_write_access(void);
 void eeprom_free_write_access(void);
 uint8_t eeprom_get_read_access(void);
 void eeprom_free_read_access(void);
+
+uint8_t eeprom_my_read_uint8(uint16_t addr);
+uint16_t eeprom_my_read_uint16(uint16_t addr);
+
 //void eeprom_write_page(uint8_t* data, uint8_t num, uint8_t page);
 uint8_t eeprom_new_buffer(void);
 uint8_t eeprom_buffer_byte(uint8_t data);
