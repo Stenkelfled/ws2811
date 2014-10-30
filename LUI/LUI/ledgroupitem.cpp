@@ -240,6 +240,7 @@ QByteArray LedGroupItem::getUsbCmd()
         cmd.append(PR_GRP_SEQ_START);
         if(sequence == this->my_sequences->last()){
             cmd.append((char)0); //this is the last item. It has no next one.
+            cmd.append((char)0);
         } else {
             adress += sequence_data.length() + 3;
             cmd.append(adress);
