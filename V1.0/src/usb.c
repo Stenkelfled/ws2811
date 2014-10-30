@@ -131,10 +131,11 @@ void my_callback_rx_notify(uint8_t port){
 						eeprom_data_length |= usb_data<<8;
 					} else {
 						//usb_print("eeprom_write...\n");
-						if(eeprom_data_length--){
-							eeprom_buffer_byte(usb_data);
-						} else {
+						eeprom_buffer_byte(usb_data);
+						if( !(--eeprom_data_length) ){
 							eeprom_write_buffer();
+							preamble_pos = 0;
+							msg_type = msg_none;
 						}
 					}
 					break;
@@ -155,7 +156,7 @@ void my_callback_rx_notify(uint8_t port){
 				//preamble-check passed -> now evaluate the data
 				LED_GN_ON
 				//evaluator_new_evaluation( &usb_rx_ready );
-				usb_print("preamble passed\n");
+				//usb_print("preamble passed\n");
 				msg_type = msg_none;
 			}
 		}		
