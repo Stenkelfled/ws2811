@@ -11,7 +11,7 @@ class Serial : public QSerialPort
 {
     Q_OBJECT
 public:
-    explicit Serial(QObject *parent = 0);
+    explicit Serial(QWidget *parent = 0);
     ~Serial();
     bool openAndWrite(const QByteArray &data);
     bool isOpen();
@@ -29,6 +29,7 @@ private:
     void configurePort(void);
     void refreshPorts(void);
     void updatePortDescription(void);
+    QWidget *my_parent_widget;
     QList<QSerialPortInfo> ports;
     QStringList *port_descr;
     QSerialPortInfo *current_port_info;

@@ -110,6 +110,8 @@ void Lui::colorDisplayChange(QColor color)
 
 void Lui::sequenceDetailsSetEnabled(bool status)
 {
+#warning this function is not available yet
+    if(status) return;
     this->ui->sequence_details->setEnabled(status);
     if(status){
         this->ui->tabWidget->setCurrentWidget(this->ui->sequence_details);

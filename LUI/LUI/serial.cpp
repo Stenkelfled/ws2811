@@ -5,8 +5,9 @@
 
 #include "serial.h"
 
-Serial::Serial(QObject *parent) :
-    QSerialPort(parent),
+Serial::Serial(QWidget *parent) :
+    QSerialPort(NULL),
+    my_parent_widget(parent),
     waiting_data(QList<QByteArray>()),
     waiting_data_transmitted(false)
 {
@@ -45,7 +46,7 @@ bool Serial::openAndWrite(const QByteArray &data){
         /*QErrorMessage *err_msg = new QErrorMessage();
         err_msg->showMessage("Could not open serial Port.");
         delete err_msg;*/
-        //QMessageBox::critical(this, "Error", "Konnte seriellen Port nicht öffnen.");
+        QMessageBox::critical(this->my_parent_widget, "Fehler", "Die Verbindung konnte nicht hergestellt werden.");
         qDebug() << "open failed: " << this->errorString();
         return false;
     }
