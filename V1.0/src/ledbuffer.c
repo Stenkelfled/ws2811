@@ -60,7 +60,7 @@ void fill_buffer(void){
     groups[group_id].start_led = &leds[start_led];
 }*/
 
-void new_group(uint8_t group_id){
+void clear_group(uint8_t group_id){
 	groups[group_id].start_led = NULL;
 }
 

@@ -24,7 +24,7 @@ void interprete_eeprom(void){
 	group_count = eeprom_address / 2;
 	
 	for(uint8_t i=0; i<group_count; i++){
-		new_group(i);
+		clear_group(i);
 		eeprom_address = eeprom_my_read_uint16(i*2);
 		
 		while(1){ //add all LEDs to the group

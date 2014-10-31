@@ -111,7 +111,7 @@ void my_callback_rx_notify(uint8_t port){
 						test_color.blue = usb_data;
 						preamble_pos = 0;
 						msg_type = msg_none;
-						new_group(0);
+						clear_group(0);
 						append_row_to_group(0, 0, LED_COUNT-1, 1);
 						color_group(0, test_color);
 						fill_buffer();
@@ -133,6 +133,7 @@ void my_callback_rx_notify(uint8_t port){
 						//usb_print("eeprom_write...\n");
 						eeprom_buffer_byte(usb_data);
 						if( !(--eeprom_data_length) ){
+							eeprom_buffer_byte(0xFF); //write one more Byte to finish the data. So the interpreter will not be messed up with old data still present in the EEPROM
 							eeprom_write_buffer();
 							eeprom_free_write_access();
 							preamble_pos = 0;

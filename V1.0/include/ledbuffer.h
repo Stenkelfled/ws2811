@@ -39,7 +39,7 @@ void fill_buffer(void);
 uint8_t* ledbuffer_get_data_pointer(void);
 
 //void define_group(uint8_t group_id, uint8_t start_led);
-void new_group(uint8_t group_id);
+void clear_group(uint8_t group_id);
 uint8_t append_row_to_group(uint8_t group_id, uint8_t start_led,uint8_t end_led, uint8_t step);
 void append_led_to_group(uint8_t group_id, uint8_t led_id);
 void color_group(uint8_t group_id, rgbcolor_t color);
