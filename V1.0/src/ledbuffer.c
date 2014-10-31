@@ -112,10 +112,16 @@ void append_led_to_group(uint8_t group_id, uint8_t led_id){
 	}
 	
     led_color_t* ledptr = groups[group_id].start_led;
-    while(ledptr->next_led != NULL){
-        ledptr = ledptr->next_led;
-    }
-    ledptr->next_led = &leds[led_id];
+	
+	if(ledptr == NULL){
+		groups[group_id].start_led = &leds[led_id];
+		ledptr = groups[group_id].start_led;
+	} else {	
+		while(ledptr->next_led != NULL){
+			ledptr = ledptr->next_led;
+		}
+		ledptr->next_led = &leds[led_id];
+	}
 	ledptr->next_led->next_led = NULL;
 }
 

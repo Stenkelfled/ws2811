@@ -5,6 +5,8 @@
  *  Author: stenkelfled
  */ 
 
+#include <util/delay.h>
+
 #include <ee_interpreter.h>
 #include <eeprom.h>
 #include <ledbuffer.h>
@@ -80,7 +82,7 @@ void interprete_eeprom(void){
 	}
 	
 	eeprom_free_read_access();
-	
+	_delay_ms(10);
 	fill_buffer();
 	refresh_leds();
 }
