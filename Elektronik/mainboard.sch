@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="6.5.0">
+<eagle version="7.1.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -70,16 +70,25 @@
 <layer number="109" name="fp9" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="110" name="fp0" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="111" name="LPC17xx" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="112" name="tSilk" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="116" name="Patch_BOT" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="121" name="_tsilk" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="122" name="_bsilk" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="123" name="tTestmark" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="124" name="bTestmark" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="125" name="_tNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="126" name="_bNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="127" name="_tValues" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="128" name="_bValues" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="131" name="tAdjust" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="132" name="bAdjust" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="144" name="Drill_legend" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="150" name="Notes" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="151" name="HeatSink" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="152" name="_bDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="153" name="FabDoc1" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="154" name="FabDoc2" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="155" name="FabDoc3" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="169" name="Baugruppen" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="199" name="Contour" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="200" name="200bmp" color="1" fill="10" visible="no" active="no"/>
@@ -99,9 +108,23 @@
 <layer number="214" name="214bmp" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="215" name="215bmp" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="216" name="216bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="217" name="217bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="218" name="218bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="219" name="219bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="220" name="220bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="221" name="221bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="222" name="222bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="223" name="223bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="224" name="224bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="225" name="225bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="226" name="226bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="227" name="227bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="228" name="228bmp" color="7" fill="1" visible="no" active="yes"/>
 <layer number="231" name="Eagle3D_PG1" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="232" name="Eagle3D_PG2" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="233" name="Eagle3D_PG3" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="248" name="Housing" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="249" name="Edge" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="250" name="Descript" color="3" fill="1" visible="yes" active="yes"/>
 <layer number="251" name="SMDround" color="12" fill="11" visible="yes" active="yes"/>
 <layer number="254" name="cooling" color="7" fill="1" visible="yes" active="yes"/>
@@ -567,9 +590,9 @@ Source: http://www2.produktinfo.conrad.com/datenblaetter/725000-749999/733980-da
 <wire x1="2" y1="2.12" x2="1.4" y2="2.12" width="0.1016" layer="51"/>
 <wire x1="3.1" y1="2.12" x2="2.5" y2="2.12" width="0.1016" layer="51"/>
 <wire x1="-1.4" y1="2.12" x2="-2" y2="2.12" width="0.1016" layer="51"/>
-<pad name="2" x="0" y="2.42" drill="1" diameter="2.5" shape="long"/>
-<pad name="1" x="0" y="8.57" drill="1" diameter="2.5" shape="long"/>
-<pad name="3" x="5" y="5.57" drill="1" diameter="2.5" shape="long" rot="R90"/>
+<pad name="2" x="0" y="2.42" drill="2.7"/>
+<pad name="1" x="0" y="8.57" drill="2.7"/>
+<pad name="3" x="5" y="5.57" drill="2.7" rot="R90"/>
 <text x="5.66" y="-2.945" size="1.27" layer="25" rot="R90">&gt;NAME</text>
 <text x="-4.39" y="-2.945" size="1.27" layer="27" rot="R90">&gt;VALUE</text>
 </package>
@@ -8571,12 +8594,15 @@ Source: www.kingbright.com</description>
 </connects>
 <technologies>
 <technology name="LG">
+<attribute name="FARNELL" value="" constant="no"/>
 <attribute name="REICHELT" value="LG L29K" constant="no"/>
 </technology>
 <technology name="LR">
+<attribute name="FARNELL" value="1685068" constant="no"/>
 <attribute name="REICHELT" value="LS L29K" constant="no"/>
 </technology>
 <technology name="LY">
+<attribute name="FARNELL" value="1685069" constant="no"/>
 <attribute name="REICHELT" value="LY L29K" constant="no"/>
 </technology>
 </technologies>
@@ -8694,6 +8720,10 @@ DDEController.pdf</description>
 <text x="-4.445" y="2.54" size="1.27" layer="25">&gt;NAME</text>
 <text x="-4.445" y="-3.81" size="1.27" layer="27">&gt;VALUE</text>
 <hole x="5.845" y="-0.53" drill="1.5"/>
+<wire x1="-6" y1="2.4" x2="6" y2="2.4" width="0.005" layer="57"/>
+<wire x1="6" y1="2.4" x2="6" y2="-2.4" width="0.005" layer="57"/>
+<wire x1="6" y1="-2.4" x2="-6" y2="-2.4" width="0.005" layer="57"/>
+<wire x1="-6" y1="-2.4" x2="-6" y2="2.4" width="0.005" layer="57"/>
 </package>
 </packages>
 <symbols>
@@ -9261,12 +9291,7 @@ DDEController.pdf</description>
 <label x="25.4" y="93.98" size="1.778" layer="95" rot="MR0"/>
 </segment>
 </net>
-<net name="USB_N" class="0">
-<segment>
-<pinref part="U$1" gate="G$1" pin="PD6(RXD1/MISO/USBDM)"/>
-<wire x1="96.52" y1="144.78" x2="99.06" y2="144.78" width="0.1524" layer="91"/>
-<label x="99.06" y="144.78" size="1.778" layer="95"/>
-</segment>
+<net name="USB_DM" class="0">
 <segment>
 <pinref part="X2" gate="G41" pin="2"/>
 <wire x1="243.84" y1="93.98" x2="246.38" y2="93.98" width="0.1524" layer="91"/>
@@ -9277,8 +9302,13 @@ DDEController.pdf</description>
 <wire x1="231.14" y1="48.26" x2="233.68" y2="48.26" width="0.1524" layer="91"/>
 <label x="233.68" y="48.26" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="U$1" gate="G$1" pin="PD6(RXD1/MISO/USBDM)"/>
+<wire x1="96.52" y1="144.78" x2="99.06" y2="144.78" width="0.1524" layer="91"/>
+<label x="99.06" y="144.78" size="1.778" layer="95"/>
+</segment>
 </net>
-<net name="USB_P" class="0">
+<net name="USB_DP" class="0">
 <segment>
 <pinref part="U$1" gate="G$1" pin="PD7(TXD1/SCK/CLKO/EVO/USBDP)"/>
 <wire x1="96.52" y1="142.24" x2="99.06" y2="142.24" width="0.1524" layer="91"/>
