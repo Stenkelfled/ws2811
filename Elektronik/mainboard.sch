@@ -7052,7 +7052,7 @@ Source: www.cypressindustries.com</description>
 </symbols>
 <devicesets>
 <deviceset name="SRV05-4" prefix="IC">
-<description>SRV05-4.TCT bzw. WE-TVS TVS Diode – High Speed Series</description>
+<description>SRV05-4.TCT bzw. WE-TVS TVS Diode - High Speed Series</description>
 <gates>
 <gate name="G$1" symbol="DIODE_ARRAY_4" x="0" y="0"/>
 </gates>
