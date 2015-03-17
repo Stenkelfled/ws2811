@@ -1,7 +1,8 @@
 # ws2811
 WS2811 LED microcontroller driver with USB-connection and UserInterface for PC
 
-All you need to setup nice blinking LEDs.
+Another Project for a WS2811 LED-strip. The clue here is, that the controller board is accessible via USB and that you can control the LEDs from you PC/Laptop.
+
 Includes:
 - Electronics design with ATXMEGA
 - code for the xmega
