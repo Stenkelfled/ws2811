@@ -10,6 +10,10 @@
 #include "lui.h"
 #include "ui_lui.h"
 
+/*!
+ * \brief Lui::Lui
+ * The main window of LUI - the gread LED User Interface
+ */
 Lui::Lui(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Lui),
@@ -65,10 +69,10 @@ Lui::~Lui()
     delete this->ui;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/// Stuff for communicate with uC
-///
-
+/*!
+ * \brief Lui::updatePortComboBox
+ * hier wird was gemacht
+ */
 void Lui::updatePortComboBox(QStringList &items){
     this->ui->portComboBox->clear();
     this->ui->portComboBox->addItems(items);
@@ -77,6 +81,10 @@ void Lui::updatePortComboBox(QStringList &items){
     }
 }
 
+/*!
+ * \brief Lui::enableTransmitPushButton
+ * ...hier auch
+ */
 void Lui::enableTransmitPushButton(){
     if(!this->serial->isOpen()){
         this->ui->transmitPushButton->setEnabled(true);
