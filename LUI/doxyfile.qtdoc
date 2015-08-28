@@ -1966,10 +1966,9 @@ SKIP_FUNCTION_MACROS   = YES
 # the path). If a tag file is not located in the directory in which doxygen is
 # run, you must also specify the path to the tagfile here.
 
-#TAGFILES               =	"C:\Qt\Docs\Qt-5.3\qtwidgets\qtwidgets.tags = C:\Qt\Docs\Qt-5.3\qtwidgets\"
-TAGFILES               =	C:\Qt\Docs\Qt-5.3\qtwidgets\qtwidgets.tags=File:///C:/Qt/Docs/Qt-5.3/qtwidgets
-#TAGFILES               =	C:\Qt\Docs\Qt-5.3\qtwidgets\qtwidgets.tags
-#TAGFILES				=	qtwidgets.tags
+TAGFILES               =	C:\Qt\Docs\Qt-5.3\qtwidgets\qtwidgets.tags=qthelp://org.qt-project.qtwidgets.531/qtwidgets \
+							C:\Qt\Docs\Qt-5.3\qtcore\qtcore.tags=qthelp://org.qt-project.qtwidgets.531/qtcore
+
 
 # When a file name is specified after GENERATE_TAGFILE, doxygen will create a
 # tag file that is based on the input files it reads. See section "Linking to
