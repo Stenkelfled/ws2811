@@ -17,14 +17,19 @@
 Lui::Lui(QWidget *parent) :
     QMainWindow(parent)
 {
-    //QHBoxLayout *test_layout = new QHBoxLayout(this);
-    //this->setLayout(test_layout);
-    QLabel *label1 = new QLabel("label1", this);
-    QLabel *label2 = new QLabel("label2", this);
-    QSplitter *splitter = new QSplitter(this);
-    splitter->setOrientation(Qt::Horizontal);
-    splitter->addWidget(label1);
-    splitter->addWidget(label2);
+    led_scene = new LedScene();
+    QGraphicsView *led_view = new QGraphicsView(this);
+    setCentralWidget(led_view);
+    led_view->setScene(led_scene);
+    // ////////////////////////////////////////////////////////////////////////
+    //create menu structure
+
+    //Datei
+    QMenu *menu_datei = menuBar()->addMenu("&Datei");
+
+    //Ansicht
+    QMenu *menu_ansicht = menuBar()->addMenu("&Ansicht");
+
 }
 
 Lui::~Lui()

@@ -11,6 +11,10 @@
 #include <ledscene.h>
 #include <settings.h>
 
+/**
+ * @brief Scene to manage,lay out and group the leds
+ * @param parent
+ */
 LedScene::LedScene(QObject *parent) :
     QGraphicsScene(parent),
     groups(new QList<LedGroupItem*>),

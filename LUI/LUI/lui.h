@@ -30,6 +30,7 @@ public slots:
 private slots:
 
 private:
+    LedScene *led_scene;
 
 };
 
