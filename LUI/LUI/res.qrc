@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/styles" lang="de">
+        <file alias="splitter.css">res/splitter.css</file>
+    </qresource>
+</RCC>
