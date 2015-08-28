@@ -57,9 +57,7 @@ qint16 LedScene::newLed()
  */
 void LedScene::makeNew()
 {
-    /*foreach(LedGroupItem* grp, groups){
-        removeGroup(group);
-    }*/
+    ///TODO: add functionality here
 }
 
 void LedScene::group()
@@ -350,6 +348,15 @@ void LedScene::dropEvent(QGraphicsSceneDragDropEvent *event)
     }
 }*/
 
+/**
+ * @brief Copies an QGraphicsSceneDragDropEvent
+ * @param old_event The event to copy
+ * @param type Type of the event to copy
+ * @return The copy of the event
+ * This copies an QGraphicsSceneDragDropEvent with the ability to change the
+ * event type. This adds the functionality of passing the current event to
+ * another slot.
+ */
 QGraphicsSceneDragDropEvent *LedScene::copyEvent(QGraphicsSceneDragDropEvent *old_event, QEvent::Type type)
 {
     QGraphicsSceneDragDropEvent *new_event = new QGraphicsSceneDragDropEvent(type);

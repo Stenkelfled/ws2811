@@ -27,13 +27,12 @@ Lui::Lui(QWidget *parent) :
     led_view->setScene(led_scene);
     led_scene->fillDefault();
     // ////////////////////////////////////////////////////////////////////////
-    //add dock widgets
+    //add DockWidgets
     QDockWidget *dock_sequence = new QDockWidget("Sequenzübersicht", this);
     QGraphicsView *sequence_view = new QGraphicsView(this);
     sequence_view->setScene(sequence_scene);
     dock_sequence->setWidget(sequence_view);
     addDockWidget(Qt::BottomDockWidgetArea, dock_sequence);
-    //connect(dock_sequence, SIGNAL(visibilityChanged(bool)), this, SLOT(onDockSequenceVisibilityChanged(bool)));
 
     // ////////////////////////////////////////////////////////////////////////
     //create menu structure
@@ -41,7 +40,7 @@ Lui::Lui(QWidget *parent) :
     //Datei
     QMenu *menu_datei = menuBar()->addMenu("&Datei");
 
-    //Ansicht
+    //Ansicht -> turn off and on all DockWidgets
     QMenu *menu_ansicht = menuBar()->addMenu("&Ansicht");
     menu_ansicht->addAction(dock_sequence->toggleViewAction());
 
@@ -50,11 +49,6 @@ Lui::Lui(QWidget *parent) :
 Lui::~Lui()
 {
 
-}
-
-void Lui::onDockSequenceVisibilityChanged(bool visible)
-{
-    qDebug() << "Sequence visibility: " << visible;
 }
 
 

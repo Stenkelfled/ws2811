@@ -3,12 +3,22 @@
 
 #include <luiview.h>
 
+/**
+ * @brief QGraphicsView with the ability to zoom via mouse Wheel
+ * @param parent
+ * This reimplements QGraphicsView and adds the functionlity to zoom,
+ * pan and drop leds in the LedScene
+ */
 LuiView::LuiView(QWidget *parent) :
     QGraphicsView(parent)
 {
     setAcceptDrops(true);
 }
 
+/**
+ * @brief Adds the zooming function to LuiView
+ * @param event
+ */
 void LuiView::wheelEvent(QWheelEvent *event)
 {
     setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
