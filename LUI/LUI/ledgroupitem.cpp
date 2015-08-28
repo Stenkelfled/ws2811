@@ -490,7 +490,8 @@ QDataStream &operator>>(QDataStream &stream, LedGroupItem &group){
     for(quint16 row_num=0; row_num<row_count; row_num++){
         stream >> led_count;
         for(quint16 led_num=0; led_num<led_count; led_num++){
-            led = ((LedScene*)(group.scene()))->newLed(0);
+            qint16 led_id = ((LedScene*)(group.scene()))->newLed();
+            led = ((LedScene*)(group.scene()))->getLed(led_id);
             stream >> *led;
             group.addLed(led, row_num);
         }

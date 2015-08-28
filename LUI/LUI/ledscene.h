@@ -12,7 +12,7 @@ class LedScene : public QGraphicsScene
 public:
     explicit LedScene(QObject *parent = 0);
     void fillDefault();
-    LedItem* newLed(qint16 id=0);
+    qint16 newLed();
 
 signals:
     void selectedGroupChanged(LedGroupItem* group);
@@ -21,6 +21,7 @@ signals:
     void groupRemoved(LedGroupItem* group);
 
 public slots:
+    void makeNew();
     //void ungroup();
     void group();
     void removeGroup(LedGroupItem *group);
@@ -43,8 +44,8 @@ private:
     void sortSelection(QList<QGraphicsItem*> &items);
     static QGraphicsSceneDragDropEvent* copyEvent(QGraphicsSceneDragDropEvent *old_event, QEvent::Type type);
     LedGroupItem* newGroup();
-    QList<LedGroupItem*> *groups;
-    QList<LedItem*> *leds;
+    QList<LedGroupItem*> groups;
+    QList<LedItem*> leds;
     QGraphicsRectItem *selection_rect_item;
     QPointF selection_start;
     QGraphicsItem *current_drag_item;

@@ -26,11 +26,13 @@ public:
 signals:
 
 public slots:
+    void onDockSequenceVisibilityChanged(bool visible);
 
 private slots:
 
 private:
     LedScene *led_scene;
+    SequenceScene *sequence_scene;
 
 };
 

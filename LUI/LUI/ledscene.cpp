@@ -17,8 +17,6 @@
  */
 LedScene::LedScene(QObject *parent) :
     QGraphicsScene(parent),
-    groups(new QList<LedGroupItem*>),
-    leds(new QList<LedItem*>),
     selection_start(settings::ledscene::invalid_pos),
     current_drag_item(NULL),
     my_selected_group(NULL)
@@ -27,23 +25,41 @@ LedScene::LedScene(QObject *parent) :
     selection_rect_color.setAlpha(80);
     this->selection_rect_item = addRect(0, 0, 0, 0, QPen(Qt::black, 1, Qt::DashLine), QBrush(selection_rect_color));
     this->selection_rect_item->setZValue(10000);
-
+    makeNew();
 }
 
+/**
+ * @brief Fills the Scene with the default number of LEDs grouped to 1 group
+ */
 void LedScene::fillDefault()
 {
     LedGroupItem* grp = newGroup();
     for(qint16 i=0; i<GLOBAL_LED_COUNT; i++){
-        LedItem* led = newLed(i);
+        LedItem* led = getLed(newLed());
         grp->addLed(led);
     }
 }
 
-LedItem *LedScene::newLed(qint16 id)
+/**
+ * @brief Add a new LED to the scene
+ * @return ID of the new LED
+ */
+qint16 LedScene::newLed()
 {
+    qint16 id = leds.length();
     LedItem *led = new LedItem(id); //items will be removed automatically on scene deletion
-    this->leds->append(led);
-    return led;
+    this->leds.append(led);
+    return id;
+}
+
+/**
+ * @brief Clear the scene and add the default LEDs
+ */
+void LedScene::makeNew()
+{
+    /*foreach(LedGroupItem* grp, groups){
+        removeGroup(group);
+    }*/
 }
 
 void LedScene::group()
@@ -80,11 +96,11 @@ void LedScene::removeGroup(LedGroupItem* group)
 {
     int id = group->id();
     emit groupRemoved(group);
-    this->groups->removeAt(id);
+    this->groups.removeAt(id);
     removeItem((QGraphicsItem*)group);
-    for(;id<this->groups->length();id++){
+    for(;id<this->groups.length();id++){
     //foreach(GroupItem *item, this->groups){
-        this->groups->at(id)->changeId(id);
+        this->groups.at(id)->changeId(id);
     }
 }
 
@@ -122,13 +138,13 @@ void LedScene::selectAll()
 
 LedItem *LedScene::getLed(int id)
 {
-    return (*(this->leds))[id];
+    return (this->leds)[id];
 }
 
 LedGroupItem* LedScene::newGroup()
 {
-    LedGroupItem *grp = new LedGroupItem(this->groups->length(), NULL);
-    this->groups->append(grp);
+    LedGroupItem *grp = new LedGroupItem(this->groups.length(), NULL);
+    this->groups.append(grp);
     connect(grp, SIGNAL(groupEmpty(LedGroupItem*)), this, SLOT(removeGroup(LedGroupItem*)));
     connect(grp, SIGNAL(selectionChanged(bool,LedGroupItem*)), this, SLOT(changeSelectedGroup(bool,LedGroupItem*)));
     addItem(grp);
@@ -343,8 +359,8 @@ QGraphicsSceneDragDropEvent *LedScene::copyEvent(QGraphicsSceneDragDropEvent *ol
 }
 
 QDataStream &operator<<(QDataStream &stream, const LedScene &scene){
-    stream << (quint16)scene.groups->size();
-    foreach(LedGroupItem* group, *(scene.groups)){
+    stream << (quint16)scene.groups.size();
+    foreach(LedGroupItem* group, scene.groups){
         stream << *group;
     }
     return stream;
