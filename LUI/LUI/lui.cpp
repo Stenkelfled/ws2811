@@ -51,4 +51,9 @@ Lui::~Lui()
 
 }
 
+void Lui::onDockSequenceVisibilityChanged(bool visible)
+{
+    qDebug() << "Sequence visibility: " << visible;
+}
+
 
