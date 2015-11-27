@@ -1,12 +1,18 @@
-#eagle backup files
+#EAGLE
 *#*
+*bom*
 
 #AtmelStudio
 evaluator - Kopie.c
+*.atsuo
 
+#Qt
+*.pro.user*
+
+#Binaries
 V1.0/Debug/
 QT-lernen/
 LUI/doc/qtdoc
-*.atsuo
-*bom*
+
+
 *.autosave
