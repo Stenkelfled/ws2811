@@ -26,7 +26,6 @@ public:
 signals:
 
 public slots:
-    //void onDockSequenceVisibilityChanged(bool visible);
 
 private slots:
 
