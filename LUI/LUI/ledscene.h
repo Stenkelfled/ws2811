@@ -48,6 +48,9 @@ private:
     QList<LedItem*> leds;
     QGraphicsRectItem *selection_rect_item;
     QPointF selection_start;
+    /**
+     * @brief The item, that is currently under the item being dragged around. (NULL if no item)
+     */
     QGraphicsItem *current_drag_item;
     LedGroupItem *my_selected_group;
 

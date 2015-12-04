@@ -28,6 +28,8 @@ protected:
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     //virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     //virtual QVariant itemChange(GraphicsItemChange change, const QVariant & value);
+    //virtual void focusInEvent(QFocusEvent * event);
+    //virtual void focusOutEvent(QFocusEvent * event);
 
 signals:
     //void itemMoves(bool state); //is emitted if the item begins or stops moving; true, on begin

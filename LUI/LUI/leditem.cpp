@@ -13,6 +13,7 @@ LedItem::LedItem(qint16 id, QGraphicsItem *parent):
     //group_index(QPoint(-1,-1))
 {
     setAcceptedMouseButtons(Qt::LeftButton);
+    //setFlag(QGraphicsItem::ItemIsFocusable, true);
 }
 
 QRectF LedItem::boundingRect() const
@@ -92,8 +93,9 @@ LedItem *LedItem::unpackDragData(const QMimeData *data)
 
 /*void LedItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    QPixmap pixmap(10,10);
-    pixmap.fill(Qt::white);
+    qDebug() << "led mouse press";
+    //QPixmap pixmap(10,10);
+    //pixmap.fill(Qt::white);
     LuiItem::mousePressEvent(event);
 }*/
 
@@ -132,6 +134,18 @@ void LedItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     //QGraphicsRectItem::mouseMoveEvent(event);
 }
+
+/*void LedItem::focusInEvent(QFocusEvent *event)
+{
+    qDebug() << "led focus in";
+    LuiItem::focusInEvent(event);
+}
+
+void LedItem::focusOutEvent(QFocusEvent *event)
+{
+    qDebug() << "led focus out";
+    LuiItem::focusOutEvent(event);
+}*/
 
 /*void LedItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {

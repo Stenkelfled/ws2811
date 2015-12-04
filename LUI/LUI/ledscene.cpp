@@ -222,7 +222,7 @@ void LedScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
  *
  * Check, if we are currently drawing a selection (selection_start is not set to
  * settings::ledscene::invalid_pos). If we do, then update the
- * selection-rectangle.
+ * selection-rectangle. \n
  * After drawing the rectangle, don't forge to propagate the Event to superclass.
  */
 void LedScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -273,8 +273,20 @@ void LedScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsScene::mouseReleaseEvent(event);
 }
 
+/**
+ * @brief Handles drag events.
+ * @param event
+ *
+ *
+ * At the moment there are only LedItems, that need to be handeled by
+ * drag/drop mechanism. LedGroupItems are movable, but need no drag/drop,
+ * because they don't interact with other items. \n
+ * The dragEnterEvent occurs on both starting a drag inside the scene and
+ * moving the item from outside the scene to inside.
+ */
 void LedScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
+    //* only handle drag-events for LedItems
     if(LedItem::unpackDragData(event->mimeData()) == NULL){
         event->ignore();
         return;
@@ -282,6 +294,7 @@ void LedScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
     //qDebug() << "scene drag enter";
     QGraphicsItem *itm = itemAt(event->scenePos(), QTransform());
     if(itm != NULL){
+        //* There is any item (Group or Led) under the current dragging item. Get the Group!
         while(!itm->acceptDrops()){
             if(itm->parentItem() == NULL){
                 break;
@@ -290,12 +303,30 @@ void LedScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
         }
         this->current_drag_item = itm;
         event->setPos(event->scenePos());
+        //* Propagate the drag event to the LedGroupItem
         sendEvent(itm, event);
     }
 }
 
+/**
+ * @brief Handles drag events
+ * @param event
+ *
+ *
+ * See also LedScene::dragEnterEvent().
+ * There are different options, how the LedItem can move from group to group:
+ *  -# from group to outside a group
+ *  -# from outside a group to a group
+ *  -# from a group directly to another group
+ *  -# inside a group (don't leaving the group)
+ *  -# outside any group
+ * These options are differentiated by current_drag_item, which holds the last
+ * LedGroupItem (or NULL, if there is no group) and itm, which hold the LedGroupItem
+ * currently located unter the mouse.
+ */
 void LedScene::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
+    //* only handle drag-events for LedItems
     if(LedItem::unpackDragData(event->mimeData()) == NULL){
         event->ignore();
         return;
@@ -303,6 +334,7 @@ void LedScene::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
     //qDebug() << "scene drag move";
     QGraphicsItem *itm = itemAt(event->scenePos(), QTransform());
     if(itm != NULL){
+        //* Item under mouse -> get the LedGroupItem
         while(!itm->acceptDrops()){
             if(itm->parentItem() == NULL){
                 break;
@@ -311,27 +343,39 @@ void LedScene::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
         }
         event->setPos(itm->mapFromScene(event->scenePos()));
         if(itm != this->current_drag_item){
+            //* We got a new LedGroupItem -> remove Led from old group and add to new group
             if(this->current_drag_item != NULL){
+                //* Send DragLeave to the old LedGroupItem
                 sendEvent(this->current_drag_item, copyEvent(event, QEvent::GraphicsSceneDragLeave));
             }
+            //* Send DragEnter to the new LedGroupItem
             sendEvent(itm, copyEvent(event, QEvent::GraphicsSceneDragEnter));
             this->current_drag_item = itm;
         }
+        //* Propagate the move event to the group
         sendEvent(itm, event);
         return;
+    } else {
+        //*no item under mouse
+        if(this->current_drag_item != NULL){
+            //*send dragLeaveEvent to current_drag_item
+            event->setPos(this->current_drag_item->mapFromScene(event->scenePos()));
+            sendEvent(this->current_drag_item, copyEvent(event, QEvent::GraphicsSceneDragLeave));
+            this->current_drag_item = NULL;
+        }
+        event->accept();
     }
-    //no item under mouse
-    if(this->current_drag_item != NULL){
-        //send dragLeaveEvent to current_dragItem
-        event->setPos(this->current_drag_item->mapFromScene(event->scenePos()));
-        sendEvent(this->current_drag_item, copyEvent(event, QEvent::GraphicsSceneDragLeave));
-        this->current_drag_item = NULL;
-    }
-    event->accept();
 }
 
+/**
+ * @brief LedScene::dragLeaveEvent
+ * @param event
+ *
+ * \todo ensure, that the LED is not removed from the scene
+ */
 void LedScene::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 {
+    //* only handle drag-events for LedItems
     if(LedItem::unpackDragData(event->mimeData()) == NULL){
         event->ignore();
         return;
@@ -339,6 +383,13 @@ void LedScene::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
     //qDebug() << "scene drag leave";
     QGraphicsItem *itm = itemAt(event->scenePos(), QTransform());
     if(itm != NULL){
+        //* This happens, if any QGraphicsItem is at the border of the scene and
+        //* the dragging item leaves the scene hovering the item at the border.
+        //* In our case the item at the border will be a LedGroupItem (maybe
+        //* also a LedItem, but this is inside the LedGroupItem, so we don't
+        //* care...
+        //* Anyway, we have to tell the ledGroupItem, that the dragging item
+        //* has left the group
         while(!itm->acceptDrops()){
             if(itm->parentItem() == NULL){
                 break;
@@ -349,6 +400,7 @@ void LedScene::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
         sendEvent(itm, event);
     } else {
         if(this->current_drag_item != NULL){
+            //* Note: i don't know, in which case this occurs, but i'll leave it here...
             event->setPos(event->scenePos());
             sendEvent(this->current_drag_item, copyEvent(event, QEvent::GraphicsSceneDragLeave));
             this->current_drag_item = NULL;
