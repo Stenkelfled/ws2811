@@ -14,6 +14,12 @@
 /**
  * @brief Scene to manage,lay out and group the leds
  * @param parent
+ *
+ *
+ * There are as many LedItems in the LedScene as there are physically LEDs
+ * connected to the Board. These are filled by LedScene::fillDefault(). You have
+ * to make sure, that no LED is removed, because then one physical LED has no
+ * counterpart in the GUI.
  */
 LedScene::LedScene(QObject *parent) :
     QGraphicsScene(parent),
@@ -60,6 +66,9 @@ void LedScene::makeNew()
     ///TODO: add functionality here
 }
 
+/**
+ * @brief Take all selected LEDs to a new group. The LEDs are automatically removed from their old groups
+ */
 void LedScene::group()
 {    
     LedGroupItem *new_grp = newGroup();
@@ -73,35 +82,33 @@ void LedScene::group()
     }
 }
 
-/*void LedScene::ungroup()
-{
-    foreach(QGraphicsItem *itm, selectedItems()){
-        LedItem *led = qgraphicsitem_cast<LedItem*>(itm);
-        if(led != NULL){
-            GroupItem *grp = qgraphicsitem_cast<GroupItem*>(led->parentItem());
-            if(grp != NULL){
-                grp->removeLed(led);
-            }
-        }
-        GroupItem *grp = qgraphicsitem_cast<GroupItem*>(itm);
-        if(grp != NULL){
-            grp->makeEmpty();
-        }
-    }
-}*/
-
+/**
+ * @brief A LedGroupItem signalled, that it is empty -> Remove the LedGroupItem from LedScene
+ * @param group The LedGroupItemItem to remove
+ */
 void LedScene::removeGroup(LedGroupItem* group)
 {
     int id = group->id();
     emit groupRemoved(group);
     this->groups.removeAt(id);
     removeItem((QGraphicsItem*)group);
+    //Refresh group IDs
     for(;id<this->groups.length();id++){
-    //foreach(GroupItem *item, this->groups){
         this->groups.at(id)->changeId(id);
     }
 }
 
+/**
+ * @brief Change the current LedGroupItem.
+ * @param state How did the state of the LedGroupItem change? False: unselected, True: selected
+ * @param group The LedGroupItem, which state changed
+ *
+ *
+ * A LedGroupItem signalled, that its selection state has changed. Calling this
+ * function causes LedScene to update the current selected group (my_selected_group).
+ * If the new group is not the current selected group, LedScene emits the signals
+ * selectedGroupChanged and selectedGroupNameChanged.
+ */
 void LedScene::changeSelectedGroup(bool state, LedGroupItem *group)
 {
     if(state == false){
@@ -120,6 +127,15 @@ void LedScene::changeSelectedGroup(bool state, LedGroupItem *group)
     }
 }
 
+/**
+ * @brief Update the Name for a group
+ * @param name The new Name for the Group
+ * @param group The LedGroupItem, that changed its name
+ *
+ *
+ * There was a name change in a LedGroupItem. If it is the current selected
+ * LedGroupItem, propagate the name change via emmiting selectedGroupNameChanged
+ */
 void LedScene::updateGroupName(QString name, LedGroupItem* group)
 {
     if( this->my_selected_group == group){
@@ -127,6 +143,9 @@ void LedScene::updateGroupName(QString name, LedGroupItem* group)
     }
 }
 
+/**
+ * @brief Select all LedItem and LedGroupItem, that are in the LedScene.
+ */
 void LedScene::selectAll()
 {
     foreach(QGraphicsItem *itm, items()){
@@ -134,11 +153,24 @@ void LedScene::selectAll()
     }
 }
 
+/**
+ * @brief Get the LedItem with the given ID
+ * @param id The ID to the wanted LedItem
+ * @return The LedItem corresponding to the given ID
+ */
 LedItem *LedScene::getLed(int id)
 {
     return (this->leds)[id];
 }
 
+/**
+ * @brief Adds a new LedGroupItem to the LedScene
+ * @return The new LedGroupItem
+ *
+ *
+ * Creates a new LedGroupItem, including all connections (escpecially the connections
+ * between the LedGroupItem and the LedScene. Emits newGroupAdded.
+ */
 LedGroupItem* LedScene::newGroup()
 {
     LedGroupItem *grp = new LedGroupItem(this->groups.length(), NULL);
@@ -151,6 +183,15 @@ LedGroupItem* LedScene::newGroup()
     return grp;
 }
 
+/**
+ * @brief Handles Mouse-button-press event
+ * @param event The Event passed by Qt.
+ *
+ *
+ * If a MouseButton gets pressed on the LedScene, check wheter the mouse is
+ * currently over any item(LedItem, LedGroupItem) on the scene. If so, propagate
+ * the event to the item. If not, start drawing a rectangle to create a selection.
+ */
 void LedScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     //qDebug() << "scene press";
@@ -174,20 +215,32 @@ void LedScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
+/**
+ * @brief Handle Mouse movement on LedScene.
+ * @param event The Event passed by Qt.
+ *
+ *
+ * Check, if we are currently drawing a selection (selection_start is not set to
+ * settings::ledscene::invalid_pos). If we do, then update the
+ * selection-rectangle.
+ * After drawing the rectangle, don't forge to propagate the Event to superclass.
+ */
 void LedScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(this->selection_start != settings::ledscene::invalid_pos){
+    if(this->selection_start != settings::ledscene::invalid_pos){ //selection_start is set to setting::lesdcene::invalid_pos, if there is no selection to draw
         QPointF diff = event->scenePos() - this->selection_start;
         QRectF r;
         if(diff.x() >= 0){
             if(diff.y() >= 0){
                 r = QRectF(this->selection_start, event->scenePos());
             } else {
-                r = QRectF(this->selection_start.x(), event->scenePos().y(), diff.x(), -diff.y());
+                r = QRectF(this->selection_start.x(), event->scenePos().y(),
+                           diff.x(), -diff.y());
             }
         } else {
             if(diff.y() >= 0){
-                r = QRectF(event->scenePos().x(), this->selection_start.y(), -diff.x(), diff.y());
+                r = QRectF(event->scenePos().x(), this->selection_start.y(),
+                           -diff.x(), diff.y());
             } else {
                 r = QRectF(event->scenePos(), this->selection_start);
             }
@@ -197,22 +250,27 @@ void LedScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsScene::mouseMoveEvent(event);
 }
 
+/**
+ * @brief Handle Mouse-button-release on LedScene.
+ * @param event The Event passed by Qt.
+ *
+ *
+ * Finish the Selection (if we have any). The drawn rect is passed to Qt-libary
+ * by calling setSelectionArea(), which then automatically selects all items
+ * inside the rect and unselects all others.
+ * Finally propagate the Event to Superclass.
+ */
 void LedScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if(this->selection_start != settings::ledscene::invalid_pos){
         QPainterPath sel_path = QPainterPath();
         sel_path.addRect(this->selection_rect_item->rect());
         setSelectionArea(sel_path, Qt::ContainsItemShape);
+        //selection finished, now reset rectangle and selection_start position
         this->selection_rect_item->setRect(QRectF(0, 0, 0, 0));
         this->selection_start = settings::ledscene::invalid_pos;
     }
     QGraphicsScene::mouseReleaseEvent(event);
-    /*QList<QGraphicsItem*> items = selectedItems();
-    if(items.length() == 0){
-        selectedItemChanged(NULL);
-    } else if(items.length() == 1){
-        selectedItemChanged( (LuiItem*)(items.at(0)) );
-    }*/
 }
 
 void LedScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)

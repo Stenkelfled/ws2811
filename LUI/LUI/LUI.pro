@@ -51,7 +51,7 @@ INCLUDEPATH += ../../
 
 DEPENPATH += ../../
 
-FORMS    += lui.ui
+FORMS    +=
 
 RESOURCES += \
     res.qrc
