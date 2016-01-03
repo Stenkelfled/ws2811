@@ -3,6 +3,7 @@
 
 #include <QColor>
 #include <QPointF>
+#include <QSize>
 
 namespace settings{
     namespace ledscene{
@@ -12,6 +13,7 @@ namespace settings{
     namespace leditem{
         constexpr int height = 20;
         constexpr int width = 20;
+        const QSize size(width, height);
         constexpr Qt::GlobalColor color = Qt::black;
         constexpr int spacing = 5;
         const QString mimetype("ledmime");
@@ -19,7 +21,8 @@ namespace settings{
 
     namespace ledgroupitem{
         constexpr int border = 10;
-        constexpr int extra_space = 20;
+        const QSize min_size(leditem::width+border, leditem::height+border);
+        constexpr int extra_moving_space = 20;
         constexpr Qt::GlobalColor color = Qt::lightGray;
     }
 

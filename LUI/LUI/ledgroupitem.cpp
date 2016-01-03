@@ -281,7 +281,7 @@ void LedGroupItem::refreshArea(bool item_moving)
     QRectF r = this->childrenBoundingRect();
     int extra_space = 0;
     if(item_moving){
-        extra_space = settings::ledgroupitem::extra_space;
+        extra_space = settings::ledgroupitem::extra_moving_space;
     }
     r.setWidth(r.width() + 2*(settings::ledgroupitem::border + extra_space));
     r.setHeight(r.height() + 2*(settings::ledgroupitem::border + extra_space));

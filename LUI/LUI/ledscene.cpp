@@ -54,6 +54,7 @@ qint16 LedScene::newLed()
 {
     qint16 id = leds.length();
     LedItem *led = new LedItem(id); //items will be removed automatically on scene deletion
+    connect(led, SIGNAL(ledDroppedOutside(QMimeData*)), this, SLOT(resetLed(QMimeData*)));
     this->leds.append(led);
     return id;
 }
@@ -141,6 +142,29 @@ void LedScene::updateGroupName(QString name, LedGroupItem* group)
     if( this->my_selected_group == group){
         emit selectedGroupNameChanged(name);
     }
+}
+
+/**
+ * @brief Resets the Led's position on the scene and adds the Led to a new group.
+ * @param led_mime_data Mime data of the Led
+ *
+ *
+ * Call this function, if a Led was dropped outside the scene. This function
+ * will take care of the Led and place it in a new group on an empty spot near
+ * the point (0,0).
+ */
+void LedScene::resetLed(QMimeData *led_mime_data)
+{
+    QPointF new_pos = findEmptyPos(QPointF(0,0), settings::ledgroupitem::min_size);
+    new_pos += QPointF(0, settings::ledgroupitem::border);
+    QGraphicsSceneDragDropEvent *event = new QGraphicsSceneDragDropEvent(QEvent::GraphicsSceneDrop);
+    event->setButtons(Qt::LeftButton);
+    event->setMimeData(led_mime_data);
+    event->setModifiers(Qt::NoModifier);
+    event->setScenePos(new_pos);
+    event->setPossibleActions(Qt::MoveAction);
+    event->setProposedAction(Qt::MoveAction);
+    LedScene::dropEvent(event);
 }
 
 /**
@@ -424,12 +448,7 @@ void LedScene::dropEvent(QGraphicsSceneDragDropEvent *event)
         this->current_drag_item = NULL;
     } else {
         //dropping it directly on the scene
-        LedGroupItem* grp = newGroup();
-        grp->addLed(led);
-        QPointF grp_pos(event->scenePos());
-        grp->setX(grp->x() - (settings::leditem::width+settings::ledgroupitem::border) );
-        grp->setY(grp->y() - (settings::leditem::height+settings::ledgroupitem::border) );
-        grp->setPos(grp_pos);
+        addGroupForLed(led, event->scenePos());
     }
     if(mouseGrabberItem() != NULL){
         //qDebug() << "mousegrabber:" << mouseGrabberItem();
@@ -473,6 +492,41 @@ QGraphicsSceneDragDropEvent *LedScene::copyEvent(QGraphicsSceneDragDropEvent *ol
     new_event->setMimeData(old_event->mimeData());
     new_event->setPos(old_event->pos());
     return new_event;
+}
+
+/**
+ * @brief Adds a new group for a single Led at the given position.
+ * @param led The Led, that will be added to the new group
+ * @param pos The position of the new group
+ *
+ *
+ * This function is intended to handle single, ungrouped Leds. It will create
+ * a new group (and add the group to the scene), add the Led to the group and
+ * place the group at the given position pos.
+ */
+void LedScene::addGroupForLed(LedItem *led, QPointF pos)
+{
+    LedGroupItem* grp = newGroup();
+    grp->addLed(led);
+    grp->setPos(pos);
+}
+
+/**
+ * @brief Finds an empty place on the scene near the given position
+ * @param near_this Find an empty place near this position
+ * @param size Needed size for the empty spot
+ * @return
+ */
+QPointF LedScene::findEmptyPos(QPointF near_this, QSizeF size)
+{
+    QRectF search_rect(near_this, size);
+    //search_rect.moveCenter(search_rect.topLeft());
+    QList<QGraphicsItem*> intersecting_items = items(search_rect, Qt::IntersectsItemShape);
+    while(!intersecting_items.empty()){
+        search_rect.translate(0,2);
+        intersecting_items = items(search_rect, Qt::IntersectsItemShape);
+    }
+    return search_rect.topLeft();
 }
 
 QDataStream &operator<<(QDataStream &stream, const LedScene &scene){

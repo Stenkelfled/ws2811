@@ -8,7 +8,7 @@
 #include <protocoll.h>
 #include <utils.h>
 #include "lui.h"
-#include "ui_lui.h"
+#include "luiview.h"
 
 /*!
  * \brief Lui::Lui
@@ -19,10 +19,8 @@ Lui::Lui(QWidget *parent) :
 {
     this->resize(900,650);
 
-    led_scene = new LedScene();
-    sequence_scene = new SequenceScene();
-
     QGraphicsView *led_view = new LuiView(this);
+    led_scene = new LedScene(led_view);
     setCentralWidget(led_view);
     led_view->setScene(led_scene);
     led_scene->fillDefault();
@@ -30,6 +28,7 @@ Lui::Lui(QWidget *parent) :
     //add DockWidgets
     QDockWidget *dock_sequence = new QDockWidget("Sequenzübersicht", this);
     QGraphicsView *sequence_view = new QGraphicsView(this);
+    sequence_scene = new SequenceScene(sequence_view);
     sequence_view->setScene(sequence_scene);
     dock_sequence->setWidget(sequence_view);
     addDockWidget(Qt::BottomDockWidgetArea, dock_sequence);

@@ -125,10 +125,57 @@ void LedItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     pixmap.setMask(pixmap.createHeuristicMask());
     drag->setPixmap(pixmap);
     drag->setHotSpot(QPoint(settings::leditem::height/2, settings::leditem::width/2));
-
+#if 0
+    qDebug() << "my recursion:";
+    QObject *target = this;
+    while(target){
+        qDebug() << "next:" << target;
+        target = target->parent();
+    }
+    qDebug() << "recursion done.";
+    qDebug() << "scene:" << this->scene();
+    qDebug() << "views:";
+    QList<QGraphicsView *> my_views = this->scene()->views();
+    foreach(QGraphicsView *view, my_views){
+        qDebug() << view;
+    }
+    qDebug() << "views end";
+#endif
     this->is_dragging = true;
     update();
+
     drag->exec();
+/*    if(drag->exec(Qt::MoveAction) != Qt::MoveAction){
+        qDebug() << "led dropped outside. Start:" << event->buttonDownPos(Qt::LeftButton);
+        //emit ledDroppedOutside();
+        this->setPos(event->buttonDownPos(Qt::LeftButton));
+        this->show();
+    }
+    target = drag->target();
+    while(target){
+        qDebug() << "drop to:" << target;
+        target = target->parent();
+    }
+    qDebug() << "recursion done.";
+*/
+
+    /* Drag finished. Now check, if one of the target widgets is the view,
+     * that contains the scene of the LED.*/
+    bool my_view_found = false;
+    QList<QGraphicsView *> my_views = this->scene()->views();
+    QObject* target = drag->target();
+    while(target && !my_view_found){
+        foreach(QGraphicsView *view, my_views){
+            if(target == view){
+                my_view_found = true;
+            }
+        }
+        target = target->parent();
+    }
+    if(!my_view_found){
+        emit ledDroppedOutside(mime);
+        //qDebug() << "Led" << (QObject*)this << "dropped outside its view(s).";
+    }
     this->is_dragging = false;
     update();
 

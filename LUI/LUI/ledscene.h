@@ -5,6 +5,7 @@
 
 #include <ledgroupitem.h>
 #include <luiitem.h>
+#include <settings.h>
 
 class LedScene : public QGraphicsScene
 {
@@ -29,6 +30,7 @@ public slots:
     void selectAll();
     LedItem* getLed(int id);
     void updateGroupName(QString name, LedGroupItem *group);
+    void resetLed(QMimeData *led_mime_data);
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
@@ -43,6 +45,9 @@ private:
     //void selectedItemChanged(LuiItem* item);
     void sortSelection(QList<QGraphicsItem*> &items);
     static QGraphicsSceneDragDropEvent* copyEvent(QGraphicsSceneDragDropEvent *old_event, QEvent::Type type);
+    void addGroupForLed(LedItem* led, QPointF pos);
+    QPointF findEmptyPos(QPointF near_this, QSizeF size);
+
     LedGroupItem* newGroup();
     QList<LedGroupItem*> groups;
     QList<LedItem*> leds;

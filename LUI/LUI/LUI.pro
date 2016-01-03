@@ -49,7 +49,7 @@ HEADERS  += settings.h \
 
 INCLUDEPATH += ../../
 
-DEPENPATH += ../../
+DEPENDPATH += ../../
 
 FORMS    +=
 

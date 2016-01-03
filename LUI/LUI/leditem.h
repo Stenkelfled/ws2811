@@ -33,6 +33,7 @@ protected:
 
 signals:
     //void itemMoves(bool state); //is emitted if the item begins or stops moving; true, on begin
+    void ledDroppedOutside(QMimeData *led_mime_data);
 
 private:
     bool is_dragging;
