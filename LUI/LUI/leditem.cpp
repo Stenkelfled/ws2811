@@ -145,19 +145,6 @@ void LedItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     update();
 
     drag->exec();
-/*    if(drag->exec(Qt::MoveAction) != Qt::MoveAction){
-        qDebug() << "led dropped outside. Start:" << event->buttonDownPos(Qt::LeftButton);
-        //emit ledDroppedOutside();
-        this->setPos(event->buttonDownPos(Qt::LeftButton));
-        this->show();
-    }
-    target = drag->target();
-    while(target){
-        qDebug() << "drop to:" << target;
-        target = target->parent();
-    }
-    qDebug() << "recursion done.";
-*/
 
     /* Drag finished. Now check, if one of the target widgets is the view,
      * that contains the scene of the LED.*/
@@ -178,8 +165,6 @@ void LedItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     }
     this->is_dragging = false;
     update();
-
-    //QGraphicsRectItem::mouseMoveEvent(event);
 }
 
 /*void LedItem::focusInEvent(QFocusEvent *event)

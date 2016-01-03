@@ -392,10 +392,16 @@ void LedScene::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 }
 
 /**
- * @brief LedScene::dragLeaveEvent
+ * @brief Handles leaving of a dragging element
  * @param event
  *
- * \todo ensure, that the LED is not removed from the scene
+ *
+ * This is mainly to tell a LED group, that any led has left the group.
+ * The LED itself since can leave the scene, but if it is dropped outside, the
+ * LED emits a signal, that it is not dropped on its native QGraphicsView. Then
+ * the LedScene catches this signal and creates a new QGraphicsSceneDragDropEvent
+ * dropping the LED on an empty spot inside the scene. So it is "re-dropped"
+ * inside the scene by the application.
  */
 void LedScene::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 {
@@ -433,6 +439,10 @@ void LedScene::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
     event->accept();
 }
 
+/**
+ * @brief Handles drop events of LEDs to this scene
+ * @param event
+ */
 void LedScene::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
     LedItem* led = LedItem::unpackDragData(event->mimeData());
@@ -440,7 +450,6 @@ void LedScene::dropEvent(QGraphicsSceneDragDropEvent *event)
         event->ignore();
         return;
     }
-    //qDebug() << "scene drop";
     if(this->current_drag_item != NULL){
         //dropping it on some item
         event->setPos(event->scenePos());
@@ -451,7 +460,6 @@ void LedScene::dropEvent(QGraphicsSceneDragDropEvent *event)
         addGroupForLed(led, event->scenePos());
     }
     if(mouseGrabberItem() != NULL){
-        //qDebug() << "mousegrabber:" << mouseGrabberItem();
         QGraphicsScene::mouseReleaseEvent(new QGraphicsSceneMouseEvent(QEvent::GraphicsSceneMouseRelease));
     }
     event->accept();
@@ -529,6 +537,12 @@ QPointF LedScene::findEmptyPos(QPointF near_this, QSizeF size)
     return search_rect.topLeft();
 }
 
+/**
+ * @brief Serialization for saving to a file
+ * @param stream
+ * @param scene
+ * @return
+ */
 QDataStream &operator<<(QDataStream &stream, const LedScene &scene){
     stream << (quint16)scene.groups.size();
     foreach(LedGroupItem* group, scene.groups){
@@ -537,6 +551,12 @@ QDataStream &operator<<(QDataStream &stream, const LedScene &scene){
     return stream;
 }
 
+/**
+ * @brief Serialization for loading from a file
+ * @param stream
+ * @param scene
+ * @return
+ */
 QDataStream &operator>>(QDataStream &stream, LedScene &scene){
     quint16 group_count;
     stream >> group_count;
